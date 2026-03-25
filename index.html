@@ -257,23 +257,69 @@
               <p>จัดเก็บข้อมูลในรูปแบบ <strong>ต้นไม้ (Tree Structure)</strong> มีความสัมพันธ์แบบ Parent–Child ข้อมูล Parent หนึ่งตัวมี Child ได้หลายตัว แต่ Child หนึ่งตัวมี Parent ได้เพียงตัวเดียว</p>
             </div>
           </div>
-          <div class="dbt-diagram">
-            <div class="tree-node root">🏢 บริษัท</div>
-            <div class="tree-children">
-              <div class="tree-branch">
-                <div class="tree-node level1">📁 แผนก IT</div>
-                <div class="tree-children">
-                  <div class="tree-node level2">👤 นาย ก</div>
-                  <div class="tree-node level2">👤 นาย ข</div>
-                </div>
-              </div>
-              <div class="tree-branch">
-                <div class="tree-node level1">📁 แผนก HR</div>
-                <div class="tree-children">
-                  <div class="tree-node level2">👤 นาง ค</div>
-                </div>
-              </div>
-            </div>
+          <div class="dbt-diagram" style="padding:8px 0;">
+            <svg viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg"
+                 style="width:100%;max-width:480px;display:block;margin:0 auto;">
+              <defs>
+                <style>.ts{font-family:'Sarabun','Noto Sans Thai',sans-serif;}</style>
+              </defs>
+
+              <!-- ── บริษัท (root) cx=240 y=20 ── -->
+              <rect x="170" y="16" width="140" height="38" rx="8"
+                    fill="rgba(34,197,94,0.22)" stroke="#16A34A" stroke-width="2"/>
+              <text x="240" y="40" text-anchor="middle" font-size="14" font-weight="700"
+                    fill="#14532D" class="ts">🏢 บริษัท</text>
+
+              <!-- vertical line: root → crossbar -->
+              <line x1="240" y1="54" x2="240" y2="86" stroke="#16A34A" stroke-width="1.8"/>
+
+              <!-- horizontal crossbar -->
+              <line x1="130" y1="86" x2="360" y2="86" stroke="#16A34A" stroke-width="1.8"/>
+
+              <!-- drop line → แผนก IT -->
+              <line x1="130" y1="86" x2="130" y2="108" stroke="#16A34A" stroke-width="1.8"/>
+              <!-- drop line → แผนก HR -->
+              <line x1="360" y1="86" x2="360" y2="108" stroke="#16A34A" stroke-width="1.8"/>
+
+              <!-- แผนก IT -->
+              <rect x="60" y="108" width="140" height="36" rx="8"
+                    fill="rgba(34,197,94,0.18)" stroke="#16A34A" stroke-width="1.8"/>
+              <text x="130" y="131" text-anchor="middle" font-size="13" font-weight="600"
+                    fill="#14532D" class="ts">📁 แผนก IT</text>
+
+              <!-- แผนก HR -->
+              <rect x="290" y="108" width="140" height="36" rx="8"
+                    fill="rgba(34,197,94,0.18)" stroke="#16A34A" stroke-width="1.8"/>
+              <text x="360" y="131" text-anchor="middle" font-size="13" font-weight="600"
+                    fill="#14532D" class="ts">📁 แผนก HR</text>
+
+              <!-- แผนก IT → crossbar2 -->
+              <line x1="130" y1="144" x2="130" y2="168" stroke="#16A34A" stroke-width="1.8"/>
+              <line x1="80" y1="168" x2="180" y2="168" stroke="#16A34A" stroke-width="1.8"/>
+              <line x1="80" y1="168" x2="80" y2="190" stroke="#16A34A" stroke-width="1.8"/>
+              <line x1="180" y1="168" x2="180" y2="190" stroke="#16A34A" stroke-width="1.8"/>
+
+              <!-- นาย ก -->
+              <rect x="30" y="190" width="100" height="34" rx="8"
+                    fill="rgba(34,197,94,0.12)" stroke="#16A34A" stroke-width="1.5"/>
+              <text x="80" y="212" text-anchor="middle" font-size="12" font-weight="600"
+                    fill="#14532D" class="ts">👤 นาย ก</text>
+
+              <!-- นาย ข -->
+              <rect x="130" y="190" width="100" height="34" rx="8"
+                    fill="rgba(34,197,94,0.12)" stroke="#16A34A" stroke-width="1.5"/>
+              <text x="180" y="212" text-anchor="middle" font-size="12" font-weight="600"
+                    fill="#14532D" class="ts">👤 นาย ข</text>
+
+              <!-- แผนก HR → นาง ค -->
+              <line x1="360" y1="144" x2="360" y2="190" stroke="#16A34A" stroke-width="1.8"/>
+
+              <!-- นาง ค -->
+              <rect x="310" y="190" width="100" height="34" rx="8"
+                    fill="rgba(34,197,94,0.12)" stroke="#16A34A" stroke-width="1.5"/>
+              <text x="360" y="212" text-anchor="middle" font-size="12" font-weight="600"
+                    fill="#14532D" class="ts">👤 นาง ค</text>
+            </svg>
           </div>
           <div class="dbt-props">
             <div class="prop good">✅ ค้นหาข้อมูลตามลำดับชั้นได้รวดเร็ว</div>
@@ -776,31 +822,128 @@
 
         <div class="erd-example">
           <div class="erd-title">ตัวอย่าง ERD: ระบบนักเรียนและวิชาเรียน</div>
-          <div class="erd-canvas">
-            <div class="erd-entity-box">
-              <div class="erd-entity">นักเรียน</div>
-              <div class="erd-attrs">
-                <span class="attr-pk">🔑 รหัสนักเรียน</span>
-                <span class="attr">ชื่อ</span>
-                <span class="attr">นามสกุล</span>
-                <span class="attr">แผนก</span>
-              </div>
-            </div>
-            <div class="erd-rel-line">
-              <span class="erd-card">M</span>
-              <div class="erd-line"></div>
-              <div class="erd-relation-box">ลงทะเบียน</div>
-              <div class="erd-line"></div>
-              <span class="erd-card">N</span>
-            </div>
-            <div class="erd-entity-box">
-              <div class="erd-entity">วิชา</div>
-              <div class="erd-attrs">
-                <span class="attr-pk">🔑 รหัสวิชา</span>
-                <span class="attr">ชื่อวิชา</span>
-                <span class="attr">หน่วยกิต</span>
-              </div>
-            </div>
+          <div class="erd-canvas-svg">
+            <svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg"
+                 style="width:100%;max-width:860px;display:block;margin:0 auto;">
+              <defs>
+                <style>.et{font-family:'Sarabun','Noto Sans Thai',sans-serif;}</style>
+              </defs>
+
+              <!-- ══════════════════════════════════════
+                   ENTITY: นักเรียน  cx=170 cy=210
+                   ══════════════════════════════════════ -->
+              <rect x="100" y="185" width="140" height="50"
+                    fill="rgba(232,101,10,0.18)" stroke="#C2500A" stroke-width="2.5"/>
+              <text x="170" y="217" text-anchor="middle" font-size="16" font-weight="700"
+                    fill="#7C2D12" class="et">นักเรียน</text>
+
+              <!-- PK: รหัสนักเรียน  cx=100 cy=68 — เส้นใต้เฉพาะตัวอักษร -->
+              <ellipse cx="100" cy="68" rx="54" ry="26"
+                       fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="2"/>
+              <text x="100" y="72" text-anchor="middle" font-size="12" font-weight="700"
+                    fill="#78350F" text-decoration="underline" class="et">รหัสนักเรียน</text>
+              <line x1="112" y1="94" x2="145" y2="185" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- Attr: ชื่อ  cx=28 cy=183 -->
+              <ellipse cx="28" cy="183" rx="26" ry="20"
+                       fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
+              <text x="28" y="187" text-anchor="middle" font-size="13" font-weight="600"
+                    fill="#14532D" class="et">ชื่อ</text>
+              <line x1="54" y1="183" x2="100" y2="205" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- Attr: นามสกุล  cx=40 cy=315 -->
+              <ellipse cx="40" cy="315" rx="40" ry="22"
+                       fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
+              <text x="40" y="319" text-anchor="middle" font-size="12" font-weight="600"
+                    fill="#14532D" class="et">นามสกุล</text>
+              <line x1="70" y1="298" x2="118" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- Attr: แผนก  cx=183 cy=358 -->
+              <ellipse cx="183" cy="358" rx="36" ry="22"
+                       fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
+              <text x="183" y="362" text-anchor="middle" font-size="12" font-weight="600"
+                    fill="#14532D" class="et">แผนก</text>
+              <line x1="183" y1="336" x2="170" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- ══════════════════════════════════════
+                   RELATIONSHIP DIAMOND  cx=430 cy=210
+                   ══════════════════════════════════════ -->
+              <polygon points="430,145 518,210 430,275 342,210"
+                       fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="2.5"/>
+              <text x="430" y="207" text-anchor="middle" font-size="14" font-weight="700"
+                    fill="#78350F" class="et">ลงทะเบียน</text>
+
+              <!-- entity right → diamond left -->
+              <line x1="240" y1="210" x2="342" y2="210" stroke="#94A3B8" stroke-width="2"/>
+              <text x="286" y="200" text-anchor="middle" font-size="16" font-weight="800"
+                    fill="#92400E" class="et">M</text>
+
+              <!-- diamond right → entity left -->
+              <line x1="518" y1="210" x2="620" y2="210" stroke="#94A3B8" stroke-width="2"/>
+              <text x="569" y="200" text-anchor="middle" font-size="16" font-weight="800"
+                    fill="#92400E" class="et">N</text>
+
+              <!-- ══════════════════════════════════════
+                   ENTITY: วิชา  cx=690 cy=210
+                   ══════════════════════════════════════ -->
+              <rect x="620" y="185" width="140" height="50"
+                    fill="rgba(232,101,10,0.18)" stroke="#C2500A" stroke-width="2.5"/>
+              <text x="690" y="217" text-anchor="middle" font-size="16" font-weight="700"
+                    fill="#7C2D12" class="et">วิชา</text>
+
+              <!-- PK: รหัสวิชา  cx=760 cy=68 — เส้นใต้เฉพาะตัวอักษร -->
+              <ellipse cx="760" cy="68" rx="48" ry="26"
+                       fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="2"/>
+              <text x="760" y="72" text-anchor="middle" font-size="12" font-weight="700"
+                    fill="#78350F" text-decoration="underline" class="et">รหัสวิชา</text>
+              <line x1="748" y1="94" x2="715" y2="185" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- Attr: ชื่อวิชา  cx=832 cy=183 -->
+              <ellipse cx="832" cy="183" rx="32" ry="20"
+                       fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
+              <text x="832" y="187" text-anchor="middle" font-size="12" font-weight="600"
+                    fill="#14532D" class="et">ชื่อวิชา</text>
+              <line x1="800" y1="188" x2="760" y2="208" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- Attr: หน่วยกิต  cx=677 cy=358 -->
+              <ellipse cx="677" cy="358" rx="40" ry="22"
+                       fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
+              <text x="677" y="362" text-anchor="middle" font-size="12" font-weight="600"
+                    fill="#14532D" class="et">หน่วยกิต</text>
+              <line x1="690" y1="336" x2="690" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- Attr: อาจารย์ผู้สอน  cx=820 cy=315 -->
+              <ellipse cx="820" cy="315" rx="46" ry="22"
+                       fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
+              <text x="820" y="319" text-anchor="middle" font-size="11.5" font-weight="600"
+                    fill="#14532D" class="et">อาจารย์ผู้สอน</text>
+              <line x1="784" y1="298" x2="742" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
+
+              <!-- ══════════════════════════════════════
+                   LEGEND
+                   ══════════════════════════════════════ -->
+              <rect x="220" y="385" width="420" height="28" rx="6"
+                    fill="rgba(240,240,235,0.95)" stroke="#D1D5DB" stroke-width="1"/>
+              <!-- PK -->
+              <ellipse cx="248" cy="399" rx="14" ry="10"
+                       fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="1.5"/>
+              <text x="248" y="403" text-anchor="middle" font-size="10" font-weight="700"
+                    fill="#78350F" text-decoration="underline" class="et">PK</text>
+              <text x="267" y="403" font-size="10" fill="#374151" class="et">= PK (ขีดเส้นใต้)</text>
+              <!-- Attr -->
+              <ellipse cx="370" cy="399" rx="14" ry="10"
+                       fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.5"/>
+              <text x="370" y="403" text-anchor="middle" font-size="9" fill="#14532D" class="et">Attr</text>
+              <text x="389" y="403" font-size="10" fill="#374151" class="et">= Attribute</text>
+              <!-- Entity -->
+              <rect x="455" y="391" width="28" height="16"
+                    fill="rgba(232,101,10,0.18)" stroke="#C2500A" stroke-width="1.5"/>
+              <text x="488" y="403" font-size="10" fill="#374151" class="et">= Entity</text>
+              <!-- Relationship -->
+              <polygon points="549,399 560,406 549,413 538,406"
+                       fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="1.5"/>
+              <text x="565" y="403" font-size="10" fill="#374151" class="et">= Relationship</text>
+            </svg>
           </div>
         </div>
       </div>
