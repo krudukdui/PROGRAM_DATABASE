@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERD Builder — ห้องเรียน ปวช.</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   CSS VARIABLES — Light Theme
+   ══════════════════════════════════════════ */
+:root {
+  --bg:        #eef1f9;
+  --surface:   #ffffff;
+  --surface2:  #f5f7fc;
+  --surface3:  #eaedfa;
+  --border:    #dde2f2;
+  --border2:   #c5cceb;
+
+  --indigo:       #4361ee;
+  --indigo-d:     #2f4acf;
+  --indigo-light: #eef1fd;
+  --indigo-mid:   #bec9f8;
+  --violet:       #7c3aed;
+  --violet-light: #f3eefe;
+  --amber:        #d97706;
+  --amber-light:  #fef3c7;
+  --amber-mid:    #fbbf24;
+  --green:        #059669;
+  --green-light:  #ecfdf5;
+  --red:          #dc2626;
+  --red-light:    #fef2f2;
+  --red-mid:      #fca5a5;
+
+  --text:  #1b1f3a;
+  --text2: #5b639a;
+  --text3: #9ba3c8;
+
+  --shadow-sm: 0 1px 4px rgba(67,97,238,0.09);
+  --shadow:    0 4px 20px rgba(67,97,238,0.13);
+  --shadow-lg: 0 10px 36px rgba(67,97,238,0.18);
+  --radius:    12px;
+  --radius-sm: 8px;
+  --font:  'Sarabun', sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  font-size:14px;
+}
+
+/* ── HEADER ── */
+header{
+  background:var(--surface);
+  border-bottom:2px solid var(--border);
+  padding:0 18px;
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+  box-shadow:var(--shadow-sm);
+  z-index:100;
+}
+
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{
+  width:34px;height:34px;
+  background:var(--indigo);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;
+  box-shadow:0 2px 8px rgba(67,97,238,.35);
+}
+.logo-text{font-size:16px;font-weight:700;color:var(--indigo)}
+.logo-sub{font-size:11px;color:var(--text2)}
+
+.score-pill{
+  background:var(--amber-light);
+  border:1.5px solid var(--amber-mid);
+  border-radius:20px;
+  padding:5px 16px;
+  font-size:13px;font-weight:700;
+  color:var(--amber);
+  display:flex;align-items:center;gap:6px;
+}
+
+/* ── LAYOUT ── */
+.app{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:228px;
+  background:var(--surface);
+  border-right:1.5px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow-y:auto;flex-shrink:0;
+}
+
+.sec{padding:13px 13px 10px;border-bottom:1.5px solid var(--border)}
+
+.sec-lbl{
+  font-size:10px;font-weight:700;letter-spacing:1.3px;
+  color:var(--text3);text-transform:uppercase;
+  margin-bottom:9px;display:flex;align-items:center;gap:5px;
+}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Buttons */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:9px 13px;border-radius:var(--radius-sm);border:none;
+  cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;
+  transition:all .14s;width:100%;margin-bottom:7px;
+}
+.btn:last-child{margin-bottom:0}
+.btn-indigo{background:var(--indigo);color:#fff;box-shadow:0 2px 8px rgba(67,97,238,.25)}
+.btn-indigo:hover{background:var(--indigo-d);transform:translateY(-1px);box-shadow:0 4px 14px rgba(67,97,238,.35)}
+.btn-green{background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(5,150,105,.25)}
+.btn-green:hover{background:#047857;transform:translateY(-1px)}
+.btn-amber{background:var(--amber);color:#fff;box-shadow:0 2px 8px rgba(217,119,6,.25)}
+.btn-amber:hover{background:#b45309;transform:translateY(-1px)}
+.btn-red{background:#fff;color:var(--red);border:1.5px solid var(--red-mid)}
+.btn-red:hover{background:var(--red-light)}
+.btn-outline{background:var(--surface2);color:var(--text2);border:1.5px solid var(--border)}
+.btn-outline:hover{background:var(--surface3);color:var(--text);border-color:var(--indigo-mid)}
+.btn-violet{background:var(--violet);color:#fff;box-shadow:0 2px 8px rgba(124,58,237,.25)}
+.btn-violet:hover{background:#6d28d9;transform:translateY(-1px)}
+
+/* Rel chips */
+.rel-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
+.rel-chip{
+  padding:6px 4px;border-radius:7px;border:1.5px solid var(--border);
+  background:var(--surface2);color:var(--text2);
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  cursor:pointer;text-align:center;transition:all .14s;
+}
+.rel-chip:hover{border-color:var(--indigo-mid);color:var(--indigo)}
+.rel-chip.active{background:var(--indigo);border-color:var(--indigo);color:#fff;box-shadow:0 2px 8px rgba(67,97,238,.3)}
+
+.hint{
+  background:var(--indigo-light);border:1.5px solid var(--indigo-mid);
+  border-radius:var(--radius-sm);padding:9px 11px;
+  font-size:12px;line-height:1.75;color:var(--indigo);margin-top:8px;
+}
+.hint strong{font-weight:700}
+
+.prob{
+  background:var(--amber-light);border:1.5px solid #fde68a;
+  border-radius:var(--radius-sm);padding:10px 12px;
+  font-size:12.5px;line-height:1.8;color:#78350f;
+}
+.prob strong{color:var(--amber);font-weight:700}
+.etag{
+  display:inline-flex;align-items:center;
+  background:#fff;border:1px solid #fde68a;border-radius:5px;
+  padding:1px 7px;font-family:var(--mono);font-size:11px;font-weight:600;
+  color:var(--amber);margin:2px 1px;
+}
+
+/* ── CANVAS ── */
+.canvas-wrap{
+  flex:1;position:relative;overflow:hidden;
+  background-color:var(--bg);
+  background-image:radial-gradient(circle,#c5cff9 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.canvas-wrap.rel-mode{cursor:crosshair}
+#canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+#svg-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+
+.rel-toast{
+  position:absolute;top:13px;left:50%;transform:translateX(-50%);
+  background:var(--violet);color:#fff;padding:7px 22px;border-radius:22px;
+  font-size:13px;font-weight:700;z-index:50;pointer-events:none;
+  box-shadow:0 4px 16px rgba(124,58,237,.4);white-space:nowrap;
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 4px 16px rgba(124,58,237,.4)}50%{box-shadow:0 4px 28px rgba(124,58,237,.7)}}
+
+.empty-state{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;color:var(--text3);pointer-events:none;
+}
+.empty-icon{font-size:50px;opacity:.4;margin-bottom:10px}
+.empty-text{font-size:14px;font-weight:500}
+.empty-sub{font-size:12px;margin-top:3px}
+
+/* ── ENTITY CARD ── */
+.entity-card{
+  position:absolute;background:var(--surface);
+  border:2px solid var(--indigo-mid);border-radius:var(--radius);
+  min-width:188px;box-shadow:var(--shadow);user-select:none;
+  transition:box-shadow .2s,border-color .2s,transform .1s;z-index:10;
+}
+.entity-card:hover{border-color:var(--indigo);box-shadow:var(--shadow-lg)}
+.entity-card.selected{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,58,237,.18),var(--shadow-lg);transform:scale(1.01)}
+.entity-card.has-error{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.14),var(--shadow)}
+
+.ent-header{
+  background:var(--indigo);
+  border-radius:calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0;
+  padding:9px 11px;display:flex;align-items:center;justify-content:space-between;
+  cursor:grab;gap:6px;
+}
+.ent-header:active{cursor:grabbing}
+
+.ent-name-wrap{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.ent-name-input{
+  background:rgba(255,255,255,.16);border:1px solid transparent;color:#fff;
+  font-family:var(--mono);font-size:12.5px;font-weight:600;
+  width:100%;outline:none;border-radius:5px;padding:2px 6px;cursor:pointer;
+  transition:background .15s,border-color .15s;
+}
+.ent-name-input:focus{background:rgba(255,255,255,.26);border-color:rgba(255,255,255,.4);cursor:text}
+
+.ent-actions{display:flex;gap:3px;flex-shrink:0}
+.icon-btn{
+  background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);
+  cursor:pointer;width:24px;height:24px;border-radius:5px;font-size:12px;
+  display:flex;align-items:center;justify-content:center;transition:all .14s;
+}
+.icon-btn:hover{background:rgba(255,255,255,.26);color:#fff}
+.icon-btn.del:hover{background:rgba(239,68,68,.5);border-color:transparent}
+
+.attr-list{padding:4px 0}
+.attr-row{
+  display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px;
+  transition:background .1s;
+}
+.attr-row:hover{background:var(--surface3)}
+
+.abadge{
+  font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;min-width:22px;
+  text-align:center;letter-spacing:.3px;flex-shrink:0;
+}
+.abadge-pk{background:#fef3c7;color:var(--amber);border:1px solid #fde68a}
+.abadge-fk{background:var(--violet-light);color:var(--violet);border:1px solid #ddd6fe}
+.abadge-n{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+
+.attr-name-input{
+  background:transparent;border:none;color:var(--text);
+  font-family:var(--mono);font-size:11.5px;width:100%;outline:none;min-width:0;
+}
+.attr-name-input:focus{background:var(--surface3);border-radius:3px;padding:1px 4px}
+.attr-type{color:var(--text3);font-size:10.5px;font-family:var(--mono);flex-shrink:0}
+.attr-del{
+  background:transparent;border:none;color:var(--text3);cursor:pointer;
+  width:18px;height:18px;border-radius:3px;font-size:11px;
+  display:flex;align-items:center;justify-content:center;opacity:0;transition:all .14s;flex-shrink:0;
+}
+.attr-row:hover .attr-del{opacity:1}
+.attr-del:hover{background:var(--red-light);color:var(--red)}
+
+.add-attr-row{
+  display:flex;align-items:center;gap:6px;padding:6px 10px 9px;
+  font-size:11.5px;color:var(--text3);cursor:pointer;
+  border-top:1.5px dashed var(--border);transition:all .14s;
+  border-radius:0 0 calc(var(--radius)-2px) calc(var(--radius)-2px);
+}
+.add-attr-row:hover{color:var(--indigo);background:var(--indigo-light)}
+
+/* ── SVG lines ── */
+.ln-11{stroke:#059669;stroke-width:2;fill:none}
+.ln-1n{stroke:#4361ee;stroke-width:2;fill:none}
+.ln-nn{stroke:#7c3aed;stroke-width:2;fill:none}
+.ln-err{stroke:#dc2626;stroke-width:2;fill:none;stroke-dasharray:6,3}
+.rel-lbl{font-family:var(--mono);font-size:10.5px;font-weight:600}
+
+/* ── RIGHT PANEL ── */
+.rpanel{
+  width:284px;background:var(--surface);
+  border-left:1.5px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;
+}
+
+.panel-tabs{display:flex;border-bottom:1.5px solid var(--border);background:var(--surface2)}
+.ptab{
+  flex:1;padding:11px 8px;border:none;background:transparent;
+  font-family:var(--font);font-size:12px;font-weight:600;color:var(--text2);
+  cursor:pointer;border-bottom:2.5px solid transparent;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.ptab.active{color:var(--indigo);border-bottom-color:var(--indigo);background:var(--surface)}
+.ptab:hover:not(.active){color:var(--text);background:var(--surface3)}
+
+.pcontent{flex:1;overflow-y:auto;display:none}
+.pcontent.show{display:block}
+
+/* Guide styles */
+.gsec{padding:13px 13px 10px;border-bottom:1px solid var(--border)}
+.gtitle{font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+.gstep{display:flex;gap:9px;margin-bottom:9px;align-items:flex-start}
+.stepnum{
+  width:22px;height:22px;background:var(--indigo);color:#fff;border-radius:50%;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.stepbody{font-size:12.5px;line-height:1.65;color:var(--text2)}
+.stepbody strong{color:var(--text);font-weight:600}
+
+.ccard{border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;font-size:12.5px;line-height:1.65}
+.ccard.cpk{background:#fef3c7;border:1.5px solid #fde68a;color:#78350f}
+.ccard.cfk{background:var(--violet-light);border:1.5px solid #ddd6fe;color:#4c1d95}
+.ccard.crel{background:var(--indigo-light);border:1.5px solid var(--indigo-mid);color:#1e2ea0}
+.ctitle{font-weight:700;font-size:12px;margin-bottom:3px;display:flex;align-items:center;gap:5px}
+.cmono{font-family:var(--mono);font-size:11.5px}
+
+.ctable{
+  width:100%;border-collapse:collapse;font-size:11.5px;
+  margin-top:6px;border-radius:6px;overflow:hidden;border:1px solid var(--border);
+}
+.ctable th{background:var(--indigo);color:#fff;padding:5px 8px;font-weight:600;font-size:11px;text-align:left}
+.ctable td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text2)}
+.ctable tr:last-child td{border-bottom:none}
+.ctable tr:nth-child(even) td{background:var(--surface2)}
+.ctable .mono{font-family:var(--mono);font-weight:600;color:var(--indigo)}
+
+/* Feedback */
+.score-sec{
+  padding:16px;border-bottom:1.5px solid var(--border);
+  background:var(--surface2);text-align:center;
+}
+.score-circle{
+  width:74px;height:74px;border-radius:50%;background:var(--amber-light);
+  border:3px solid var(--amber-mid);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;margin:0 auto 10px;transition:all .4s;
+}
+.score-big{font-size:24px;font-weight:800;color:var(--amber);line-height:1;font-family:var(--mono)}
+.score-maxl{font-size:10px;color:var(--text3)}
+.sbar{width:100%;height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.sbar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--indigo));transition:width .7s cubic-bezier(.4,0,.2,1);width:0%}
+.score-lbl{font-size:12px;color:var(--text2);margin-top:6px}
+
+.fb-list{padding:10px}
+.fb-item{
+  display:flex;align-items:flex-start;gap:9px;padding:9px 11px;
+  border-radius:var(--radius-sm);margin-bottom:7px;font-size:12.5px;line-height:1.5;
+  border:1.5px solid transparent;animation:fbIn .22s ease both;
+}
+@keyframes fbIn{from{opacity:0;transform:translateX(7px)}to{opacity:1;transform:none}}
+.fb-ok  {background:var(--green-light);border-color:#a7f3d0;color:#065f46}
+.fb-err {background:var(--red-light);border-color:var(--red-mid);color:#991b1b}
+.fb-warn{background:var(--amber-light);border-color:#fde68a;color:#92400e}
+.fb-info{background:var(--indigo-light);border-color:var(--indigo-mid);color:#1e2ea0}
+.fb-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+
+/* ── MODALS ── */
+.moverlay{
+  position:fixed;inset:0;background:rgba(27,31,58,.42);
+  display:flex;align-items:center;justify-content:center;z-index:999;
+  backdrop-filter:blur(5px);animation:fadeIn .18s;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
+  padding:24px;width:92%;max-width:460px;box-shadow:var(--shadow-lg);
+  animation:mpop .2s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes mpop{from{transform:scale(.93);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:18px;color:var(--text);display:flex;align-items:center;gap:8px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.flbl{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.4px;text-transform:uppercase}
+.finput,.fselect{
+  background:var(--surface2);border:1.5px solid var(--border2);
+  color:var(--text);font-family:var(--font);font-size:13.5px;
+  padding:9px 12px;border-radius:var(--radius-sm);outline:none;width:100%;
+  transition:border-color .15s,box-shadow .15s;
+}
+.finput:focus,.fselect:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(67,97,238,.12)}
+.mfooter{display:flex;gap:8px;justify-content:flex-end}
+.mfooter .btn{width:auto;margin:0;padding:9px 20px}
+
+/* Answer modal */
+.ans-scroll{max-height:68vh;overflow-y:auto;padding-right:4px}
+.ans-entity{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px}
+.ans-ename{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--indigo);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ans-attr{display:flex;align-items:center;gap:7px;padding:3px 0;font-size:12px;color:var(--text2)}
+.ansbadge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px}
+.ansbadge-pk{background:#fef3c7;color:var(--amber);border:1px solid #fde68a}
+.ansbadge-fk{background:var(--violet-light);color:var(--violet);border:1px solid #ddd6fe}
+.ans-aname{font-family:var(--mono);font-size:11.5px;color:var(--text)}
+.ans-atype{font-family:var(--mono);font-size:10.5px;color:var(--text3)}
+.rel-chip-a{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:7px;padding:5px 10px;font-size:12px;margin:3px;font-family:var(--mono);
+}
+.rel-type-badge{font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px;background:var(--indigo-light);color:var(--indigo);border:1px solid var(--indigo-mid)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+
+@media(max-width:900px){.sidebar{width:190px}.rpanel{width:238px}}
+@media(max-width:640px){.rpanel{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🗄</div>
+    <div>
+      <div class="logo-text">ERD Builder</div>
+      <div class="logo-sub">ฝึกออกแบบฐานข้อมูล ระดับ ปวช.</div>
+    </div>
+  </div>
+  <div class="score-pill">⭐ คะแนน: <span id="scoreDisplay">—</span></div>
+</header>
+
+<div class="app">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <div class="sidebar">
+
+    <div class="sec">
+      <div class="sec-lbl">📦 Entity</div>
+      <button class="btn btn-indigo" onclick="addEntity()">＋ เพิ่ม Entity ใหม่</button>
+    </div>
+
+    <div class="sec">
+      <div class="sec-lbl">🔗 ความสัมพันธ์</div>
+      <div style="font-size:11px;color:var(--text2);margin-bottom:6px;font-weight:600">เลือก Cardinality:</div>
+      <div class="rel-chips">
+        <div class="rel-chip" id="c11" onclick="setRelType('1:1')">1:1</div>
+        <div class="rel-chip active" id="c1n" onclick="setRelType('1:N')">1:N</div>
+        <div class="rel-chip" id="cnn" onclick="setRelType('N:N')">N:N</div>
+      </div>
+      <button class="btn btn-violet" id="relBtn" onclick="toggleRel()">🖱 วาดเส้นความสัมพันธ์</button>
+      <div class="hint">
+        <strong>วิธีใช้:</strong> กด "วาดเส้น" แล้ว<br>
+        ① คลิก Entity <em>ต้นทาง</em><br>
+        ② คลิก Entity <em>ปลายทาง</em><br>
+        เส้นจะสร้างอัตโนมัติ<br>
+        <strong>คลิก label เส้น</strong> เพื่อลบ
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-lbl">⚙️ การดำเนินการ</div>
+      <button class="btn btn-green"   onclick="checkAnswer()">✅ ตรวจคำตอบ</button>
+      <button class="btn btn-amber"   onclick="showAnswer()">💡 ดูเฉลย</button>
+      <button class="btn btn-outline" onclick="loadSample()">📋 โหลดโครงร่าง</button>
+      <button class="btn btn-red"     onclick="doReset()">🔄 Reset</button>
+    </div>
+
+    <div class="sec">
+      <div class="sec-lbl">📝 โจทย์</div>
+      <div class="prob">
+        <strong>ระบบร้านค้าออนไลน์</strong><br>
+        ออกแบบ ERD โดยมี:<br>
+        <span class="etag">Customer</span>
+        <span class="etag">Product</span>
+        <span class="etag">Order</span>
+        <span class="etag">OrderDetail</span><br><br>
+        ✔ กำหนด <strong>PK</strong> ทุกตาราง<br>
+        ✔ กำหนด <strong>FK</strong> ให้ถูกต้อง<br>
+        ✔ วาดเส้น + <strong>Cardinality</strong>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ CANVAS ═══ -->
+  <div class="canvas-wrap" id="canvasWrap">
+    <div id="relToast" class="rel-toast" style="display:none">🔗 คลิก Entity ต้นทาง...</div>
+    <div id="emptyState" class="empty-state">
+      <div class="empty-icon">🗂</div>
+      <div class="empty-text">Canvas ว่างเปล่า</div>
+      <div class="empty-sub">กด "เพิ่ม Entity" หรือ "โหลดโครงร่าง" เพื่อเริ่ม</div>
+    </div>
+    <div id="canvas"></div>
+    <svg id="svg-layer" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a11" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L8,3.5 z" fill="#059669"/></marker>
+        <marker id="a1n" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L8,3.5 z" fill="#4361ee"/></marker>
+        <marker id="ann" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L8,3.5 z" fill="#7c3aed"/></marker>
+        <marker id="aerr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L8,3.5 z" fill="#dc2626"/></marker>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <div class="rpanel">
+    <div class="panel-tabs">
+      <button class="ptab active" id="tGuide"    onclick="switchTab('guide')">📖 คู่มือ</button>
+      <button class="ptab"        id="tFeedback" onclick="switchTab('feedback')">📊 ผลตรวจ</button>
+    </div>
+
+    <!-- GUIDE -->
+    <div class="pcontent show" id="pGuide">
+
+      <div class="gsec">
+        <div class="gtitle">🎓 ERD คืออะไร?</div>
+        <div style="font-size:12.5px;color:var(--text2);line-height:1.7;margin-bottom:10px">
+          <strong style="color:var(--text)">Entity Relationship Diagram</strong> คือแผนผังแสดงความสัมพันธ์ระหว่างข้อมูลในฐานข้อมูล
+        </div>
+        <div class="ccard cpk">
+          <div class="ctitle">🔑 Primary Key (PK)</div>
+          ค่าที่<strong>ไม่ซ้ำ</strong> ระบุแต่ละแถวได้อย่างเจาะจง<br>
+          เช่น <span class="cmono">customer_id</span>, <span class="cmono">product_id</span>
+        </div>
+        <div class="ccard cfk">
+          <div class="ctitle">🔗 Foreign Key (FK)</div>
+          อ้างอิง <strong>PK ของตารางอื่น</strong> สร้างความเชื่อมโยง<br>
+          เช่น <span class="cmono">customer_id</span> ใน Order
+        </div>
+      </div>
+
+      <div class="gsec">
+        <div class="gtitle">🚀 ขั้นตอนการใช้งาน</div>
+        <div class="gstep"><div class="stepnum">1</div><div class="stepbody">กด <strong>"เพิ่ม Entity"</strong> หรือ <strong>"โหลดโครงร่าง"</strong> เพื่อสร้างตาราง</div></div>
+        <div class="gstep"><div class="stepnum">2</div><div class="stepbody">คลิก <strong>ชื่อตาราง</strong> เพื่อแก้ไข กด <strong>＋</strong> เพื่อเพิ่ม Attribute</div></div>
+        <div class="gstep"><div class="stepnum">3</div><div class="stepbody">กำหนด <strong>PK</strong> อย่างน้อย 1 ตัวต่อตาราง และกำหนด <strong>FK</strong> ให้ถูกต้อง</div></div>
+        <div class="gstep"><div class="stepnum">4</div><div class="stepbody">เลือก Cardinality แล้วกด <strong>"วาดเส้น"</strong> เชื่อมตาราง</div></div>
+        <div class="gstep"><div class="stepnum">5</div><div class="stepbody">กด <strong>"ตรวจคำตอบ"</strong> เพื่อดูคะแนนและ Feedback</div></div>
+      </div>
+
+      <div class="gsec">
+        <div class="gtitle">↔ ประเภท Cardinality</div>
+        <table class="ctable">
+          <thead><tr><th>ประเภท</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">1:1</td><td>หนึ่งต่อหนึ่ง</td><td style="font-size:11px">คน — บัตรประชาชน</td></tr>
+            <tr><td class="mono">1:N</td><td>หนึ่งต่อกลุ่ม</td><td style="font-size:11px">ลูกค้า — Order</td></tr>
+            <tr><td class="mono">N:N</td><td>กลุ่มต่อกลุ่ม</td><td style="font-size:11px">นักเรียน — วิชา</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="gsec">
+        <div class="gtitle">💡 คำใบ้โจทย์</div>
+        <div class="ccard crel" style="font-size:12px;line-height:1.85">
+          <div class="ctitle">ความสัมพันธ์ที่ควรมี</div>
+          • <strong>Customer → Order</strong> <em>(1:N)</em><br>
+          &nbsp;&nbsp;ลูกค้า 1 คน มีได้หลาย Order<br><br>
+          • <strong>Order → OrderDetail</strong> <em>(1:N)</em><br>
+          &nbsp;&nbsp;1 Order มีรายการสินค้าหลายชิ้น<br><br>
+          • <strong>Product → OrderDetail</strong> <em>(1:N)</em><br>
+          &nbsp;&nbsp;1 สินค้าปรากฏใน OrderDetail หลายครั้ง
+        </div>
+      </div>
+
+      <div class="gsec" style="border-bottom:none">
+        <div class="gtitle">🎨 สัญลักษณ์เส้น</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <svg width="50" height="14"><line x1="0" y1="7" x2="50" y2="7" stroke="#059669" stroke-width="2.5"/></svg>
+            <span style="color:var(--text2)">1:1 สีเขียว</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <svg width="50" height="14"><line x1="0" y1="7" x2="50" y2="7" stroke="#4361ee" stroke-width="2.5"/></svg>
+            <span style="color:var(--text2)">1:N สีน้ำเงิน</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <svg width="50" height="14"><line x1="0" y1="7" x2="50" y2="7" stroke="#7c3aed" stroke-width="2.5"/></svg>
+            <span style="color:var(--text2)">N:N สีม่วง</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <svg width="50" height="14"><line x1="0" y1="7" x2="50" y2="7" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="5,3"/></svg>
+            <span style="color:var(--text2)">เส้นแดงประ = ผิด</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="pcontent" id="pFeedback">
+      <div class="score-sec">
+        <div class="score-circle" id="scoreCircle">
+          <div class="score-big" id="scoreNum">—</div>
+          <div class="score-maxl">/10</div>
+        </div>
+        <div class="sbar"><div class="sbar-fill" id="sbarFill"></div></div>
+        <div class="score-lbl" id="scoreLbl">กดตรวจคำตอบเพื่อดูคะแนน</div>
+      </div>
+      <div class="fb-list" id="fbList">
+        <div class="fb-item fb-info">
+          <span class="fb-icon">📖</span>
+          <span>ดูคู่มือที่แท็บ "คู่มือ" แล้วกด "ตรวจคำตอบ"</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: Add Attribute -->
+<div id="attrModal" class="moverlay" style="display:none" onclick="closeModal('attrModal',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">➕ เพิ่ม Attribute</div>
+    <div class="mgrid">
+      <div class="fg" style="grid-column:1/-1">
+        <label class="flbl">ชื่อ Attribute</label>
+        <input class="finput" id="attrName" placeholder="เช่น customer_id, name, price"/>
+      </div>
+      <div class="fg">
+        <label class="flbl">ประเภทข้อมูล</label>
+        <select class="fselect" id="attrType">
+          <option>INT</option><option>VARCHAR</option><option>TEXT</option>
+          <option>DATE</option><option>DECIMAL</option><option>BOOLEAN</option>
+          <option>FLOAT</option><option>TIMESTAMP</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="flbl">ประเภท Key</label>
+        <select class="fselect" id="attrKey">
+          <option value="none">— ปกติ —</option>
+          <option value="PK">🔑 Primary Key</option>
+          <option value="FK">🔗 Foreign Key</option>
+        </select>
+      </div>
+    </div>
+    <div class="mfooter">
+      <button class="btn btn-outline" onclick="closeModal('attrModal')">ยกเลิก</button>
+      <button class="btn btn-indigo" onclick="confirmAttr()">✔ เพิ่ม</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Answer -->
+<div id="ansModal" class="moverlay" style="display:none" onclick="closeModal('ansModal',event)">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:560px">
+    <div class="modal-title">💡 เฉลย — ระบบร้านค้าออนไลน์</div>
+    <div class="ans-scroll">
+      <div id="ansEntities"></div>
+      <div style="margin-top:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px">ความสัมพันธ์</div>
+        <div id="ansRels"></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="mfooter">
+      <button class="btn btn-outline" onclick="closeModal('ansModal')">ปิด</button>
+      <button class="btn btn-green" onclick="loadAnswer();closeModal('ansModal')">📥 โหลดเฉลยลง Canvas</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ JS ════════════════ -->
+<script>
+// ── STATE ──
+let entities=[], relationships=[];
+let eid=1, aid=1;
+let relMode=false, relSrc=null, relType="1:N";
+let drag=null, doff={x:0,y:0};
+let curEnt=null; // entity ที่กำลัง add attr
+
+// ── ANSWER KEY ──
+const ANS={
+  entities:[
+    {name:"Customer",attrs:[
+      {name:"customer_id",type:"INT",key:"PK"},{name:"name",type:"VARCHAR",key:"none"},
+      {name:"email",type:"VARCHAR",key:"none"},{name:"phone",type:"VARCHAR",key:"none"}]},
+    {name:"Product",attrs:[
+      {name:"product_id",type:"INT",key:"PK"},{name:"name",type:"VARCHAR",key:"none"},
+      {name:"price",type:"DECIMAL",key:"none"},{name:"stock",type:"INT",key:"none"}]},
+    {name:"Order",attrs:[
+      {name:"order_id",type:"INT",key:"PK"},{name:"customer_id",type:"INT",key:"FK"},
+      {name:"order_date",type:"DATE",key:"none"},{name:"total",type:"DECIMAL",key:"none"}]},
+    {name:"OrderDetail",attrs:[
+      {name:"detail_id",type:"INT",key:"PK"},{name:"order_id",type:"INT",key:"FK"},
+      {name:"product_id",type:"INT",key:"FK"},{name:"quantity",type:"INT",key:"none"},
+      {name:"unit_price",type:"DECIMAL",key:"none"}]}
+  ],
+  relationships:[
+    {from:"Customer",to:"Order",cardinality:"1:N",label:"สั่งซื้อ"},
+    {from:"Order",to:"OrderDetail",cardinality:"1:N",label:"ประกอบด้วย"},
+    {from:"Product",to:"OrderDetail",cardinality:"1:N",label:"อยู่ใน"}
+  ]
+};
+
+// ── TABS ──
+function switchTab(t){
+  document.getElementById("pGuide").classList.toggle("show",t==="guide");
+  document.getElementById("pFeedback").classList.toggle("show",t==="feedback");
+  document.getElementById("tGuide").classList.toggle("active",t==="guide");
+  document.getElementById("tFeedback").classList.toggle("active",t==="feedback");
+}
+
+// ── REL TYPE ──
+function setRelType(t){
+  relType=t;
+  [["1:1","c11"],["1:N","c1n"],["N:N","cnn"]].forEach(([v,id])=>{
+    document.getElementById(id).classList.toggle("active",v===t);
+  });
+}
+
+// ── ADD ENTITY ──
+function addEntity(){
+  const names=["Customer","Product","Order","OrderDetail","Employee","Category","Payment","Supplier"];
+  let name="Entity";
+  for(const n of names){if(!entities.find(e=>e.name===n)){name=n;break}}
+  const id=`e${eid++}`;
+  const ent={id,name,x:60+Math.random()*280,y:60+Math.random()*180,attrs:[]};
+  entities.push(ent);
+  renderEnt(ent);
+  updEmpty();
+  updLines();
+}
+
+// ── RENDER ENTITY ──
+function renderEnt(ent){
+  document.getElementById(ent.id)?.remove();
+  const cv=document.getElementById("canvas");
+  const card=document.createElement("div");
+  card.className="entity-card"; card.id=ent.id;
+  card.style.cssText=`left:${ent.x}px;top:${ent.y}px`;
+
+  // Header
+  const hdr=document.createElement("div"); hdr.className="ent-header";
+  const nw=document.createElement("div"); nw.className="ent-name-wrap";
+  const ico=document.createElement("span"); ico.textContent="📦"; ico.style.fontSize="14px"; ico.style.opacity=".9";
+  const ni=document.createElement("input"); ni.className="ent-name-input"; ni.value=ent.name;
+  ni.addEventListener("mousedown",e=>e.stopPropagation());
+  ni.addEventListener("change",e=>{ent.name=e.target.value.trim()||ent.name});
+  nw.appendChild(ico); nw.appendChild(ni);
+
+  const acts=document.createElement("div"); acts.className="ent-actions";
+  const btnA=document.createElement("button"); btnA.className="icon-btn"; btnA.innerHTML="＋"; btnA.title="เพิ่ม Attribute";
+  btnA.onclick=e=>{e.stopPropagation();openAttrModal(ent.id)};
+  const btnD=document.createElement("button"); btnD.className="icon-btn del"; btnD.innerHTML="✕"; btnD.title="ลบ Entity";
+  btnD.onclick=e=>{e.stopPropagation();delEnt(ent.id)};
+  acts.appendChild(btnA); acts.appendChild(btnD);
+  hdr.appendChild(nw); hdr.appendChild(acts);
+
+  // Attr list
+  const al=document.createElement("div"); al.className="attr-list"; al.id=`al_${ent.id}`;
+  ent.attrs.forEach(a=>al.appendChild(makeAttrRow(ent,a)));
+
+  // Add attr row
+  const ar=document.createElement("div"); ar.className="add-attr-row"; ar.textContent="＋ เพิ่ม Attribute";
+  ar.onclick=()=>openAttrModal(ent.id);
+
+  card.appendChild(hdr); card.appendChild(al); card.appendChild(ar);
+
+  // Drag
+  hdr.addEventListener("mousedown",e=>{
+    if(relMode)return;
+    e.preventDefault();
+    const r=card.getBoundingClientRect();
+    drag=ent; doff={x:e.clientX-r.left,y:e.clientY-r.top};
+    card.style.zIndex=20;
+  });
+
+  // Rel click
+  card.addEventListener("mousedown",e=>{
+    if(relMode){e.preventDefault();handleRelClick(ent.id)}
+  });
+
+  cv.appendChild(card);
+}
+
+// ── ATTR ROW ──
+function makeAttrRow(ent,attr){
+  const row=document.createElement("div"); row.className="attr-row"; row.id=`ar_${attr.id}`;
+  const b=document.createElement("span");
+  b.className="abadge "+(attr.key==="PK"?"abadge-pk":attr.key==="FK"?"abadge-fk":"abadge-n");
+  b.textContent=attr.key==="none"?"—":attr.key;
+  const ni=document.createElement("input"); ni.className="attr-name-input"; ni.value=attr.name;
+  ni.addEventListener("mousedown",e=>e.stopPropagation());
+  ni.addEventListener("change",e=>{attr.name=e.target.value});
+  const ts=document.createElement("span"); ts.className="attr-type"; ts.textContent=attr.type;
+  const db=document.createElement("button"); db.className="attr-del"; db.innerHTML="✕";
+  db.addEventListener("mousedown",e=>e.stopPropagation());
+  db.onclick=()=>{ent.attrs=ent.attrs.filter(a=>a.id!==attr.id);row.remove()};
+  row.appendChild(b); row.appendChild(ni); row.appendChild(ts); row.appendChild(db);
+  return row;
+}
+
+// ── DELETE ENTITY ──
+function delEnt(id){
+  entities=entities.filter(e=>e.id!==id);
+  relationships=relationships.filter(r=>r.from!==id&&r.to!==id);
+  document.getElementById(id)?.remove();
+  updEmpty(); updLines();
+}
+
+function updEmpty(){
+  document.getElementById("emptyState").style.display=entities.length?"none":"block";
+}
+
+// ── DRAG ──
+document.addEventListener("mousemove",e=>{
+  if(!drag)return;
+  const wr=document.getElementById("canvasWrap").getBoundingClientRect();
+  drag.x=Math.max(0,e.clientX-wr.left-doff.x);
+  drag.y=Math.max(0,e.clientY-wr.top-doff.y);
+  const c=document.getElementById(drag.id);
+  if(c){c.style.left=drag.x+"px";c.style.top=drag.y+"px"}
+  updLines();
+});
+document.addEventListener("mouseup",()=>{
+  if(drag){document.getElementById(drag.id).style.zIndex=10;drag=null}
+});
+
+// ── ATTR MODAL ──
+function openAttrModal(id){
+  curEnt=id;
+  document.getElementById("attrName").value="";
+  document.getElementById("attrKey").value="none";
+  document.getElementById("attrType").value="INT";
+  document.getElementById("attrModal").style.display="flex";
+  setTimeout(()=>document.getElementById("attrName").focus(),60);
+}
+
+function confirmAttr(){
+  const name=document.getElementById("attrName").value.trim();
+  if(!name){document.getElementById("attrName").focus();return}
+  const ent=entities.find(e=>e.id===curEnt); if(!ent)return;
+  const attr={id:`a${aid++}`,name,type:document.getElementById("attrType").value,key:document.getElementById("attrKey").value};
+  ent.attrs.push(attr);
+  document.getElementById(`al_${ent.id}`)?.appendChild(makeAttrRow(ent,attr));
+  closeModal("attrModal");
+}
+
+// ── REL MODE ──
+function toggleRel(){
+  relMode=!relMode; relSrc=null;
+  const w=document.getElementById("canvasWrap");
+  const b=document.getElementById("relBtn");
+  const t=document.getElementById("relToast");
+  entities.forEach(e=>document.getElementById(e.id)?.classList.remove("selected"));
+  if(relMode){
+    w.classList.add("rel-mode");
+    b.textContent="❌ ออกจากโหมดวาดเส้น";
+    b.style.background="#dc2626";
+    t.style.display="block"; t.textContent="🔗 คลิก Entity ต้นทาง...";
+  } else {
+    w.classList.remove("rel-mode");
+    b.textContent="🖱 วาดเส้นความสัมพันธ์";
+    b.style.background="";
+    t.style.display="none";
+  }
+}
+
+function handleRelClick(id){
+  if(!relSrc){
+    relSrc=id;
+    document.getElementById(id)?.classList.add("selected");
+    const n=entities.find(e=>e.id===id)?.name;
+    document.getElementById("relToast").textContent=`🔗 เลือก "${n}" — คลิก Entity ปลายทาง`;
+  } else {
+    if(relSrc===id){
+      document.getElementById(id)?.classList.remove("selected");
+      relSrc=null;
+      document.getElementById("relToast").textContent="🔗 คลิก Entity ต้นทาง...";
+      return;
+    }
+    const dup=relationships.find(r=>(r.from===relSrc&&r.to===id)||(r.from===id&&r.to===relSrc));
+    if(dup)alert("ความสัมพันธ์นี้มีอยู่แล้ว!");
+    else relationships.push({id:`r${Date.now()}`,from:relSrc,to:id,cardinality:relType,error:false});
+    document.getElementById(relSrc)?.classList.remove("selected");
+    relSrc=null;
+    document.getElementById("relToast").textContent="🔗 คลิก Entity ต้นทาง...";
+    updLines();
+  }
+}
+
+// ── SVG LINES ──
+function getCenter(id){
+  const c=document.getElementById(id),e=entities.find(x=>x.id===id);
+  if(!c||!e)return null;
+  return{x:e.x+c.offsetWidth/2,y:e.y+c.offsetHeight/2,w:c.offsetWidth,h:c.offsetHeight};
+}
+function edgePt(c1,c2){
+  const dx=c2.x-c1.x,dy=c2.y-c1.y,hw=c1.w/2+5,hh=c1.h/2+5;
+  if(hw*Math.abs(dy)<=hh*Math.abs(dx))
+    return{x:c1.x+(dx>0?hw:-hw),y:c1.y+(dx!==0?dy/Math.abs(dx)*hw:0)};
+  return{x:c1.x+(dy!==0?dx/Math.abs(dy)*hh:0),y:c1.y+(dy>0?hh:-hh)};
+}
+
+function updLines(){
+  const svg=document.getElementById("svg-layer");
+  Array.from(svg.children).forEach(c=>{if(c.tagName!=="defs")c.remove()});
+
+  relationships.forEach(rel=>{
+    const c1=getCenter(rel.from),c2=getCenter(rel.to);
+    if(!c1||!c2)return;
+    const p1=edgePt(c1,c2),p2=edgePt(c2,c1);
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2-25;
+
+    let lc,mid,lcolor;
+    if(rel.error){lc="ln-err";mid="aerr";lcolor="#dc2626"}
+    else if(rel.cardinality==="1:1"){lc="ln-11";mid="a11";lcolor="#059669"}
+    else if(rel.cardinality==="1:N"){lc="ln-1n";mid="a1n";lcolor="#4361ee"}
+    else{lc="ln-nn";mid="ann";lcolor="#7c3aed"}
+
+    const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+    path.setAttribute("class",lc);
+    path.setAttribute("d",`M${p1.x},${p1.y} Q${mx},${my} ${p2.x},${p2.y}`);
+    path.setAttribute("marker-end",`url(#${mid})`);
+
+    const g=document.createElementNS("http://www.w3.org/2000/svg","g");
+    g.style.cursor="pointer"; g.setAttribute("pointer-events","all");
+    g.addEventListener("click",()=>{
+      if(confirm("ลบความสัมพันธ์นี้?")){relationships=relationships.filter(r=>r.id!==rel.id);updLines()}
+    });
+
+    const lw=34,lh=18;
+    const rect=document.createElementNS("http://www.w3.org/2000/svg","rect");
+    rect.setAttribute("x",mx-lw/2); rect.setAttribute("y",my-lh/2);
+    rect.setAttribute("width",lw); rect.setAttribute("height",lh); rect.setAttribute("rx","6");
+    rect.setAttribute("fill","white"); rect.setAttribute("stroke",lcolor); rect.setAttribute("stroke-width","1.5");
+    rect.setAttribute("filter","drop-shadow(0 1px 3px rgba(0,0,0,.1))");
+
+    const txt=document.createElementNS("http://www.w3.org/2000/svg","text");
+    txt.setAttribute("x",mx); txt.setAttribute("y",my);
+    txt.setAttribute("text-anchor","middle"); txt.setAttribute("dominant-baseline","middle");
+    txt.setAttribute("class","rel-lbl"); txt.setAttribute("fill",lcolor);
+    txt.textContent=rel.cardinality;
+
+    g.appendChild(rect); g.appendChild(txt);
+    svg.appendChild(path); svg.appendChild(g);
+  });
+}
+
+// ── CHECK ANSWER ──
+function checkAnswer(){
+  entities.forEach(e=>document.getElementById(e.id)?.classList.remove("has-error"));
+  relationships.forEach(r=>r.error=false);
+  const fbs=[]; let score=0;
+
+  // 1. Entity (3 pts)
+  let ef=0;
+  ANS.entities.forEach(ae=>{
+    const f=entities.find(e=>e.name.trim().toLowerCase()===ae.name.toLowerCase());
+    if(f)ef++;
+    else fbs.push({t:"err",m:`❌ ขาด Entity: <strong>${ae.name}</strong>`});
+  });
+  const es=Math.round(ef/ANS.entities.length*3); score+=es;
+  fbs.push(ef===ANS.entities.length
+    ?{t:"ok",m:`✔ Entity ครบ ${ef}/${ANS.entities.length} ตาราง (+${es})`}
+    :{t:"warn",m:`⚠ มี Entity ${ef}/${ANS.entities.length} ตาราง (+${es})`});
+
+  // 2. PK (2 pts)
+  let pke=0;
+  entities.forEach(ent=>{
+    const ae=ANS.entities.find(a=>a.name.toLowerCase()===ent.name.trim().toLowerCase());
+    if(!ae)return;
+    if(!ent.attrs.some(a=>a.key==="PK")){
+      pke++;
+      fbs.push({t:"err",m:`❌ ตาราง <strong>${ent.name}</strong> ไม่มี Primary Key`});
+      document.getElementById(ent.id)?.classList.add("has-error");
+    }
+  });
+  const ps=Math.max(0,2-pke); score+=ps;
+  if(pke===0&&ef>0)fbs.push({t:"ok",m:`✔ ทุกตารางมี Primary Key (+${ps})`});
+
+  // 3. FK (2 pts)
+  let fke=0;
+  ANS.entities.forEach(ae=>{
+    const aFKs=ae.attrs.filter(a=>a.key==="FK"); if(!aFKs.length)return;
+    const se=entities.find(e=>e.name.toLowerCase()===ae.name.toLowerCase()); if(!se)return;
+    if(se.attrs.filter(a=>a.key==="FK").length<aFKs.length){
+      fke++;
+      fbs.push({t:"warn",m:`⚠ <strong>${ae.name}</strong> ควรมี FK: ${aFKs.map(a=>`<em>${a.name}</em>`).join(", ")}`});
+    }
+  });
+  const fs2=Math.max(0,2-fke); score+=fs2;
+  if(fke===0&&ef>0)fbs.push({t:"ok",m:`✔ Foreign Key ถูกต้อง (+${fs2})`});
+
+  // 4. Relationships (3 pts)
+  let rf=0,re=0;
+  ANS.relationships.forEach(ar=>{
+    const fe=entities.find(e=>e.name.toLowerCase()===ar.from.toLowerCase());
+    const te=entities.find(e=>e.name.toLowerCase()===ar.to.toLowerCase());
+    if(!fe||!te)return;
+    const sr=relationships.find(r=>(r.from===fe.id&&r.to===te.id)||(r.from===te.id&&r.to===fe.id));
+    if(!sr){
+      fbs.push({t:"err",m:`❌ ขาดความสัมพันธ์: <strong>${ar.from}</strong> ↔ <strong>${ar.to}</strong>`});
+    } else {
+      rf++;
+      if(sr.cardinality!==ar.cardinality){
+        re++; sr.error=true;
+        fbs.push({t:"warn",m:`⚠ <strong>${ar.from}→${ar.to}</strong> ควรเป็น <em>${ar.cardinality}</em> (ปัจจุบัน ${sr.cardinality})`});
+      } else {
+        fbs.push({t:"ok",m:`✔ <strong>${ar.from}</strong> ↔ <strong>${ar.to}</strong> (${ar.cardinality})`});
+      }
+    }
+  });
+  score+=Math.min(3,Math.max(0,rf-re));
+  score=Math.min(10,Math.max(0,score));
+
+  showFeedback(fbs,score);
+  updLines();
+  document.getElementById("scoreDisplay").textContent=`${score}/10`;
+  switchTab("feedback");
+}
+
+function showFeedback(fbs,score){
+  const list=document.getElementById("fbList"); list.innerHTML="";
+  fbs.forEach(f=>{
+    const item=document.createElement("div");
+    item.className="fb-item "+(f.t==="ok"?"fb-ok":f.t==="err"?"fb-err":"fb-warn");
+    item.innerHTML=`<span class="fb-icon">${f.t==="ok"?"✅":f.t==="err"?"❌":"⚠️"}</span><span>${f.m}</span>`;
+    list.appendChild(item);
+  });
+  const pct=score/10*100;
+  document.getElementById("scoreNum").textContent=score;
+  document.getElementById("sbarFill").style.width=pct+"%";
+  document.getElementById("scoreLbl").textContent=
+    pct>=90?"🎉 ยอดเยี่ยมมาก!":pct>=70?"👍 ดีมาก! แก้ไขเพิ่มเล็กน้อย":pct>=50?"📚 พอใช้ได้ ลองใหม่อีกครั้ง":"🔍 ต้องปรับปรุง ดูคู่มือก่อน";
+  const circ=document.getElementById("scoreCircle"),snum=document.getElementById("scoreNum");
+  if(pct>=70){circ.style.background="var(--green-light)";circ.style.borderColor="#6ee7b7";snum.style.color="var(--green)"}
+  else if(pct>=50){circ.style.background="var(--amber-light)";circ.style.borderColor="var(--amber-mid)";snum.style.color="var(--amber)"}
+  else{circ.style.background="var(--red-light)";circ.style.borderColor="var(--red-mid)";snum.style.color="var(--red)"}
+}
+
+// ── SHOW ANSWER ──
+function showAnswer(){
+  const el=document.getElementById("ansEntities"),rl=document.getElementById("ansRels");
+  el.innerHTML=""; rl.innerHTML="";
+  ANS.entities.forEach(ae=>{
+    const box=document.createElement("div"); box.className="ans-entity";
+    box.innerHTML=`<div class="ans-ename">📦 ${ae.name}</div>`;
+    ae.attrs.forEach(a=>{
+      const r=document.createElement("div"); r.className="ans-attr";
+      const b=a.key==="PK"?`<span class="ansbadge ansbadge-pk">PK</span>`:a.key==="FK"?`<span class="ansbadge ansbadge-fk">FK</span>`:"";
+      r.innerHTML=`${b}<span class="ans-aname">${a.name}</span><span class="ans-atype">${a.type}</span>`;
+      box.appendChild(r);
+    });
+    el.appendChild(box);
+  });
+  ANS.relationships.forEach(ar=>{
+    const chip=document.createElement("span"); chip.className="rel-chip-a";
+    chip.innerHTML=`${ar.from} <span class="rel-type-badge">${ar.cardinality}</span> ${ar.to} <span style="font-size:10px;color:var(--text3)">(${ar.label})</span>`;
+    rl.appendChild(chip);
+  });
+  document.getElementById("ansModal").style.display="flex";
+}
+
+// ── LOAD ANSWER ──
+function loadAnswer(){
+  doReset(true);
+  const pos=[{x:50,y:50},{x:310,y:50},{x:50,y:295},{x:310,y:295}];
+  const idMap={};
+  ANS.entities.forEach((ae,i)=>{
+    const id=`e${eid++}`; idMap[ae.name]=id;
+    const ent={id,name:ae.name,x:pos[i]?.x||100,y:pos[i]?.y||100,
+      attrs:ae.attrs.map(a=>({id:`a${aid++}`,name:a.name,type:a.type,key:a.key}))};
+    entities.push(ent); renderEnt(ent);
+  });
+  ANS.relationships.forEach(ar=>{
+    relationships.push({id:`r${Date.now()}_${Math.random()}`,from:idMap[ar.from],to:idMap[ar.to],cardinality:ar.cardinality,error:false});
+  });
+  updEmpty(); updLines();
+}
+
+// ── LOAD SAMPLE ──
+function loadSample(){
+  doReset(true);
+  const pos=[{x:50,y:50},{x:300,y:50},{x:50,y:290},{x:300,y:290}];
+  ["Customer","Product","Order","OrderDetail"].forEach((name,i)=>{
+    const id=`e${eid++}`;
+    entities.push({id,name,x:pos[i].x,y:pos[i].y,attrs:[]});
+    renderEnt(entities[entities.length-1]);
+  });
+  updEmpty(); updLines();
+}
+
+// ── RESET ──
+function doReset(silent=false){
+  if(!silent&&!confirm("ลบทุกอย่างและเริ่มใหม่?"))return;
+  entities=[]; relationships=[]; eid=1; aid=1;
+  document.getElementById("canvas").innerHTML="";
+  const svg=document.getElementById("svg-layer");
+  Array.from(svg.children).forEach(c=>{if(c.tagName!=="defs")c.remove()});
+  document.getElementById("fbList").innerHTML=`<div class="fb-item fb-info"><span class="fb-icon">📖</span><span>ดูคู่มือที่แท็บ "คู่มือ" แล้วกด "ตรวจคำตอบ"</span></div>`;
+  document.getElementById("scoreNum").textContent="—"; document.getElementById("scoreNum").style.color="var(--amber)";
+  document.getElementById("scoreLbl").textContent="กดตรวจคำตอบเพื่อดูคะแนน";
+  document.getElementById("sbarFill").style.width="0%";
+  document.getElementById("scoreDisplay").textContent="—";
+  const c=document.getElementById("scoreCircle");
+  c.style.background="var(--amber-light)"; c.style.borderColor="var(--amber-mid)";
+  if(relMode)toggleRel();
+  updEmpty();
+}
+
+// ── MODAL ──
+function closeModal(id,e){if(!e||e.target.id===id)document.getElementById(id).style.display="none"}
+
+// ── KEYBOARD ──
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    if(relMode)toggleRel();
+    ["attrModal","ansModal"].forEach(id=>document.getElementById(id).style.display="none");
+  }
+  if(e.key==="Enter"&&document.getElementById("attrModal").style.display==="flex")confirmAttr();
+});
+
+// ── INIT ──
+window.addEventListener("load",()=>loadSample());
+</script>
+</body>
+</html>

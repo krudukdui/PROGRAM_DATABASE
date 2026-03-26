@@ -136,17 +136,17 @@ body {
 .nav-item.active .nav-sub { display: block; color: rgba(196,83,10,0.7); }
 
 .nav-item-quiz {
-  margin-top: 12px;
-  border-top: 1px solid var(--border);
-  padding-top: 16px;
-  color: #7C3AED !important;
+  margin-top: 0px;
+  border-top: 2cap solid var(--border);
+  padding-top: 12px;
+  color: #000000 !important;
   background: rgba(124,58,237,0.06);
   border-radius: var(--radius-sm);
 }
 
 .nav-item-quiz:hover {
   background: rgba(124,58,237,0.12) !important;
-  color: #6D28D9 !important;
+  color: #6b26da !important;
 }
 
 .sidebar-footer {
@@ -441,7 +441,7 @@ body {
   padding: 28px;
   margin-top: 20px;
 }
-
+app
 .diagram-title {
   text-align: center;
   font-size: 0.85rem;
