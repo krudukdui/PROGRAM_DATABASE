@@ -1121,12 +1121,17 @@ function renderEnt(ent){
   nw.appendChild(ico); nw.appendChild(ni);
 
   const acts=document.createElement("div"); acts.className="ent-actions";
+
   const btnA=document.createElement("button"); btnA.className="icon-btn"; btnA.innerHTML="＋"; btnA.title="เพิ่ม Attribute";
   btnA.onclick=e=>{e.stopPropagation();openAttrModal(ent.id)};
-  btnA.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();openAttrModal(ent.id)},{passive:false});
+  btnA.addEventListener("touchstart",e=>{e.stopPropagation();},{passive:true});
+  btnA.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();openAttrModal(ent.id);},{passive:false});
+
   const btnD=document.createElement("button"); btnD.className="icon-btn del"; btnD.innerHTML="✕"; btnD.title="ลบ Entity";
   btnD.onclick=e=>{e.stopPropagation();delEnt(ent.id)};
-  btnD.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();delEnt(ent.id)},{passive:false});
+  btnD.addEventListener("touchstart",e=>{e.stopPropagation();},{passive:true});
+  btnD.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();delEnt(ent.id);},{passive:false});
+
   acts.appendChild(btnA); acts.appendChild(btnD);
   hdr.appendChild(nw); hdr.appendChild(acts);
 
@@ -1137,6 +1142,7 @@ function renderEnt(ent){
   // Add attr row
   const ar=document.createElement("div"); ar.className="add-attr-row"; ar.textContent="＋ เพิ่ม Attribute";
   ar.onclick=()=>openAttrModal(ent.id);
+  ar.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();openAttrModal(ent.id);},{passive:false});
 
   card.appendChild(hdr); card.appendChild(al); card.appendChild(ar);
 
@@ -1169,7 +1175,10 @@ function renderEnt(ent){
 
   // Rel click (touch)
   card.addEventListener("touchend",e=>{
-    if(relMode){e.preventDefault();handleRelClick(ent.id)}
+    if(!relMode) return;
+    if(e.target.closest('button')) return; // ปล่อยให้ปุ่มทำงานเอง
+    e.preventDefault();
+    handleRelClick(ent.id);
   },{passive:false});
 
   cv.appendChild(card);
