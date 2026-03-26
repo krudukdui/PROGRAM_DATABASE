@@ -426,6 +426,67 @@ header{
 /* ── CANVAS VIEWPORT (dot grid follows zoom via background-size) ── */
 #canvasViewport{will-change:transform;}
 
+/* PC pan cursor */
+.canvas-wrap.pan-ready{cursor:grab}
+.canvas-wrap.pan-ready.panning{cursor:grabbing}
+
+/* ── MOBILE CARDINALITY BOTTOM SHEET ── */
+.rel-sheet-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(27,31,58,.35);
+  z-index:500;
+  backdrop-filter:blur(3px);
+  animation:fadeIn .18s;
+}
+.rel-sheet-overlay.show{display:block}
+.rel-sheet{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  background:var(--surface);
+  border-radius:20px 20px 0 0;
+  padding:0 0 32px;
+  box-shadow:0 -8px 32px rgba(67,97,238,.18);
+  animation:slideUp .24s cubic-bezier(.34,1.3,.64,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.rel-sheet-handle{
+  width:40px;height:4px;
+  background:var(--border2);border-radius:2px;
+  margin:12px auto 18px;
+}
+.rel-sheet-title{
+  font-size:14px;font-weight:700;color:var(--text);
+  text-align:center;margin-bottom:18px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.rel-sheet-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;padding:0 16px 16px;
+}
+.rel-sheet-card{
+  border:2px solid var(--border);border-radius:14px;
+  background:var(--surface2);padding:16px 8px 12px;
+  text-align:center;cursor:pointer;transition:all .16s;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.rel-sheet-card:active{transform:scale(.95)}
+.rel-sheet-card.active{border-color:var(--indigo);background:var(--indigo-light)}
+.rel-sheet-card .rsc-type{
+  font-family:var(--mono);font-size:20px;font-weight:700;color:var(--text);
+}
+.rel-sheet-card.active .rsc-type{color:var(--indigo)}
+.rel-sheet-card .rsc-label{font-size:11px;color:var(--text2);line-height:1.4}
+.rel-sheet-card.c11 .rsc-dot{background:#059669}
+.rel-sheet-card.c1n .rsc-dot{background:#4361ee}
+.rel-sheet-card.cnn .rsc-dot{background:#7c3aed}
+.rsc-dot{width:10px;height:10px;border-radius:50%;margin:0 auto}
+.rel-sheet-cancel{
+  margin:0 16px;width:calc(100% - 32px);
+  padding:13px;border-radius:12px;border:1.5px solid var(--border);
+  background:var(--surface2);font-family:var(--font);font-size:14px;
+  font-weight:600;color:var(--text2);cursor:pointer;
+}
 
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -899,6 +960,32 @@ header{
   </button>
 </nav>
 
+<!-- ════════ MOBILE: Cardinality Bottom Sheet ════════ -->
+<div class="rel-sheet-overlay" id="relSheetOverlay" onclick="closeRelSheet()">
+  <div class="rel-sheet" onclick="event.stopPropagation()">
+    <div class="rel-sheet-handle"></div>
+    <div class="rel-sheet-title">🔗 เลือกรูปแบบความสัมพันธ์</div>
+    <div class="rel-sheet-cards">
+      <div class="rel-sheet-card c11 active" id="rsc11" onclick="pickRelType('1:1')">
+        <div class="rsc-dot"></div>
+        <div class="rsc-type">1:1</div>
+        <div class="rsc-label">หนึ่ง<br>ต่อหนึ่ง</div>
+      </div>
+      <div class="rel-sheet-card c1n" id="rsc1n" onclick="pickRelType('1:N')">
+        <div class="rsc-dot"></div>
+        <div class="rsc-type">1:N</div>
+        <div class="rsc-label">หนึ่ง<br>ต่อกลุ่ม</div>
+      </div>
+      <div class="rel-sheet-card cnn" id="rsccnn" onclick="pickRelType('N:N')">
+        <div class="rsc-dot"></div>
+        <div class="rsc-type">N:N</div>
+        <div class="rsc-label">กลุ่ม<br>ต่อกลุ่ม</div>
+      </div>
+    </div>
+    <button class="rel-sheet-cancel" onclick="closeRelSheet()">ยกเลิก</button>
+  </div>
+</div>
+
 <!-- ════════════════ JS ════════════════ -->
 <script>
 // ── STATE ──
@@ -946,6 +1033,13 @@ function toggleMobilePanel(which){
 }
 
 function toggleMobileRel(){
+  // on mobile: if not in rel mode, open cardinality picker first
+  if(isMobile() && !relMode){
+    closeMobilePanels();
+    openRelSheet();
+    return;
+  }
+  // if already in rel mode, toggle off
   toggleRel();
   const btn=document.getElementById('mnavRel');
   if(btn) btn.classList.toggle('active', relMode);
@@ -1147,9 +1241,28 @@ function clientToCanvas(cx,cy){
   };
 }
 
-// ── DRAG (mouse) ──
+// ── PC MOUSE PAN + DRAG ──
+let mousePan=false, mousePanStart={x:0,y:0}, mousePanOrigin={x:0,y:0};
+
+document.getElementById("canvasWrap").addEventListener("mousedown",e=>{
+  if(relMode||drag) return;
+  const onCard=e.target.closest('.entity-card');
+  if(onCard||e.button!==0) return;
+  e.preventDefault();
+  mousePan=true;
+  mousePanStart={x:e.clientX,y:e.clientY};
+  mousePanOrigin={x:vpX,y:vpY};
+  document.getElementById("canvasWrap").classList.add("panning");
+});
+
 document.addEventListener("mousemove",e=>{
-  if(!drag)return;
+  if(mousePan && !drag){
+    vpX=mousePanOrigin.x+(e.clientX-mousePanStart.x);
+    vpY=mousePanOrigin.y+(e.clientY-mousePanStart.y);
+    applyViewport();
+    return;
+  }
+  if(!drag) return;
   const pt=clientToCanvas(e.clientX,e.clientY);
   drag.x=Math.max(0,pt.x-doff.x);
   drag.y=Math.max(0,pt.y-doff.y);
@@ -1157,9 +1270,41 @@ document.addEventListener("mousemove",e=>{
   if(c){c.style.left=drag.x+"px";c.style.top=drag.y+"px"}
   updLines();
 });
+
 document.addEventListener("mouseup",()=>{
+  if(mousePan){
+    mousePan=false;
+    document.getElementById("canvasWrap").classList.remove("panning");
+  }
   if(drag){document.getElementById(drag.id).style.zIndex=10;drag=null}
 });
+
+// grab cursor: show on empty canvas area, hide on cards
+document.getElementById("canvasWrap").addEventListener("mousemove",e=>{
+  if(mousePan||drag||relMode) return;
+  const onCard=e.target.closest('.entity-card');
+  document.getElementById("canvasWrap").classList.toggle("pan-ready",!onCard);
+});
+document.getElementById("canvasWrap").addEventListener("mouseleave",()=>{
+  if(!mousePan) document.getElementById("canvasWrap").classList.remove("pan-ready");
+});
+
+// ── CARDINALITY BOTTOM SHEET (mobile only) ──
+function openRelSheet(){
+  ["1:1","1:N","N:N"].forEach(t=>{
+    const id=t==="1:1"?"rsc11":t==="1:N"?"rsc1n":"rsccnn";
+    document.getElementById(id)?.classList.toggle("active",t===relType);
+  });
+  document.getElementById("relSheetOverlay").classList.add("show");
+}
+function closeRelSheet(){
+  document.getElementById("relSheetOverlay").classList.remove("show");
+}
+function pickRelType(t){
+  setRelType(t);
+  closeRelSheet();
+  if(!relMode) toggleRel();
+}
 
 // ── CANVAS PANNING & PINCH-ZOOM (touch) ──
 let panActive=false, panStart={x:0,y:0}, panOrigin={x:0,y:0};
@@ -1275,18 +1420,26 @@ function toggleRel(){
   entities.forEach(e=>document.getElementById(e.id)?.classList.remove("selected"));
   if(relMode){
     w.classList.add("rel-mode");
+    w.classList.remove("pan-ready");
     b.textContent="❌ ออกจากโหมดวาดเส้น";
     b.style.background="#dc2626";
-    t.style.display="block"; t.textContent="🔗 คลิก Entity ต้นทาง...";
-    if(mnavRel)mnavRel.classList.add("active");
-    if(fab){fab.textContent="❌";fab.classList.add("rel-active");fab.onclick=()=>{toggleMobileRel()}}
+    t.style.display="block"; t.textContent=`🔗 [${relType}] คลิก Entity ต้นทาง...`;
+    if(mnavRel){mnavRel.classList.add("active");mnavRel.querySelector(".micon").textContent="❌"}
+    if(fab){fab.textContent="❌";fab.classList.add("rel-active");fab.onclick=()=>{toggleRel();syncMobileRelBtn()}}
   } else {
     w.classList.remove("rel-mode");
     b.textContent="🖱 วาดเส้นความสัมพันธ์";
     b.style.background="";
     t.style.display="none";
-    if(mnavRel)mnavRel.classList.remove("active");
+    if(mnavRel){mnavRel.classList.remove("active");mnavRel.querySelector(".micon").textContent="🔗"}
     if(fab){fab.textContent="＋";fab.classList.remove("rel-active");fab.onclick=()=>{addEntity()}}
+  }
+}
+function syncMobileRelBtn(){
+  const mnavRel=document.getElementById("mnavRel");
+  if(mnavRel){
+    mnavRel.classList.toggle("active",relMode);
+    mnavRel.querySelector(".micon").textContent=relMode?"❌":"🔗";
   }
 }
 
@@ -1295,7 +1448,7 @@ function handleRelClick(id){
     relSrc=id;
     document.getElementById(id)?.classList.add("selected");
     const n=entities.find(e=>e.id===id)?.name;
-    document.getElementById("relToast").textContent=`🔗 เลือก "${n}" — คลิก Entity ปลายทาง`;
+    document.getElementById("relToast").textContent=`🔗 [${relType}] "${n}" → คลิก Entity ปลายทาง`;
   } else {
     if(relSrc===id){
       document.getElementById(id)?.classList.remove("selected");
@@ -1308,7 +1461,7 @@ function handleRelClick(id){
     else relationships.push({id:`r${Date.now()}`,from:relSrc,to:id,cardinality:relType,error:false});
     document.getElementById(relSrc)?.classList.remove("selected");
     relSrc=null;
-    document.getElementById("relToast").textContent="🔗 คลิก Entity ต้นทาง...";
+    document.getElementById("relToast").textContent=`🔗 [${relType}] คลิก Entity ต้นทาง...`;
     updLines();
   }
 }
