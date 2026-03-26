@@ -619,7 +619,12 @@ header{
   /* Entity cards — touch-friendlier */
   .entity-card{min-width:160px}
   .ent-header{padding:10px 11px}
-  .icon-btn{width:28px;height:28px;font-size:14px}
+  .icon-btn{
+    width:36px;height:36px;font-size:16px;
+    /* larger tap area */
+    -webkit-tap-highlight-color:rgba(255,255,255,.2);
+  }
+  .ent-actions{gap:6px}
   .attr-row{padding:7px 10px}
   .add-attr-row{padding:8px 10px 11px}
 
@@ -1118,8 +1123,10 @@ function renderEnt(ent){
   const acts=document.createElement("div"); acts.className="ent-actions";
   const btnA=document.createElement("button"); btnA.className="icon-btn"; btnA.innerHTML="＋"; btnA.title="เพิ่ม Attribute";
   btnA.onclick=e=>{e.stopPropagation();openAttrModal(ent.id)};
+  btnA.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();openAttrModal(ent.id)},{passive:false});
   const btnD=document.createElement("button"); btnD.className="icon-btn del"; btnD.innerHTML="✕"; btnD.title="ลบ Entity";
   btnD.onclick=e=>{e.stopPropagation();delEnt(ent.id)};
+  btnD.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();delEnt(ent.id)},{passive:false});
   acts.appendChild(btnA); acts.appendChild(btnD);
   hdr.appendChild(nw); hdr.appendChild(acts);
 
@@ -1145,6 +1152,8 @@ function renderEnt(ent){
   // Drag (touch)
   hdr.addEventListener("touchstart",e=>{
     if(relMode)return;
+    // ถ้า touch ที่ปุ่ม ให้ปุ่มทำงานตามปกติ ไม่ต้อง drag
+    if(e.target.closest('button')) return;
     e.preventDefault();
     e.stopPropagation();
     const t=e.touches[0];
