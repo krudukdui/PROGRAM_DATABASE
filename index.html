@@ -15,7 +15,7 @@
     <div class="sidebar-logo">
       <div class="logo-icon">🗄️</div>
       <div class="logo-text">
-        <span class="logo-title">ฐานข้อมูล</span>
+        <span class="logo-title">โปรแกรมฐานข้อมูล</span>
         <span class="logo-sub">21910-2012</span>
       </div>
     </div>
@@ -55,7 +55,11 @@
         <span class="nav-sub">รายงานและแมโคร</span>
       </a>
 
-      
+      <a href="https://quiz.zep.us/th/play/R5lepr" target="_blank" rel="noopener" class="nav-item nav-item-quiz">
+        <span class="nav-icon">📝</span>
+        <span class="nav-label">แบบทดสอบก่อนเรียน</span>
+      </a>
+
     </nav>
     <div class="sidebar-footer">
       ภาคเรียนที่ 1/2569
@@ -200,9 +204,6 @@
         <h3 class="block-title">📐 โครงสร้างของข้อมูลในตาราง</h3>
         <p class="block-desc">ฐานข้อมูลแบบตารางประกอบด้วย Field (คอลัมน์) และ Record (แถว)</p>
         <div class="table-anatomy">
-          <div class="ta-label-top">
-            <span class="ta-arrow-h">←————— Field (คอลัมน์) —————→</span>
-          </div>
           <div class="ta-wrap">
             <div class="ta-label-left">
               <span class="ta-arrow-v">Record<br>(แถว)</span>
@@ -210,6 +211,9 @@
             <div class="table-wrapper">
               <table class="demo-table annotated-table">
                 <thead>
+                  <tr>
+                    <th colspan="5" class="field-label-row" style="text-align: center;">← Field (คอลัมน์) →</th>
+                  </tr>
                   <tr>
                     <th class="field-hi">🔑 รหัสนักเรียน<br><small>Primary Key</small></th>
                     <th class="field-hi">ชื่อ<br><small>Field</small></th>
@@ -367,18 +371,43 @@
             </div>
           </div>
           <div class="dbt-diagram rel-diagram-u1">
-            <div class="rdu1-table">
-              <div class="rdu1-head">📋 ลูกค้า</div>
-              <div class="rdu1-row"><span class="rdu1-pk">🔑 CustomerID</span></div>
-              <div class="rdu1-row">ชื่อลูกค้า</div>
-              <div class="rdu1-row">เบอร์โทร</div>
-            </div>
-            <div class="rdu1-arrow">—FK→</div>
-            <div class="rdu1-table">
-              <div class="rdu1-head">📋 คำสั่งซื้อ</div>
-              <div class="rdu1-row"><span class="rdu1-pk">🔑 OrderID</span></div>
-              <div class="rdu1-row"><span class="rdu1-fk">🔗 CustomerID</span></div>
-              <div class="rdu1-row">วันที่สั่ง</div>
+            <!-- ใช้ SVG วาดเส้น FK ให้ชี้จาก CustomerID ในคำสั่งซื้อ → CustomerID ในลูกค้า -->
+            <div class="rdu1-wrap">
+
+              <!-- ตาราง ลูกค้า (ซ้าย) -->
+              <div class="rdu1-table" id="rdu1-left">
+                <div class="rdu1-head">📋 ลูกค้า</div>
+                <div class="rdu1-row rdu1-pk-row"><span class="rdu1-pk">🔑 CustomerID</span></div>
+                <div class="rdu1-row">ชื่อลูกค้า</div>
+                <div class="rdu1-row">เบอร์โทร</div>
+              </div>
+
+              <!-- SVG เส้นเชื่อม -->
+              <svg class="rdu1-svg" viewBox="0 0 80 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- เส้นจาก FK (คำสั่งซื้อ row2 ≈ y=65) ไปถึง PK (ลูกค้า row1 ≈ y=33) -->
+                <defs>
+                  <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#C4530A"/>
+                  </marker>
+                </defs>
+                <!-- เส้นจากขวา (คำสั่งซื้อ) ไปซ้าย (ลูกค้า) -->
+                <path d="M 80 65 C 40 65, 40 33, 0 33"
+                      stroke="#C4530A" stroke-width="2" fill="none"
+                      stroke-dasharray="4 3"
+                      marker-end="url(#arrowhead)"/>
+                <!-- label FK -->
+                <text x="40" y="46" text-anchor="middle" font-size="9"
+                      font-family="Space Mono,monospace" fill="#C4530A" font-weight="700">FK</text>
+              </svg>
+
+              <!-- ตาราง คำสั่งซื้อ (ขวา) -->
+              <div class="rdu1-table" id="rdu1-right">
+                <div class="rdu1-head">📋 คำสั่งซื้อ</div>
+                <div class="rdu1-row"><span class="rdu1-pk">🔑 OrderID</span></div>
+                <div class="rdu1-row rdu1-fk-row"><span class="rdu1-fk">🔗 CustomerID</span></div>
+                <div class="rdu1-row">วันที่สั่ง</div>
+              </div>
+
             </div>
           </div>
           <div class="dbt-props">
@@ -755,50 +784,162 @@
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 1: หลักการออกแบบฐานข้อมูลเบื้องต้น ========== -->
+      <h3 class="unit-section-title">1. หลักการออกแบบฐานข้อมูลเบื้องต้น</h3>
+
       <div class="content-block">
-        <h3 class="block-title">🗺️ ERD Flow — ขั้นตอนการออกแบบ</h3>
+        <div class="info-card" style="background:rgba(34,197,94,0.07);border-color:rgba(34,197,94,0.3)">
+          <div class="info-icon">💡</div>
+          <div>
+            <h3>การออกแบบฐานข้อมูลที่ดีคืออะไร?</h3>
+            <p>การออกแบบฐานข้อมูล คือการวางแผนโครงสร้างการจัดเก็บข้อมูลให้ <strong>ถูกต้อง ครบถ้วน ไม่ซ้ำซ้อน</strong> และสามารถนำข้อมูลกลับมาใช้งานได้อย่างมีประสิทธิภาพ</p>
+          </div>
+        </div>
+
+        <h4 style="margin-bottom:12px;font-weight:700">🎯 หลักการสำคัญในการออกแบบ</h4>
+        <div class="design-principles">
+          <div class="dp-item">
+            <div class="dp-icon">🚫</div>
+            <div class="dp-title">ลดความซ้ำซ้อน (Reduce Redundancy)</div>
+            <div class="dp-desc">ไม่เก็บข้อมูลเดิมซ้ำหลายที่ เช่น ชื่อแผนกควรอยู่ในตารางแผนกเพียงที่เดียว</div>
+          </div>
+          <div class="dp-item">
+            <div class="dp-icon">✅</div>
+            <div class="dp-title">ความถูกต้องของข้อมูล (Data Integrity)</div>
+            <div class="dp-desc">ข้อมูลต้องสอดคล้องกัน เปลี่ยนที่เดียวแล้วถูกต้องทุกที่</div>
+          </div>
+          <div class="dp-item">
+            <div class="dp-icon">🔍</div>
+            <div class="dp-title">ค้นหาได้ง่าย (Easy to Query)</div>
+            <div class="dp-desc">โครงสร้างตารางต้องทำให้สามารถดึงข้อมูลได้รวดเร็วและยืดหยุ่น</div>
+          </div>
+          <div class="dp-item">
+            <div class="dp-icon">📈</div>
+            <div class="dp-title">รองรับการขยาย (Scalability)</div>
+            <div class="dp-desc">ออกแบบให้เพิ่มข้อมูลหรือ Field ใหม่ในอนาคตได้โดยไม่กระทบโครงสร้างเดิม</div>
+          </div>
+          <div class="dp-item">
+            <div class="dp-icon">🔒</div>
+            <div class="dp-title">ความปลอดภัย (Security)</div>
+            <div class="dp-desc">กำหนดสิทธิ์การเข้าถึงข้อมูลให้เหมาะสมกับผู้ใช้แต่ละระดับ</div>
+          </div>
+          <div class="dp-item">
+            <div class="dp-icon">⚡</div>
+            <div class="dp-title">ประสิทธิภาพ (Performance)</div>
+            <div class="dp-desc">โครงสร้างที่ดีช่วยให้การบันทึกและเรียกใช้ข้อมูลทำได้รวดเร็ว</div>
+          </div>
+        </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">📋 ขั้นตอนการออกแบบฐานข้อมูล</h4>
         <div class="flow-steps">
           <div class="flow-step">
             <div class="step-num">1</div>
             <div class="step-content">
-              <div class="step-title">วิเคราะห์ข้อมูล</div>
-              <div class="step-desc">ศึกษาความต้องการของระบบ รวบรวมข้อมูลที่ต้องการจัดเก็บ</div>
+              <div class="step-title">วิเคราะห์ความต้องการ</div>
+              <div class="step-desc">รวบรวมข้อมูลจากผู้ใช้งาน ศึกษาระบบที่มีอยู่ และกำหนดขอบเขตของระบบ</div>
             </div>
           </div>
           <div class="flow-arrow">↓</div>
           <div class="flow-step">
             <div class="step-num">2</div>
             <div class="step-content">
-              <div class="step-title">กำหนด Entity</div>
-              <div class="step-desc">ระบุสิ่งที่ต้องการจัดเก็บข้อมูล เช่น นักเรียน, วิชา, ครู</div>
+              <div class="step-title">ออกแบบเชิงแนวคิด (Conceptual Design)</div>
+              <div class="step-desc">สร้าง E-R Diagram เพื่อแสดง Entity, Attribute และความสัมพันธ์</div>
             </div>
           </div>
           <div class="flow-arrow">↓</div>
           <div class="flow-step">
             <div class="step-num">3</div>
             <div class="step-content">
-              <div class="step-title">กำหนด Attribute</div>
-              <div class="step-desc">ระบุคุณสมบัติของแต่ละ Entity เช่น ชื่อ, อายุ, ที่อยู่</div>
+              <div class="step-title">ออกแบบเชิงตรรกะ (Logical Design)</div>
+              <div class="step-desc">แปลง ERD เป็นตาราง กำหนด PK/FK และทำ Normalization</div>
             </div>
           </div>
           <div class="flow-arrow">↓</div>
           <div class="flow-step">
             <div class="step-num">4</div>
             <div class="step-content">
-              <div class="step-title">สร้าง E-R Diagram</div>
-              <div class="step-desc">วาดแผนภาพแสดงความสัมพันธ์ระหว่าง Entity</div>
-            </div>
-          </div>
-          <div class="flow-arrow">↓</div>
-          <div class="flow-step">
-            <div class="step-num">5</div>
-            <div class="step-content">
-              <div class="step-title">Normalize</div>
-              <div class="step-desc">ปรับโครงสร้างตารางให้ถูกต้อง ลดความซ้ำซ้อน</div>
+              <div class="step-title">ออกแบบเชิงกายภาพ (Physical Design)</div>
+              <div class="step-desc">สร้างตารางจริงในโปรแกรม DBMS เช่น Microsoft Access</div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- ========== หัวข้อ 2: การวิเคราะห์ความต้องการของระบบ ========== -->
+      <h3 class="unit-section-title">2. การวิเคราะห์ความต้องการของระบบ</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">🔎 การวิเคราะห์ความต้องการของระบบ (System Requirements Analysis)</h3>
+        <div class="info-card accent-yellow">
+          <div class="info-icon">📋</div>
+          <div>
+            <h4>ทำไมต้องวิเคราะห์ความต้องการก่อน?</h4>
+            <p>ก่อนสร้างฐานข้อมูล ต้องเข้าใจว่าระบบต้องการเก็บข้อมูลอะไร ใครเป็นผู้ใช้งาน และต้องการรายงานอะไรบ้าง เพื่อให้การออกแบบตรงกับความต้องการจริง</p>
+          </div>
+        </div>
+
+        <h4 style="margin-bottom:12px;font-weight:700">🛠️ เทคนิคการวิเคราะห์ความต้องการ</h4>
+        <div class="req-methods">
+          <div class="rm-item">
+            <div class="rm-icon">🗣️</div>
+            <div class="rm-content">
+              <div class="rm-name">สัมภาษณ์ (Interview)</div>
+              <div class="rm-desc">พูดคุยกับผู้ใช้งานโดยตรง เพื่อเข้าใจกระบวนการทำงานและความต้องการ</div>
+            </div>
+          </div>
+          <div class="rm-item">
+            <div class="rm-icon">📄</div>
+            <div class="rm-content">
+              <div class="rm-name">ศึกษาเอกสาร (Document Study)</div>
+              <div class="rm-desc">วิเคราะห์แบบฟอร์ม รายงาน และเอกสารที่ใช้งานอยู่ในปัจจุบัน</div>
+            </div>
+          </div>
+          <div class="rm-item">
+            <div class="rm-icon">👁️</div>
+            <div class="rm-content">
+              <div class="rm-name">สังเกตการณ์ (Observation)</div>
+              <div class="rm-desc">สังเกตการทำงานจริงของผู้ใช้เพื่อหาจุดที่ต้องปรับปรุง</div>
+            </div>
+          </div>
+          <div class="rm-item">
+            <div class="rm-icon">📊</div>
+            <div class="rm-content">
+              <div class="rm-name">แบบสอบถาม (Questionnaire)</div>
+              <div class="rm-desc">รวบรวมข้อมูลจากผู้ใช้จำนวนมากพร้อมกันอย่างมีระบบ</div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">📌 ตัวอย่าง: วิเคราะห์ระบบทะเบียนนักเรียน</h4>
+        <div class="req-example">
+          <div class="req-q">
+            <div class="rq-label">❓ ต้องเก็บข้อมูลอะไร?</div>
+            <div class="rq-ans">ข้อมูลนักเรียน, วิชาเรียน, ครูผู้สอน, เกรด, ห้องเรียน</div>
+          </div>
+          <div class="req-q">
+            <div class="rq-label">❓ ใครใช้งานระบบบ้าง?</div>
+            <div class="rq-ans">ครู, นักเรียน, เจ้าหน้าที่ทะเบียน, ผู้อำนวยการ</div>
+          </div>
+          <div class="req-q">
+            <div class="rq-label">❓ ต้องการรายงานอะไร?</div>
+            <div class="rq-ans">รายชื่อนักเรียน, ผลการเรียน, สรุปเกรด, รายวิชาที่เปิดสอน</div>
+          </div>
+          <div class="req-q">
+            <div class="rq-label">❓ Entity ที่ได้จากการวิเคราะห์?</div>
+            <div class="rq-ans">
+              <span class="entity-badge">นักเรียน</span>
+              <span class="entity-badge">วิชา</span>
+              <span class="entity-badge">ครู</span>
+              <span class="entity-badge">การลงทะเบียน</span>
+              <span class="entity-badge">ห้องเรียน</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 3: แผนภาพ E-R ========== -->
+      <h3 class="unit-section-title">3. แผนภาพ E-R (Entity-Relationship Diagram)</h3>
 
       <div class="content-block">
         <h3 class="block-title">📐 E-R Diagram (Entity-Relationship Diagram)</h3>
@@ -830,125 +971,110 @@
               <defs>
                 <style>.et{font-family:'Sarabun','Noto Sans Thai',sans-serif;}</style>
               </defs>
-
-              <!-- ══════════════════════════════════════
-                   ENTITY: นักเรียน  cx=170 cy=210
-                   ══════════════════════════════════════ -->
               <rect x="100" y="185" width="140" height="50"
                     fill="rgba(232,101,10,0.18)" stroke="#C2500A" stroke-width="2.5"/>
               <text x="170" y="217" text-anchor="middle" font-size="16" font-weight="700"
                     fill="#7C2D12" class="et">นักเรียน</text>
-
-              <!-- PK: รหัสนักเรียน  cx=100 cy=68 — เส้นใต้เฉพาะตัวอักษร -->
               <ellipse cx="100" cy="68" rx="54" ry="26"
                        fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="2"/>
               <text x="100" y="72" text-anchor="middle" font-size="12" font-weight="700"
                     fill="#78350F" text-decoration="underline" class="et">รหัสนักเรียน</text>
               <line x1="112" y1="94" x2="145" y2="185" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- Attr: ชื่อ  cx=28 cy=183 -->
               <ellipse cx="28" cy="183" rx="26" ry="20"
                        fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
               <text x="28" y="187" text-anchor="middle" font-size="13" font-weight="600"
                     fill="#14532D" class="et">ชื่อ</text>
               <line x1="54" y1="183" x2="100" y2="205" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- Attr: นามสกุล  cx=40 cy=315 -->
               <ellipse cx="40" cy="315" rx="40" ry="22"
                        fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
               <text x="40" y="319" text-anchor="middle" font-size="12" font-weight="600"
                     fill="#14532D" class="et">นามสกุล</text>
               <line x1="70" y1="298" x2="118" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- Attr: แผนก  cx=183 cy=358 -->
               <ellipse cx="183" cy="358" rx="36" ry="22"
                        fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
               <text x="183" y="362" text-anchor="middle" font-size="12" font-weight="600"
                     fill="#14532D" class="et">แผนก</text>
               <line x1="183" y1="336" x2="170" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- ══════════════════════════════════════
-                   RELATIONSHIP DIAMOND  cx=430 cy=210
-                   ══════════════════════════════════════ -->
               <polygon points="430,145 518,210 430,275 342,210"
                        fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="2.5"/>
               <text x="430" y="207" text-anchor="middle" font-size="14" font-weight="700"
                     fill="#78350F" class="et">ลงทะเบียน</text>
-
-              <!-- entity right → diamond left -->
               <line x1="240" y1="210" x2="342" y2="210" stroke="#94A3B8" stroke-width="2"/>
               <text x="286" y="200" text-anchor="middle" font-size="16" font-weight="800"
                     fill="#92400E" class="et">M</text>
-
-              <!-- diamond right → entity left -->
               <line x1="518" y1="210" x2="620" y2="210" stroke="#94A3B8" stroke-width="2"/>
               <text x="569" y="200" text-anchor="middle" font-size="16" font-weight="800"
                     fill="#92400E" class="et">N</text>
-
-              <!-- ══════════════════════════════════════
-                   ENTITY: วิชา  cx=690 cy=210
-                   ══════════════════════════════════════ -->
               <rect x="620" y="185" width="140" height="50"
                     fill="rgba(232,101,10,0.18)" stroke="#C2500A" stroke-width="2.5"/>
               <text x="690" y="217" text-anchor="middle" font-size="16" font-weight="700"
                     fill="#7C2D12" class="et">วิชา</text>
-
-              <!-- PK: รหัสวิชา  cx=760 cy=68 — เส้นใต้เฉพาะตัวอักษร -->
               <ellipse cx="760" cy="68" rx="48" ry="26"
                        fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="2"/>
               <text x="760" y="72" text-anchor="middle" font-size="12" font-weight="700"
                     fill="#78350F" text-decoration="underline" class="et">รหัสวิชา</text>
               <line x1="748" y1="94" x2="715" y2="185" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- Attr: ชื่อวิชา  cx=832 cy=183 -->
               <ellipse cx="832" cy="183" rx="32" ry="20"
                        fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
               <text x="832" y="187" text-anchor="middle" font-size="12" font-weight="600"
                     fill="#14532D" class="et">ชื่อวิชา</text>
               <line x1="800" y1="188" x2="760" y2="208" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- Attr: หน่วยกิต  cx=677 cy=358 -->
               <ellipse cx="677" cy="358" rx="40" ry="22"
                        fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
               <text x="677" y="362" text-anchor="middle" font-size="12" font-weight="600"
                     fill="#14532D" class="et">หน่วยกิต</text>
               <line x1="690" y1="336" x2="690" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- Attr: อาจารย์ผู้สอน  cx=820 cy=315 -->
               <ellipse cx="820" cy="315" rx="46" ry="22"
                        fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.8"/>
               <text x="820" y="319" text-anchor="middle" font-size="11.5" font-weight="600"
                     fill="#14532D" class="et">อาจารย์ผู้สอน</text>
               <line x1="784" y1="298" x2="742" y2="235" stroke="#94A3B8" stroke-width="1.5"/>
-
-              <!-- ══════════════════════════════════════
-                   LEGEND
-                   ══════════════════════════════════════ -->
               <rect x="220" y="385" width="420" height="28" rx="6"
                     fill="rgba(240,240,235,0.95)" stroke="#D1D5DB" stroke-width="1"/>
-              <!-- PK -->
               <ellipse cx="248" cy="399" rx="14" ry="10"
                        fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="1.5"/>
               <text x="248" y="403" text-anchor="middle" font-size="10" font-weight="700"
                     fill="#78350F" text-decoration="underline" class="et">PK</text>
               <text x="267" y="403" font-size="10" fill="#374151" class="et">= PK (ขีดเส้นใต้)</text>
-              <!-- Attr -->
               <ellipse cx="370" cy="399" rx="14" ry="10"
                        fill="rgba(34,197,94,0.18)" stroke="#15803D" stroke-width="1.5"/>
               <text x="370" y="403" text-anchor="middle" font-size="9" fill="#14532D" class="et">Attr</text>
               <text x="389" y="403" font-size="10" fill="#374151" class="et">= Attribute</text>
-              <!-- Entity -->
               <rect x="455" y="391" width="28" height="16"
                     fill="rgba(232,101,10,0.18)" stroke="#C2500A" stroke-width="1.5"/>
               <text x="488" y="403" font-size="10" fill="#374151" class="et">= Entity</text>
-              <!-- Relationship -->
               <polygon points="549,399 560,406 549,413 538,406"
                        fill="rgba(245,158,11,0.18)" stroke="#B45309" stroke-width="1.5"/>
               <text x="565" y="403" font-size="10" fill="#374151" class="et">= Relationship</text>
             </svg>
           </div>
         </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">🔗 ประเภทของความสัมพันธ์ (Cardinality)</h4>
+        <div class="cardinality-grid">
+          <div class="card-rel">
+            <div class="cr-badge">1:1</div>
+            <div class="cr-name">One-to-One</div>
+            <div class="cr-desc">1 Entity สัมพันธ์กับอีก 1 Entity เท่านั้น</div>
+            <div class="cr-ex">📌 นักเรียน 1 คน มีบัตรนักเรียน 1 ใบ</div>
+          </div>
+          <div class="card-rel">
+            <div class="cr-badge" style="background:rgba(34,197,94,0.15);color:#15803D;border-color:rgba(34,197,94,0.4)">1:M</div>
+            <div class="cr-name">One-to-Many</div>
+            <div class="cr-desc">1 Entity สัมพันธ์กับอีก Entity ได้หลายตัว</div>
+            <div class="cr-ex">📌 ครู 1 คน สอนได้หลายวิชา</div>
+          </div>
+          <div class="card-rel">
+            <div class="cr-badge" style="background:rgba(139,92,246,0.15);color:#6D28D9;border-color:rgba(139,92,246,0.4)">M:N</div>
+            <div class="cr-name">Many-to-Many</div>
+            <div class="cr-desc">หลาย Entity สัมพันธ์กับหลาย Entity</div>
+            <div class="cr-ex">📌 นักเรียนหลายคน เรียนได้หลายวิชา</div>
+          </div>
+        </div>
       </div>
+
+      <!-- ========== หัวข้อ 4: Normalization ========== -->
+      <h3 class="unit-section-title">4. Normalization (1NF, 2NF, 3NF)</h3>
 
       <div class="content-block">
         <h3 class="block-title">🔢 Normalization — การทำให้เป็นบรรทัดฐาน</h3>
@@ -961,38 +1087,153 @@
               <strong>กฎ:</strong> ทุก Field ต้องมีค่าเดียว (Atomic Value) และมี Primary Key
             </div>
             <div class="norm-example">
-              <div class="ne-bad">❌ Subject: "คณิต, วิทย์, อังกฤษ" (หลายค่า)</div>
-              <div class="ne-good">✅ แยกเป็นหลาย Record แทน</div>
+              <div class="ne-bad">❌ วิชา: "คณิต, วิทย์, อังกฤษ" (หลายค่าในช่องเดียว)</div>
+              <div class="ne-good">✅ แยกเป็นหลาย Record แต่ละ Record มีวิชาเดียว</div>
             </div>
           </div>
           <div class="norm-card nf2">
             <div class="norm-badge">2NF</div>
             <div class="norm-name">Second Normal Form</div>
             <div class="norm-rule">
-              <strong>กฎ:</strong> ต้องอยู่ใน 1NF แล้ว และทุก Non-Key Field ต้องขึ้นกับ Primary Key ทั้งหมด
+              <strong>กฎ:</strong> ต้องอยู่ใน 1NF แล้ว และทุก Non-Key Field ต้องขึ้นกับ Primary Key <em>ทั้งหมด</em> (ไม่มี Partial Dependency)
             </div>
             <div class="norm-example">
-              <div class="ne-bad">❌ ไม่มี Partial Dependency</div>
-              <div class="ne-good">✅ แยกตารางที่ขึ้นกับ Key บางส่วนออกไป</div>
+              <div class="ne-bad">❌ ชื่อวิชาขึ้นกับแค่ รหัสวิชา (ไม่ใช่ทั้ง PK)</div>
+              <div class="ne-good">✅ แยกตารางวิชาออกมาต่างหาก</div>
             </div>
           </div>
           <div class="norm-card nf3">
             <div class="norm-badge">3NF</div>
             <div class="norm-name">Third Normal Form</div>
             <div class="norm-rule">
-              <strong>กฎ:</strong> ต้องอยู่ใน 2NF แล้ว และไม่มี Transitive Dependency
+              <strong>กฎ:</strong> ต้องอยู่ใน 2NF แล้ว และไม่มี Transitive Dependency (Field ไม่ขึ้นกับ Field อื่นที่ไม่ใช่ PK)
             </div>
             <div class="norm-example">
-              <div class="ne-bad">❌ Field A → Field B → Field C (ห้ามมี)</div>
-              <div class="ne-good">✅ ทุก Non-Key ขึ้นกับ PK เท่านั้น</div>
+              <div class="ne-bad">❌ รหัสนักเรียน → รหัสแผนก → ชื่อแผนก (ห้ามมี)</div>
+              <div class="ne-good">✅ แยกตารางแผนกออกมา เก็บแค่ รหัสแผนก ในตารางนักเรียน</div>
             </div>
+          </div>
+        </div>
+
+        <!-- ตัวอย่างการ Normalize step by step -->
+        <h4 style="margin:24px 0 12px;font-weight:700">🔄 ตัวอย่างการทำ Normalization</h4>
+        <div class="norm-walkthrough">
+          <div class="nw-step">
+            <div class="nw-label bad-label">❌ ตารางก่อนทำ Normalization (Unnormalized)</div>
+            <div class="table-wrapper" style="margin-top:10px">
+              <table class="demo-table" style="font-size:0.78rem">
+                <thead><tr>
+                  <th>รหัสนักเรียน</th><th>ชื่อ</th><th>แผนก</th><th>หัวหน้าแผนก</th><th>วิชา</th><th>เกรด</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td class="pk">ST001</td><td>สมชาย</td><td>IT</td><td>อ.มานะ</td><td>DB, Network</td><td>A, B</td></tr>
+                  <tr><td class="pk">ST002</td><td>สมหญิง</td><td>Acct</td><td>อ.สุภา</td><td>Accounting</td><td>A</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="nw-problem">⚠️ ปัญหา: วิชาและเกรดมีหลายค่าในช่องเดียว, ชื่อแผนกซ้ำ, หัวหน้าแผนกขึ้นกับแผนก ไม่ใช่ PK</div>
+          </div>
+          <div class="nw-arrow">↓ หลังทำ 3NF ↓</div>
+          <div class="nw-step">
+            <div class="nw-label good-label">✅ หลังทำ Normalization — แยกเป็น 3 ตาราง</div>
+            <div class="nw-tables">
+              <div class="nw-table">
+                <div class="nw-thead">นักเรียน</div>
+                <div class="nw-row"><span class="rdu1-pk">🔑 รหัสนักเรียน</span></div>
+                <div class="nw-row">ชื่อ</div>
+                <div class="nw-row"><span class="rdu1-fk">🔗 รหัสแผนก</span></div>
+              </div>
+              <div class="nw-table">
+                <div class="nw-thead">แผนก</div>
+                <div class="nw-row"><span class="rdu1-pk">🔑 รหัสแผนก</span></div>
+                <div class="nw-row">ชื่อแผนก</div>
+                <div class="nw-row">หัวหน้าแผนก</div>
+              </div>
+              <div class="nw-table">
+                <div class="nw-thead">การลงทะเบียน</div>
+                <div class="nw-row"><span class="rdu1-pk">🔑 รหัสนักเรียน</span></div>
+                <div class="nw-row"><span class="rdu1-pk">🔑 รหัสวิชา</span></div>
+                <div class="nw-row">เกรด</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 5: การออกแบบตารางและกำหนด Primary Key ========== -->
+      <h3 class="unit-section-title">5. การออกแบบตารางและกำหนด Primary Key</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">🗂️ การออกแบบตารางที่ดี</h3>
+
+        <div class="info-card accent-blue">
+          <div class="info-icon">🔑</div>
+          <div>
+            <h4>Primary Key (PK) คืออะไร?</h4>
+            <p>Primary Key คือ Field หรือกลุ่ม Field ที่ <strong>ระบุ Record ได้โดยไม่ซ้ำกัน</strong> ในตาราง มีกฎสำคัญ 2 ข้อ คือ ห้ามซ้ำกัน (Unique) และห้ามว่าง (NOT NULL)</p>
+          </div>
+        </div>
+
+        <h4 style="margin:16px 0 12px;font-weight:700">📏 หลักการเลือก Primary Key</h4>
+        <div class="pk-rules">
+          <div class="pkr-item good">
+            <span class="pkr-icon">✅</span>
+            <div>
+              <strong>ค่าไม่ซ้ำกันเลย (Unique)</strong>
+              <p>ต้องระบุแต่ละ Record ได้เพียง Record เดียว เช่น รหัสนักเรียน ST001 มีแค่คนเดียวเสมอ</p>
+            </div>
+          </div>
+          <div class="pkr-item good">
+            <span class="pkr-icon">✅</span>
+            <div>
+              <strong>ห้ามว่างเปล่า (NOT NULL)</strong>
+              <p>ทุก Record ต้องมีค่า PK เสมอ จะเว้นว่างไม่ได้</p>
+            </div>
+          </div>
+          <div class="pkr-item good">
+            <span class="pkr-icon">✅</span>
+            <div>
+              <strong>ค่าไม่เปลี่ยนแปลง (Stable)</strong>
+              <p>ควรเป็น Field ที่ไม่ค่อยเปลี่ยน เช่น รหัส ไม่ควรใช้ชื่อ เพราะชื่ออาจซ้ำหรือเปลี่ยนได้</p>
+            </div>
+          </div>
+          <div class="pkr-item bad">
+            <span class="pkr-icon">❌</span>
+            <div>
+              <strong>ห้ามใช้ข้อมูลที่อาจซ้ำ</strong>
+              <p>เช่น ชื่อ, เบอร์โทร, วันเกิด — ล้วนอาจซ้ำกันได้ ไม่เหมาะเป็น PK</p>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">🏗️ ตัวอย่างการออกแบบตารางระบบโรงเรียน</h4>
+        <div class="table-design-ex">
+          <div class="tdx-table">
+            <div class="tdx-head">📋 ตาราง: tblStudents (นักเรียน)</div>
+            <div class="tdx-row"><span class="tdx-pk">🔑 StudentID</span><span class="tdx-type">Text(6)</span><span class="tdx-note">PK — รหัสนักเรียน เช่น ST001</span></div>
+            <div class="tdx-row"><span class="tdx-field">FirstName</span><span class="tdx-type">Text(50)</span><span class="tdx-note">ชื่อ</span></div>
+            <div class="tdx-row"><span class="tdx-field">LastName</span><span class="tdx-type">Text(50)</span><span class="tdx-note">นามสกุล</span></div>
+            <div class="tdx-row"><span class="tdx-fk">🔗 DeptID</span><span class="tdx-type">Text(4)</span><span class="tdx-note">FK → tblDepts</span></div>
+            <div class="tdx-row"><span class="tdx-field">Year</span><span class="tdx-type">Number</span><span class="tdx-note">ปีการศึกษา</span></div>
+          </div>
+          <div class="tdx-table">
+            <div class="tdx-head">📋 ตาราง: tblDepts (แผนก)</div>
+            <div class="tdx-row"><span class="tdx-pk">🔑 DeptID</span><span class="tdx-type">Text(4)</span><span class="tdx-note">PK — รหัสแผนก เช่น IT01</span></div>
+            <div class="tdx-row"><span class="tdx-field">DeptName</span><span class="tdx-type">Text(100)</span><span class="tdx-note">ชื่อแผนก</span></div>
+            <div class="tdx-row"><span class="tdx-field">HeadName</span><span class="tdx-type">Text(100)</span><span class="tdx-note">หัวหน้าแผนก</span></div>
+          </div>
+          <div class="tdx-table">
+            <div class="tdx-head">📋 ตาราง: tblCourses (วิชา)</div>
+            <div class="tdx-row"><span class="tdx-pk">🔑 CourseID</span><span class="tdx-type">Text(6)</span><span class="tdx-note">PK — รหัสวิชา</span></div>
+            <div class="tdx-row"><span class="tdx-field">CourseName</span><span class="tdx-type">Text(100)</span><span class="tdx-note">ชื่อวิชา</span></div>
+            <div class="tdx-row"><span class="tdx-field">Credits</span><span class="tdx-type">Number</span><span class="tdx-note">จำนวนหน่วยกิต</span></div>
           </div>
         </div>
       </div>
 
       <div class="outcome-box" style="--accent-out:#22C55E">
         <span class="outcome-icon">🎯</span>
-        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถออกแบบฐานข้อมูลและสร้าง E-R Diagram เพื่อวางแผนโครงสร้างข้อมูลได้</p>
+        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถวิเคราะห์ความต้องการ ออกแบบ ERD ทำ Normalization และกำหนด Primary Key เพื่อวางแผนโครงสร้างฐานข้อมูลได้อย่างถูกต้อง</p>
       </div>
     </section>
 
@@ -1001,101 +1242,341 @@
       <div class="section-header" style="--accent:#F59E0B">
         <div class="section-num">03</div>
         <div class="section-titles">
-          <h2>การสร้างและแก้ไขฐานข้อมูล</h2>
-          <p>Database Creation & Editing with DBMS Software</p>
+          <h2>การสร้างฐานข้อมูลด้วยโปรแกรม</h2>
+          <p>Database Creation with Microsoft Access — Step by Step</p>
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 1: เปิดและกำหนดค่าโปรแกรม DBMS ========== -->
+      <h3 class="unit-section-title">1. เปิดและกำหนดค่าโปรแกรม DBMS</h3>
+
       <div class="content-block">
-        <h3 class="block-title">🖥️ ขั้นตอนการสร้างฐานข้อมูลใน Access</h3>
+        <div class="info-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.35)">
+          <div class="info-icon">🖥️</div>
+          <div>
+            <h3>Microsoft Access คืออะไร?</h3>
+            <p>Microsoft Access คือโปรแกรม <strong>DBMS (Database Management System)</strong> ในชุด Microsoft Office ใช้สำหรับสร้าง จัดการ และเรียกใช้ข้อมูลในฐานข้อมูล เหมาะสำหรับองค์กรขนาดเล็กถึงกลาง และการเรียนรู้ด้านฐานข้อมูล</p>
+          </div>
+        </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">🚀 วิธีเปิดโปรแกรม Microsoft Access</h4>
+        <div class="how-to-steps">
+          <div class="ht-step">
+            <span class="ht-num">1</span>
+            <p>กดปุ่ม <kbd>Windows</kbd> แล้วพิมพ์ <strong>"Access"</strong> ในช่องค้นหา</p>
+          </div>
+          <div class="ht-step">
+            <span class="ht-num">2</span>
+            <p>คลิกที่ <strong>Microsoft Access</strong> เพื่อเปิดโปรแกรม</p>
+          </div>
+          <div class="ht-step">
+            <span class="ht-num">3</span>
+            <p>หน้าจอ Backstage จะปรากฏขึ้น มีตัวเลือกสร้างหรือเปิดฐานข้อมูล</p>
+          </div>
+        </div>
+
+        <!-- Mock Access Start Screen -->
+        <div class="tl-img access-screen step1-screen" style="margin-top:1.5rem">
+          <div class="screen-chrome">
+            <div class="screen-dots"><span></span><span></span><span></span></div>
+            <div class="screen-title">Microsoft Access — หน้าจอเริ่มต้น</div>
+          </div>
+          <div class="screen-body">
+            <div class="access-welcome">
+              <div class="aw-logo">A</div>
+              <div class="aw-options">
+                <div class="aw-opt selected">📄 Blank database</div>
+                <div class="aw-opt">📁 Open existing...</div>
+                <div class="aw-opt">🌐 Sample templates</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">⚙️ ส่วนประกอบหลักของโปรแกรม Microsoft Access</h4>
+        <div class="access-ui-parts">
+          <div class="aup-item">
+            <div class="aup-icon" style="background:rgba(245,158,11,0.2);color:#B45309">🎀</div>
+            <div class="aup-content">
+              <div class="aup-name">Ribbon</div>
+              <div class="aup-desc">แถบเครื่องมือด้านบน มีแท็บ Home, Create, External Data, Database Tools</div>
+            </div>
+          </div>
+          <div class="aup-item">
+            <div class="aup-icon" style="background:rgba(59,130,246,0.2);color:#1D4ED8">🗂️</div>
+            <div class="aup-content">
+              <div class="aup-name">Navigation Pane</div>
+              <div class="aup-desc">แผงด้านซ้าย แสดงรายการ Table, Query, Form, Report, Macro ทั้งหมด</div>
+            </div>
+          </div>
+          <div class="aup-item">
+            <div class="aup-icon" style="background:rgba(16,185,129,0.2);color:#065F46">📋</div>
+            <div class="aup-content">
+              <div class="aup-name">Object Tabs</div>
+              <div class="aup-desc">แสดงหน้าต่างของออบเจกต์ที่เปิดอยู่ เช่น ตาราง ฟอร์ม หรือรายงาน</div>
+            </div>
+          </div>
+          <div class="aup-item">
+            <div class="aup-icon" style="background:rgba(139,92,246,0.2);color:#5B21B6">📊</div>
+            <div class="aup-content">
+              <div class="aup-name">Status Bar</div>
+              <div class="aup-desc">แถบสถานะด้านล่าง แสดงมุมมองปัจจุบัน (Datasheet View / Design View)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 2: สร้างฐานข้อมูลใหม่ ========== -->
+      <h3 class="unit-section-title">2. สร้างฐานข้อมูลใหม่ (New Database)</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">📂 การสร้างฐานข้อมูลใหม่ใน Access</h3>
+
+        <div class="new-db-steps">
+          <div class="ndb-step">
+            <div class="ndb-num">1</div>
+            <div class="ndb-content">
+              <div class="ndb-title">เปิดโปรแกรมและเลือก Blank Database</div>
+              <div class="ndb-desc">เมื่อเปิด Access จะพบหน้าจอ Backstage คลิกที่ <strong>Blank database</strong> เพื่อเริ่มสร้างฐานข้อมูลเปล่า</div>
+            </div>
+          </div>
+          <div class="ndb-arrow">↓</div>
+          <div class="ndb-step">
+            <div class="ndb-num">2</div>
+            <div class="ndb-content">
+              <div class="ndb-title">กำหนดชื่อไฟล์และตำแหน่งที่เก็บ</div>
+              <div class="ndb-desc">พิมพ์ชื่อฐานข้อมูลในช่อง <strong>File Name</strong> และเลือกโฟลเดอร์ที่ต้องการด้วยไอคอนโฟลเดอร์</div>
+            </div>
+          </div>
+          <div class="ndb-arrow">↓</div>
+          <div class="ndb-step">
+            <div class="ndb-num">3</div>
+            <div class="ndb-content">
+              <div class="ndb-title">คลิกปุ่ม Create</div>
+              <div class="ndb-desc">คลิก <strong>Create</strong> โปรแกรมจะสร้างไฟล์ฐานข้อมูล .accdb และเปิดตาราง Table1 อัตโนมัติ</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card accent-blue" style="margin-top:1.5rem">
+          <div class="info-icon">🗄️</div>
+          <div>
+            <h4>ออบเจกต์หลักใน Microsoft Access</h4>
+            <p>ฐานข้อมูล Access ประกอบด้วยออบเจกต์ 5 ประเภทหลัก ที่ทำงานร่วมกัน ได้แก่ <strong>Table</strong> (ตารางเก็บข้อมูล), <strong>Query</strong> (สอบถามข้อมูล), <strong>Form</strong> (ฟอร์มกรอกข้อมูล), <strong>Report</strong> (รายงาน) และ <strong>Macro</strong> (คำสั่งอัตโนมัติ)</p>
+          </div>
+        </div>
+
+        <div class="access-objects-grid">
+          <div class="ao-card" style="--ao-color:#3B82F6">
+            <div class="ao-icon">📋</div>
+            <div class="ao-name">Table</div>
+            <div class="ao-desc">จัดเก็บข้อมูลในรูปแบบแถวและคอลัมน์ เป็นหัวใจของฐานข้อมูล</div>
+          </div>
+          <div class="ao-card" style="--ao-color:#10B981">
+            <div class="ao-icon">🔍</div>
+            <div class="ao-name">Query</div>
+            <div class="ao-desc">สอบถาม กรอง และประมวลผลข้อมูลจากตาราง</div>
+          </div>
+          <div class="ao-card" style="--ao-color:#F59E0B">
+            <div class="ao-icon">📝</div>
+            <div class="ao-name">Form</div>
+            <div class="ao-desc">หน้าจอสำหรับกรอกและแสดงข้อมูล ใช้งานง่ายสำหรับผู้ใช้ทั่วไป</div>
+          </div>
+          <div class="ao-card" style="--ao-color:#EC4899">
+            <div class="ao-icon">📊</div>
+            <div class="ao-name">Report</div>
+            <div class="ao-desc">จัดทำรายงานสำหรับพิมพ์หรือแสดงผลข้อมูลอย่างเป็นระเบียบ</div>
+          </div>
+          <div class="ao-card" style="--ao-color:#8B5CF6">
+            <div class="ao-icon">⚡</div>
+            <div class="ao-name">Macro</div>
+            <div class="ao-desc">ชุดคำสั่งอัตโนมัติเพื่อลดขั้นตอนการทำงานซ้ำๆ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 3: กำหนดชื่อและที่เก็บไฟล์ ========== -->
+      <h3 class="unit-section-title">3. กำหนดชื่อและที่เก็บไฟล์ฐานข้อมูล</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">💾 หลักการตั้งชื่อและเลือกที่เก็บไฟล์ที่ดี</h3>
+
+        <div class="naming-rules">
+          <div class="nr-good">
+            <div class="nr-title">✅ หลักการตั้งชื่อที่ถูกต้อง</div>
+            <div class="nr-items">
+              <div class="nr-item good-nr">ใช้ภาษาอังกฤษเท่านั้น</div>
+              <div class="nr-item good-nr">ไม่มีช่องว่าง — ใช้ _ แทน เช่น Student_DB</div>
+              <div class="nr-item good-nr">ชื่อสื่อความหมาย บอกระบบที่ใช้</div>
+              <div class="nr-item good-nr">ไม่ยาวเกินไป อ่านง่าย เช่น SchoolDB.accdb</div>
+              <div class="nr-item good-nr">ลงท้ายด้วยนามสกุล .accdb (Access 2007 ขึ้นไป)</div>
+            </div>
+          </div>
+          <div class="nr-bad">
+            <div class="nr-title">❌ สิ่งที่ควรหลีกเลี่ยง</div>
+            <div class="nr-items">
+              <div class="nr-item bad-nr">ตั้งชื่อเป็นภาษาไทย เช่น ฐานข้อมูล.accdb</div>
+              <div class="nr-item bad-nr">มีช่องว่าง เช่น Student DB.accdb</div>
+              <div class="nr-item bad-nr">มีอักขระพิเศษ เช่น *, ?, /, \, :</div>
+              <div class="nr-item bad-nr">ชื่อซ้ำกับไฟล์ที่มีอยู่แล้ว</div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">📁 ตัวอย่างชื่อไฟล์ที่ดี</h4>
+        <div class="filename-examples">
+          <div class="fe-item"><span class="fe-good">✅</span><code>StudentDB.accdb</code><span class="fe-note">ระบบนักเรียน</span></div>
+          <div class="fe-item"><span class="fe-good">✅</span><code>School_Management.accdb</code><span class="fe-note">ระบบโรงเรียน</span></div>
+          <div class="fe-item"><span class="fe-good">✅</span><code>Inventory2024.accdb</code><span class="fe-note">ระบบคลังสินค้า</span></div>
+          <div class="fe-item"><span class="fe-bad">❌</span><code>ฐานข้อมูลนักเรียน.accdb</code><span class="fe-note">ชื่อภาษาไทย</span></div>
+          <div class="fe-item"><span class="fe-bad">❌</span><code>my database.accdb</code><span class="fe-note">มีช่องว่าง</span></div>
+        </div>
+
+        <div class="info-card accent-yellow" style="margin-top:1.5rem">
+          <div class="info-icon">📂</div>
+          <div>
+            <h4>การเลือก Folder ที่เก็บไฟล์</h4>
+            <p>ควรสร้างโฟลเดอร์แยกสำหรับโปรเจกต์แต่ละอัน เช่น <strong>C:\Users\YourName\Documents\SchoolDB\</strong> เพื่อจัดระเบียบและสำรองข้อมูลได้ง่าย ไม่ควรเก็บไว้บน Desktop เพราะอาจสูญหายได้ง่าย</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 4: สร้าง Table และกำหนด Field ========== -->
+      <h3 class="unit-section-title">4. สร้าง Table และกำหนด Field</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">🗂️ วิธีสร้างตาราง (Table) ใน Access</h3>
+
+        <div class="info-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.35)">
+          <div class="info-icon">💡</div>
+          <div>
+            <h4>มุมมองการสร้างตาราง 2 แบบ</h4>
+            <p><strong>Datasheet View</strong> — สร้างตารางแบบง่าย คล้าย Excel คลิกเพิ่ม Column ได้เลย เหมาะสำหรับผู้เริ่มต้น<br>
+            <strong>Design View</strong> — กำหนดรายละเอียด Field Name, Data Type, Description ได้ครบถ้วน แนะนำให้ใช้วิธีนี้</p>
+          </div>
+        </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">📐 ขั้นตอนสร้างตารางด้วย Design View</h4>
         <div class="steps-timeline">
           <div class="timeline-item">
             <div class="tl-icon">1️⃣</div>
             <div class="tl-content">
-              <h4>เปิดโปรแกรม Microsoft Access</h4>
-              <p>เปิดจาก Start Menu หรือ Desktop แล้วเลือก <strong>Blank database</strong></p>
-              <div class="tl-img access-screen step1-screen">
-                <div class="screen-chrome">
-                  <div class="screen-dots"><span></span><span></span><span></span></div>
-                  <div class="screen-title">Microsoft Access</div>
-                </div>
-                <div class="screen-body">
-                  <div class="access-welcome">
-                    <div class="aw-logo">A</div>
-                    <div class="aw-options">
-                      <div class="aw-opt selected">📄 Blank database</div>
-                      <div class="aw-opt">📁 Open existing...</div>
-                      <div class="aw-opt">🌐 Sample templates</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <h4>เปิด Design View</h4>
+              <p>ไปที่แท็บ <strong>Create</strong> → คลิก <strong>Table Design</strong> หน้าต่าง Design View จะปรากฏขึ้น</p>
             </div>
           </div>
 
           <div class="timeline-item">
             <div class="tl-icon">2️⃣</div>
             <div class="tl-content">
-              <h4>กำหนดชื่อและที่เก็บไฟล์</h4>
-              <p>ตั้งชื่อไฟล์ .accdb และเลือก Folder ที่ต้องการบันทึก</p>
-              <div class="tl-tip">💡 ตั้งชื่อเป็นภาษาอังกฤษ ไม่มีช่องว่าง เช่น StudentDB.accdb</div>
+              <h4>กรอก Field Name</h4>
+              <p>พิมพ์ชื่อ Field ในคอลัมน์แรก เช่น <code>StudentID</code>, <code>FirstName</code>, <code>BirthDate</code></p>
+              <div class="tl-tip">💡 ตั้งชื่อ Field เป็นภาษาอังกฤษ ไม่มีช่องว่าง ควรสื่อความหมาย</div>
             </div>
           </div>
 
           <div class="timeline-item">
             <div class="tl-icon">3️⃣</div>
             <div class="tl-content">
-              <h4>สร้าง Table ในมุมมอง Design View</h4>
-              <p>ไปที่ Create → Table Design เพื่อกำหนด Field Name และ Data Type</p>
-              <div class="tl-img">
-                <div class="design-view-mock">
-                  <div class="dv-header">
-                    <span>Field Name</span>
-                    <span>Data Type</span>
-                    <span>Description</span>
-                  </div>
-                  <div class="dv-row pk-row">
-                    <span>🔑 StudentID</span>
-                    <span>AutoNumber</span>
-                    <span>รหัสนักเรียน</span>
-                  </div>
-                  <div class="dv-row">
-                    <span>FirstName</span>
-                    <span>Short Text</span>
-                    <span>ชื่อ</span>
-                  </div>
-                  <div class="dv-row">
-                    <span>LastName</span>
-                    <span>Short Text</span>
-                    <span>นามสกุล</span>
-                  </div>
-                  <div class="dv-row">
-                    <span>BirthDate</span>
-                    <span>Date/Time</span>
-                    <span>วันเกิด</span>
-                  </div>
-                  <div class="dv-row">
-                    <span>IsActive</span>
-                    <span>Yes/No</span>
-                    <span>สถานะ</span>
-                  </div>
-                </div>
-              </div>
+              <h4>เลือก Data Type</h4>
+              <p>คลิกคอลัมน์ Data Type แล้วเลือกชนิดข้อมูลที่เหมาะสม เช่น Short Text, Number, Date/Time</p>
             </div>
           </div>
 
           <div class="timeline-item">
             <div class="tl-icon">4️⃣</div>
             <div class="tl-content">
-              <h4>บันทึกตาราง</h4>
-              <p>กด <kbd>Ctrl + S</kbd> แล้วตั้งชื่อตาราง กด OK เพื่อบันทึก</p>
+              <h4>กำหนด Primary Key</h4>
+              <p>คลิกขวาที่ Field ที่ต้องการ → เลือก <strong>Primary Key</strong> หรือคลิกปุ่ม 🔑 ใน Ribbon</p>
             </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">5️⃣</div>
+            <div class="tl-content">
+              <h4>บันทึกตาราง</h4>
+              <p>กด <kbd>Ctrl + S</kbd> ตั้งชื่อตาราง เช่น <strong>tblStudents</strong> แล้วกด OK</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design View Mock -->
+        <div class="tl-img" style="margin-top:1.5rem">
+          <div class="design-view-mock">
+            <div class="dv-header">
+              <span>Field Name</span>
+              <span>Data Type</span>
+              <span>Description (คำอธิบาย)</span>
+            </div>
+            <div class="dv-row pk-row">
+              <span>🔑 StudentID</span>
+              <span>AutoNumber</span>
+              <span>รหัสนักเรียน (Primary Key)</span>
+            </div>
+            <div class="dv-row">
+              <span>FirstName</span>
+              <span>Short Text</span>
+              <span>ชื่อนักเรียน</span>
+            </div>
+            <div class="dv-row">
+              <span>LastName</span>
+              <span>Short Text</span>
+              <span>นามสกุล</span>
+            </div>
+            <div class="dv-row">
+              <span>BirthDate</span>
+              <span>Date/Time</span>
+              <span>วันเกิด</span>
+            </div>
+            <div class="dv-row">
+              <span>DeptID</span>
+              <span>Short Text</span>
+              <span>รหัสแผนก (FK)</span>
+            </div>
+            <div class="dv-row">
+              <span>IsActive</span>
+              <span>Yes/No</span>
+              <span>สถานะนักเรียน</span>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">📏 Field Properties — คุณสมบัติของ Field ที่สำคัญ</h4>
+        <div class="field-props">
+          <div class="fp-item">
+            <div class="fp-prop">Field Size</div>
+            <div class="fp-desc">กำหนดขนาดสูงสุดของข้อมูล เช่น Short Text กำหนดได้ 1–255 ตัวอักษร</div>
+          </div>
+          <div class="fp-item">
+            <div class="fp-prop">Format</div>
+            <div class="fp-desc">รูปแบบการแสดงผล เช่น วันที่แสดงเป็น dd/mm/yyyy</div>
+          </div>
+          <div class="fp-item">
+            <div class="fp-prop">Default Value</div>
+            <div class="fp-desc">ค่าเริ่มต้นอัตโนมัติเมื่อเพิ่ม Record ใหม่ เช่น ค่าเริ่มต้น Yes/No = No</div>
+          </div>
+          <div class="fp-item">
+            <div class="fp-prop">Required</div>
+            <div class="fp-desc">บังคับกรอกข้อมูล (Yes = ต้องกรอก, No = ไม่บังคับ)</div>
+          </div>
+          <div class="fp-item">
+            <div class="fp-prop">Indexed</div>
+            <div class="fp-desc">สร้าง Index เพื่อเพิ่มความเร็วในการค้นหา (Yes/No Duplicates OK)</div>
+          </div>
+          <div class="fp-item">
+            <div class="fp-prop">Validation Rule</div>
+            <div class="fp-desc">กำหนดเงื่อนไขข้อมูล เช่น &gt;=0 AND &lt;=100 สำหรับคะแนน</div>
           </div>
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 5: กำหนดชนิดข้อมูล ========== -->
+      <h3 class="unit-section-title">5. กำหนดชนิดข้อมูล (Data Type)</h3>
+
       <div class="content-block">
-        <h3 class="block-title">📋 ชนิดข้อมูล (Data Types) ที่ใช้บ่อย</h3>
+        <h3 class="block-title">📋 ชนิดข้อมูล (Data Types) ใน Microsoft Access</h3>
+        <p class="block-desc">การเลือกชนิดข้อมูลที่ถูกต้องช่วยให้จัดเก็บข้อมูลได้อย่างมีประสิทธิภาพ ประหยัดพื้นที่ และลดข้อผิดพลาด</p>
+
         <div class="datatype-grid">
           <div class="dt-card">
             <div class="dt-icon" style="background:#3B82F6">Aa</div>
@@ -1106,67 +1587,192 @@
           <div class="dt-card">
             <div class="dt-icon" style="background:#8B5CF6">¶</div>
             <div class="dt-name">Long Text</div>
-            <div class="dt-desc">ข้อความยาว เช่น รายละเอียด หมายเหตุ</div>
+            <div class="dt-desc">ข้อความยาว เก็บได้สูงสุด 65,536 ตัวอักษร</div>
             <div class="dt-example">เช่น: รายละเอียดสินค้า, ความคิดเห็น</div>
           </div>
           <div class="dt-card">
             <div class="dt-icon" style="background:#10B981">123</div>
             <div class="dt-name">Number</div>
-            <div class="dt-desc">ตัวเลขสำหรับคำนวณ</div>
+            <div class="dt-desc">ตัวเลขสำหรับคำนวณ มีหลายขนาด (Byte, Integer, Long)</div>
             <div class="dt-example">เช่น: จำนวน, คะแนน, อายุ</div>
           </div>
           <div class="dt-card">
             <div class="dt-icon" style="background:#F59E0B">💰</div>
             <div class="dt-name">Currency</div>
-            <div class="dt-desc">ตัวเลขเงิน มีทศนิยม 4 ตำแหน่ง</div>
-            <div class="dt-example">เช่น: ราคา, เงินเดือน</div>
+            <div class="dt-desc">ตัวเลขเงิน มีทศนิยม 4 ตำแหน่ง แม่นยำสูง</div>
+            <div class="dt-example">เช่น: ราคา, เงินเดือน, ยอดรวม</div>
           </div>
           <div class="dt-card">
             <div class="dt-icon" style="background:#EF4444">📅</div>
             <div class="dt-name">Date/Time</div>
-            <div class="dt-desc">วันที่และเวลา</div>
+            <div class="dt-desc">วันที่และเวลา รองรับหลายรูปแบบ</div>
             <div class="dt-example">เช่น: วันเกิด, วันที่สั่งซื้อ</div>
           </div>
           <div class="dt-card">
             <div class="dt-icon" style="background:#06B6D4">☑️</div>
             <div class="dt-name">Yes/No</div>
-            <div class="dt-desc">ค่าตรรกะ จริง/เท็จ</div>
+            <div class="dt-desc">ค่าตรรกะ จริง/เท็จ (Boolean)</div>
             <div class="dt-example">เช่น: สถานะ, ชำระแล้ว</div>
           </div>
           <div class="dt-card">
             <div class="dt-icon" style="background:#84CC16">⚡</div>
             <div class="dt-name">AutoNumber</div>
-            <div class="dt-desc">รหัสอัตโนมัติ เพิ่มทีละ 1</div>
+            <div class="dt-desc">รหัสอัตโนมัติ เพิ่มทีละ 1 ไม่ซ้ำกัน</div>
             <div class="dt-example">นิยมใช้เป็น Primary Key</div>
           </div>
           <div class="dt-card">
             <div class="dt-icon" style="background:#EC4899">📎</div>
             <div class="dt-name">Attachment</div>
-            <div class="dt-desc">แนบไฟล์ รูปภาพ เอกสาร</div>
+            <div class="dt-desc">แนบไฟล์ รูปภาพ เอกสาร PDF</div>
             <div class="dt-example">เช่น: รูปภาพนักเรียน, ไฟล์เอกสาร</div>
+          </div>
+          <div class="dt-card">
+            <div class="dt-icon" style="background:#6366F1">🔗</div>
+            <div class="dt-name">Hyperlink</div>
+            <div class="dt-desc">เก็บ URL หรือ Email Address</div>
+            <div class="dt-example">เช่น: เว็บไซต์, Email นักเรียน</div>
+          </div>
+          <div class="dt-card">
+            <div class="dt-icon" style="background:#14B8A6">🔢</div>
+            <div class="dt-name">OLE Object</div>
+            <div class="dt-desc">แนบออบเจกต์ เช่น รูปภาพ เอกสาร Word</div>
+            <div class="dt-example">เช่น: รูปโปรไฟล์, เอกสาร Word</div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">🆚 เปรียบเทียบชนิดข้อมูลที่ใช้บ่อย</h4>
+        <div class="dt-compare-table">
+          <div class="dtc-header">
+            <span>ชนิดข้อมูล</span>
+            <span>ขนาด/ช่วงค่า</span>
+            <span>ใช้เมื่อ</span>
+            <span>ตัวอย่าง Field</span>
+          </div>
+          <div class="dtc-row">
+            <span><strong>Short Text</strong></span>
+            <span>1–255 ตัวอักษร</span>
+            <span>ข้อความสั้น ไม่คำนวณ</span>
+            <span>ชื่อ, รหัส, เบอร์โทร</span>
+          </div>
+          <div class="dtc-row">
+            <span><strong>Number</strong></span>
+            <span>ขึ้นกับ Field Size</span>
+            <span>ต้องนำไปคำนวณ</span>
+            <span>คะแนน, อายุ, จำนวน</span>
+          </div>
+          <div class="dtc-row">
+            <span><strong>Currency</strong></span>
+            <span>ทศนิยม 4 ตำแหน่ง</span>
+            <span>เงิน ราคา ต้องแม่นยำ</span>
+            <span>ราคา, เงินเดือน</span>
+          </div>
+          <div class="dtc-row">
+            <span><strong>Date/Time</strong></span>
+            <span>1/1/100–12/31/9999</span>
+            <span>วันที่ เวลา</span>
+            <span>วันเกิด, วันสั่งซื้อ</span>
+          </div>
+          <div class="dtc-row">
+            <span><strong>AutoNumber</strong></span>
+            <span>1–2,147,483,647</span>
+            <span>รหัส PK อัตโนมัติ</span>
+            <span>StudentID, OrderID</span>
+          </div>
+          <div class="dtc-row">
+            <span><strong>Yes/No</strong></span>
+            <span>True / False</span>
+            <span>สถานะ เปิด/ปิด</span>
+            <span>ชำระแล้ว, ยังเรียนอยู่</span>
+          </div>
+        </div>
+
+        <div class="info-card" style="background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.3);margin-top:1.5rem">
+          <div class="info-icon">⚠️</div>
+          <div>
+            <h4>ข้อผิดพลาดที่พบบ่อย — เรื่องชนิดข้อมูล</h4>
+            <p>อย่าใช้ <strong>Number</strong> เก็บเบอร์โทรศัพท์หรือรหัสที่มี 0 นำหน้า เช่น 0812345678 ควรใช้ <strong>Short Text</strong> แทน เพราะ Number จะตัด 0 ด้านหน้าออกทำให้ข้อมูลผิดพลาด</p>
           </div>
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 6: บันทึกและเรียกใช้ฐานข้อมูล ========== -->
+      <h3 class="unit-section-title">6. บันทึกและเรียกใช้ฐานข้อมูล</h3>
+
       <div class="content-block">
-        <h3 class="block-title">🔑 การกำหนด Primary Key</h3>
-        <div class="info-card accent-yellow">
-          <div class="info-icon">⚠️</div>
-          <div>
-            <h4>กฎของ Primary Key</h4>
-            <ul>
-              <li>ต้องมีค่าไม่ซ้ำกันในทุก Record</li>
-              <li>ต้องไม่ว่างเปล่า (NOT NULL)</li>
-              <li>แต่ละตารางควรมี Primary Key หนึ่งตัว</li>
-              <li>วิธีกำหนด: คลิกขวาที่ Field → Primary Key หรือใช้ปุ่มในเมนู</li>
-            </ul>
+        <h3 class="block-title">💾 การบันทึกและเปิดใช้งานฐานข้อมูล</h3>
+
+        <div class="save-open-grid">
+          <div class="so-card">
+            <div class="so-header" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4)">
+              <div class="so-icon">💾</div>
+              <div class="so-title">การบันทึกฐานข้อมูล</div>
+            </div>
+            <div class="so-steps">
+              <div class="so-step"><span class="so-num">1</span><p>กด <kbd>Ctrl + S</kbd> เพื่อบันทึกออบเจกต์ปัจจุบัน</p></div>
+              <div class="so-step"><span class="so-num">2</span><p>พิมพ์ชื่อตาราง เช่น <strong>tblStudents</strong> ในกล่องชื่อ</p></div>
+              <div class="so-step"><span class="so-num">3</span><p>คลิก <strong>OK</strong> ตารางจะปรากฏใน Navigation Pane</p></div>
+              <div class="so-step"><span class="so-num">4</span><p>Access บันทึกข้อมูลอัตโนมัติทุกครั้งที่ย้าย Record</p></div>
+            </div>
           </div>
+
+          <div class="so-card">
+            <div class="so-header" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.4)">
+              <div class="so-icon">📂</div>
+              <div class="so-title">การเปิดฐานข้อมูลที่มีอยู่</div>
+            </div>
+            <div class="so-steps">
+              <div class="so-step"><span class="so-num">1</span><p>เปิด Access แล้วคลิก <strong>Open other files</strong></p></div>
+              <div class="so-step"><span class="so-num">2</span><p>เลือก <strong>Browse</strong> หาไฟล์ .accdb ที่ต้องการ</p></div>
+              <div class="so-step"><span class="so-num">3</span><p>ดับเบิลคลิกไฟล์ หรือเลือกแล้วกด <strong>Open</strong></p></div>
+              <div class="so-step"><span class="so-num">4</span><p>ถ้าเห็น Security Warning ให้คลิก <strong>Enable Content</strong></p></div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">🖱️ วิธีเรียกดูข้อมูลในตาราง (มุมมองต่างๆ)</h4>
+        <div class="view-modes">
+          <div class="vm-card">
+            <div class="vm-icon">📊</div>
+            <div class="vm-name">Datasheet View</div>
+            <div class="vm-desc">มุมมองตาราง แสดงข้อมูลในรูปแบบแถวและคอลัมน์ ใช้กรอก แก้ไข และดูข้อมูล</div>
+            <div class="vm-how">คลิกขวาที่ตาราง → Open หรือดับเบิลคลิก</div>
+          </div>
+          <div class="vm-card">
+            <div class="vm-icon">⚙️</div>
+            <div class="vm-name">Design View</div>
+            <div class="vm-desc">มุมมองออกแบบ ใช้แก้ไขโครงสร้าง Field Name, Data Type, Properties</div>
+            <div class="vm-how">คลิกขวาที่ตาราง → Design View</div>
+          </div>
+          <div class="vm-card">
+            <div class="vm-icon">📋</div>
+            <div class="vm-name">PivotTable View</div>
+            <div class="vm-desc">สรุปข้อมูลในรูปแบบตารางสรุป คล้าย Excel PivotTable</div>
+            <div class="vm-how">View → PivotTable View</div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">⌨️ Shortcut Keys ที่ควรรู้</h4>
+        <div class="shortcut-grid">
+          <div class="sc-item"><kbd>Ctrl + S</kbd><span>บันทึก</span></div>
+          <div class="sc-item"><kbd>Ctrl + Z</kbd><span>เลิกทำ (Undo)</span></div>
+          <div class="sc-item"><kbd>Ctrl + C</kbd><span>คัดลอก</span></div>
+          <div class="sc-item"><kbd>Ctrl + V</kbd><span>วาง</span></div>
+          <div class="sc-item"><kbd>Ctrl + F</kbd><span>ค้นหา</span></div>
+          <div class="sc-item"><kbd>Ctrl + +</kbd><span>เพิ่ม Record ใหม่</span></div>
+          <div class="sc-item"><kbd>Delete</kbd><span>ลบข้อมูลใน Cell</span></div>
+          <div class="sc-item"><kbd>Esc</kbd><span>ยกเลิกการแก้ไข</span></div>
+          <div class="sc-item"><kbd>F11</kbd><span>แสดง/ซ่อน Navigation Pane</span></div>
+          <div class="sc-item"><kbd>Alt + F4</kbd><span>ปิดโปรแกรม</span></div>
+        </div>
+
+        <div class="tl-tip" style="margin-top:1.5rem">
+          💡 <strong>เคล็ดลับ:</strong> ควรสำรองข้อมูล (Backup) ไฟล์ .accdb เป็นประจำ โดยคัดลอกไฟล์ไปเก็บไว้ใน Drive อื่นหรือ Cloud Storage เพื่อป้องกันข้อมูลสูญหาย
         </div>
       </div>
 
       <div class="outcome-box" style="--accent-out:#F59E0B">
         <span class="outcome-icon">🎯</span>
-        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถสร้างและแก้ไขฐานข้อมูลโดยใช้โปรแกรมจัดการฐานข้อมูลได้</p>
+        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถเปิดโปรแกรม Microsoft Access กำหนดค่าโปรแกรม สร้างฐานข้อมูลใหม่ ตั้งชื่อและที่เก็บไฟล์ สร้าง Table กำหนด Field และ Data Type รวมถึงบันทึกและเรียกใช้ฐานข้อมูลได้อย่างถูกต้อง</p>
       </div>
     </section>
 
@@ -1176,43 +1782,99 @@
         <div class="section-num">04</div>
         <div class="section-titles">
           <h2>การเชื่อมความสัมพันธ์ระหว่างตาราง</h2>
-          <p>Table Relationships</p>
+          <p>Table Relationships — Access Database Tools</p>
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 1: ความหมายของความสัมพันธ์ ========== -->
+      <h3 class="unit-section-title">1. ความหมายของความสัมพันธ์ระหว่างตาราง</h3>
+
       <div class="content-block">
-        <h3 class="block-title">🔑 Primary Key vs Foreign Key</h3>
-        <div class="key-explain">
-          <div class="key-card pk-card">
-            <div class="key-badge">PK</div>
-            <h4>Primary Key</h4>
-            <p>ฟิลด์ที่เป็นตัวระบุ Record ในตาราง ค่าไม่ซ้ำ ไม่ว่างเปล่า</p>
-            <div class="key-example">เช่น: CustomerID ในตาราง Customers</div>
+        <div class="info-card" style="background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.35)">
+          <div class="info-icon">🔗</div>
+          <div>
+            <h3>ความสัมพันธ์ระหว่างตาราง (Table Relationship) คืออะไร?</h3>
+            <p>ความสัมพันธ์ระหว่างตาราง คือ <strong>การเชื่อมโยงข้อมูลจากตารางหนึ่งไปยังอีกตาราง</strong> โดยใช้ Field ที่มีค่าเดียวกันเป็นตัวเชื่อม ทำให้สามารถดึงข้อมูลที่กระจายอยู่ในหลายตารางมาแสดงร่วมกันได้อย่างถูกต้องและมีประสิทธิภาพ</p>
           </div>
-          <div class="key-arrow-center">🔗</div>
-          <div class="key-card fk-card">
-            <div class="key-badge fk">FK</div>
-            <h4>Foreign Key</h4>
-            <p>ฟิลด์ที่อ้างอิงไปยัง Primary Key ของอีกตาราง ใช้เชื่อมความสัมพันธ์</p>
-            <div class="key-example">เช่น: CustomerID ในตาราง Orders</div>
+        </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">🌍 ทำไมต้องมีความสัมพันธ์ระหว่างตาราง?</h4>
+        <div class="rel-why-grid">
+          <div class="rw-card" style="--rwc:#3B82F6">
+            <div class="rwc-icon">🚫</div>
+            <div class="rwc-title">ลดความซ้ำซ้อน</div>
+            <div class="rwc-desc">แทนที่จะเก็บชื่อแผนกซ้ำในทุก Record ของนักเรียน ให้เก็บแค่รหัสแผนก แล้วดึงชื่อแผนกจากตารางแผนกเมื่อต้องการ</div>
+          </div>
+          <div class="rw-card" style="--rwc:#10B981">
+            <div class="rwc-icon">✅</div>
+            <div class="rwc-title">รักษาความถูกต้อง</div>
+            <div class="rwc-desc">เมื่อแก้ไขข้อมูลที่ตารางหลัก เช่น เปลี่ยนชื่อแผนก ข้อมูลทุกที่จะอัปเดตพร้อมกันทันที ไม่ต้องแก้ทีละ Record</div>
+          </div>
+          <div class="rw-card" style="--rwc:#F59E0B">
+            <div class="rwc-icon">🔍</div>
+            <div class="rwc-title">ดึงข้อมูลข้ามตาราง</div>
+            <div class="rwc-desc">สามารถสร้าง Query เพื่อดึงข้อมูลจากหลายตารางพร้อมกัน เช่น แสดงชื่อนักเรียนพร้อมชื่อแผนกในผลลัพธ์เดียว</div>
+          </div>
+          <div class="rw-card" style="--rwc:#8B5CF6">
+            <div class="rwc-icon">🏗️</div>
+            <div class="rwc-title">โครงสร้างข้อมูลที่ดี</div>
+            <div class="rwc-desc">การออกแบบฐานข้อมูลที่ดีตามหลัก Normalization จะแบ่งข้อมูลออกเป็นหลายตารางที่มีความสัมพันธ์กัน</div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">📌 ตัวอย่างเปรียบเทียบ: มีความสัมพันธ์ VS ไม่มี</h4>
+        <div class="rel-compare">
+          <div class="rc-col">
+            <div class="rc-head bad-head">❌ ไม่มีความสัมพันธ์ (ตารางเดียว)</div>
+            <div class="rc-table">
+              <div class="rct-header"><span>StudentID</span><span>ชื่อ</span><span>ชื่อแผนก</span><span>หัวหน้าแผนก</span></div>
+              <div class="rct-row bad-data"><span>001</span><span>สมชาย</span><span>คอมพิวเตอร์</span><span>อ.สมศรี</span></div>
+              <div class="rct-row bad-data"><span>002</span><span>สมหญิง</span><span>คอมพิวเตอร์</span><span>อ.สมศรี</span></div>
+              <div class="rct-row bad-data"><span>003</span><span>สมใจ</span><span>บัญชี</span><span>อ.สมพร</span></div>
+            </div>
+            <div class="rc-note bad-note">⚠️ ข้อมูล "คอมพิวเตอร์, อ.สมศรี" ซ้ำหลายแถว ถ้าเปลี่ยนหัวหน้าแผนกต้องแก้ทุก Record!</div>
+          </div>
+          <div class="rc-col">
+            <div class="rc-head good-head">✅ มีความสัมพันธ์ (แยกตาราง)</div>
+            <div class="rc-table">
+              <div class="rct-header"><span>StudentID</span><span>ชื่อ</span><span>DeptID</span></div>
+              <div class="rct-row"><span>001</span><span>สมชาย</span><span>IT</span></div>
+              <div class="rct-row"><span>002</span><span>สมหญิง</span><span>IT</span></div>
+              <div class="rct-row"><span>003</span><span>สมใจ</span><span>ACC</span></div>
+            </div>
+            <div class="rc-table" style="margin-top:8px">
+              <div class="rct-header"><span>DeptID</span><span>ชื่อแผนก</span><span>หัวหน้า</span></div>
+              <div class="rct-row"><span>IT</span><span>คอมพิวเตอร์</span><span>อ.สมศรี</span></div>
+              <div class="rct-row"><span>ACC</span><span>บัญชี</span><span>อ.สมพร</span></div>
+            </div>
+            <div class="rc-note good-note">✅ เปลี่ยนหัวหน้าแผนกแค่ที่เดียวในตารางแผนก ส่งผลถึงทุก Record ทันที!</div>
           </div>
         </div>
       </div>
 
-      <div class="content-block">
-        <h3 class="block-title">🔗 ประเภทความสัมพันธ์</h3>
+      <!-- ========== หัวข้อ 2: ประเภทความสัมพันธ์ ========== -->
+      <h3 class="unit-section-title">2. ประเภทความสัมพันธ์</h3>
 
+      <div class="content-block">
+        <h3 class="block-title">🔗 ประเภทความสัมพันธ์ระหว่างตาราง</h3>
+        <p class="block-desc">ความสัมพันธ์ระหว่างตารางมี 3 ประเภทหลัก แต่ละประเภทใช้ในสถานการณ์ที่ต่างกัน</p>
+
+        <!-- 1:1 -->
         <div class="rel-card rel-one-one">
           <div class="rel-header">
             <span class="rel-badge">1 : 1</span>
             <h4>One-to-One (หนึ่งต่อหนึ่ง)</h4>
           </div>
           <div class="rel-body">
+            <div class="rel-concept-box">
+              <div class="rcb-def">💡 <strong>นิยาม:</strong> Record หนึ่งรายการในตาราง A สัมพันธ์กับ Record หนึ่งรายการในตาราง B เท่านั้น และในทางกลับกัน</div>
+            </div>
             <div class="rel-diagram">
               <div class="rel-table">
-                <div class="rt-header">👤 ลูกค้า</div>
-                <div class="rt-row pk">🔑 CustomerID</div>
+                <div class="rt-header">👤 นักเรียน</div>
+                <div class="rt-row pk">🔑 StudentID</div>
                 <div class="rt-row">ชื่อ</div>
+                <div class="rt-row">นามสกุล</div>
               </div>
               <div class="rel-connector">
                 <span class="rc-num">1</span>
@@ -1220,26 +1882,41 @@
                 <span class="rc-num">1</span>
               </div>
               <div class="rel-table">
-                <div class="rt-header">💳 บัตรสมาชิก</div>
-                <div class="rt-row pk">🔑 CardID</div>
-                <div class="rt-row fk">🔗 CustomerID</div>
+                <div class="rt-header">📋 ข้อมูลส่วนตัว</div>
+                <div class="rt-row pk">🔑 InfoID</div>
+                <div class="rt-row fk">🔗 StudentID</div>
+                <div class="rt-row">ที่อยู่</div>
+                <div class="rt-row">เบอร์โทร</div>
               </div>
             </div>
-            <p class="rel-desc">ลูกค้า 1 คน มีบัตรสมาชิกได้ 1 ใบ — บัตร 1 ใบ เป็นของลูกค้าคนเดียว</p>
+            <p class="rel-desc">นักเรียน 1 คน มีข้อมูลส่วนตัว 1 ชุดเท่านั้น — ข้อมูล 1 ชุด เป็นของนักเรียน 1 คนเท่านั้น</p>
+            <div class="rel-use-case">
+              <div class="ruc-title">📌 กรณีที่ใช้ 1:1</div>
+              <div class="ruc-items">
+                <span>แยกข้อมูลลับออกจากข้อมูลหลัก (เช่น รหัสผ่าน, ข้อมูลเงินเดือน)</span>
+                <span>แยกข้อมูลที่ไม่ค่อยใช้บ่อย เพื่อเพิ่มความเร็วในการค้นหา</span>
+                <span>ใช้กับตารางที่ต้องการควบคุมสิทธิ์การเข้าถึงต่างกัน</span>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!-- 1:M -->
         <div class="rel-card rel-one-many">
           <div class="rel-header">
             <span class="rel-badge" style="background:#F59E0B">1 : M</span>
             <h4>One-to-Many (หนึ่งต่อหลาย) ⭐ ใช้บ่อยที่สุด</h4>
           </div>
           <div class="rel-body">
+            <div class="rel-concept-box" style="border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.05)">
+              <div class="rcb-def">💡 <strong>นิยาม:</strong> Record หนึ่งรายการในตาราง A สัมพันธ์กับ Record หลายรายการในตาราง B แต่ Record หนึ่งรายการใน B สัมพันธ์กับ A เพียงหนึ่งรายการ</div>
+            </div>
             <div class="rel-diagram">
               <div class="rel-table">
-                <div class="rt-header">👥 ลูกค้า</div>
-                <div class="rt-row pk">🔑 CustomerID</div>
-                <div class="rt-row">ชื่อ</div>
+                <div class="rt-header">🏫 แผนก (Parent)</div>
+                <div class="rt-row pk">🔑 DeptID</div>
+                <div class="rt-row">ชื่อแผนก</div>
+                <div class="rt-row">หัวหน้า</div>
               </div>
               <div class="rel-connector">
                 <span class="rc-num">1</span>
@@ -1247,22 +1924,36 @@
                 <span class="rc-num">M</span>
               </div>
               <div class="rel-table">
-                <div class="rt-header">📋 คำสั่งซื้อ</div>
-                <div class="rt-row pk">🔑 OrderID</div>
-                <div class="rt-row fk">🔗 CustomerID</div>
-                <div class="rt-row">วันที่สั่ง</div>
+                <div class="rt-header">🎓 นักเรียน (Child)</div>
+                <div class="rt-row pk">🔑 StudentID</div>
+                <div class="rt-row fk">🔗 DeptID</div>
+                <div class="rt-row">ชื่อ</div>
+                <div class="rt-row">นามสกุล</div>
               </div>
             </div>
-            <p class="rel-desc">ลูกค้า 1 คน สามารถมีคำสั่งซื้อได้หลายรายการ — แต่คำสั่งซื้อ 1 ใบ มาจากลูกค้า 1 คนเท่านั้น</p>
+            <p class="rel-desc">แผนก 1 แผนก มีนักเรียนได้หลายคน — แต่นักเรียน 1 คน สังกัดได้เพียง 1 แผนกเท่านั้น</p>
+            <div class="rel-use-case" style="border-color:rgba(245,158,11,0.3)">
+              <div class="ruc-title" style="color:#B45309">📌 ตัวอย่าง 1:M ที่พบบ่อย</div>
+              <div class="ruc-items">
+                <span>ลูกค้า 1 คน → คำสั่งซื้อ หลายรายการ</span>
+                <span>ครู 1 คน → วิชาที่สอน หลายวิชา</span>
+                <span>แผนก 1 แผนก → พนักงาน หลายคน</span>
+                <span>ใบสั่งซื้อ 1 ใบ → รายการสินค้า หลายรายการ</span>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!-- M:N -->
         <div class="rel-card rel-many-many">
           <div class="rel-header">
             <span class="rel-badge" style="background:#8B5CF6">M : N</span>
             <h4>Many-to-Many (หลายต่อหลาย)</h4>
           </div>
           <div class="rel-body">
+            <div class="rel-concept-box" style="border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.05)">
+              <div class="rcb-def">💡 <strong>นิยาม:</strong> Record หลายรายการในตาราง A สัมพันธ์กับ Record หลายรายการในตาราง B และในทางกลับกัน — ต้องแก้ด้วย Junction Table</div>
+            </div>
             <div class="rel-diagram">
               <div class="rel-table">
                 <div class="rt-header">🎓 นักเรียน</div>
@@ -1281,56 +1972,353 @@
               </div>
             </div>
             <p class="rel-desc">นักเรียน 1 คน ลงทะเบียนได้หลายวิชา — วิชา 1 วิชา มีนักเรียนหลายคนลงทะเบียน</p>
-            <div class="mn-note">
-              💡 <strong>การแก้ปัญหา M:N</strong> ต้องสร้างตาราง Junction ขึ้นมากลาง เช่น ตาราง "การลงทะเบียน" ที่มี StudentID + SubjectID
+
+            <div class="mn-solution">
+              <div class="mns-title">🛠️ วิธีแก้ปัญหา M:N — สร้าง Junction Table (ตารางกลาง)</div>
+              <div class="mns-diagram">
+                <div class="rel-table mns-small">
+                  <div class="rt-header">🎓 นักเรียน</div>
+                  <div class="rt-row pk" style="font-size:0.75rem">🔑 StudentID</div>
+                  <div class="rt-row" style="font-size:0.75rem">ชื่อ</div>
+                </div>
+                <div class="mns-arrow">→ 1:M</div>
+                <div class="rel-table mns-small mns-junction">
+                  <div class="rt-header">📋 การลงทะเบียน<br><small>(Junction Table)</small></div>
+                  <div class="rt-row pk" style="font-size:0.75rem">🔑 RegID</div>
+                  <div class="rt-row fk" style="font-size:0.75rem">🔗 StudentID</div>
+                  <div class="rt-row fk" style="font-size:0.75rem">🔗 SubjectID</div>
+                  <div class="rt-row" style="font-size:0.75rem">เกรด</div>
+                  <div class="rt-row" style="font-size:0.75rem">ภาคเรียน</div>
+                </div>
+                <div class="mns-arrow">M:1 →</div>
+                <div class="rel-table mns-small">
+                  <div class="rt-header">📚 วิชา</div>
+                  <div class="rt-row pk" style="font-size:0.75rem">🔑 SubjectID</div>
+                  <div class="rt-row" style="font-size:0.75rem">ชื่อวิชา</div>
+                </div>
+              </div>
+              <p style="font-size:0.82rem;color:var(--text-dim);margin-top:10px">ตาราง "การลงทะเบียน" เปลี่ยน M:N เป็น 1:M สองเส้น ทำให้ Access สร้าง Relationship ได้ถูกต้อง</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="content-block">
-        <h3 class="block-title">⚙️ วิธีสร้าง Relationship ใน Access</h3>
-        <div class="how-to-steps">
-          <div class="ht-step">
-            <span class="ht-num">1</span>
-            <p>ไปที่แท็บ <strong>Database Tools</strong></p>
+        <!-- สรุปเปรียบเทียบ -->
+        <h4 style="margin:28px 0 14px;font-weight:700">📊 สรุปเปรียบเทียบประเภทความสัมพันธ์</h4>
+        <div class="rel-summary-table">
+          <div class="rst-header">
+            <span>ประเภท</span><span>สัญลักษณ์</span><span>ความหมาย</span><span>ตัวอย่าง</span><span>ความถี่</span>
           </div>
-          <div class="ht-step">
-            <span class="ht-num">2</span>
-            <p>คลิก <strong>Relationships</strong></p>
+          <div class="rst-row">
+            <span><strong style="color:#3B82F6">One-to-One</strong></span>
+            <span class="rst-badge" style="background:#3B82F6">1 : 1</span>
+            <span>แต่ละฝั่งมีได้เพียง 1 คู่</span>
+            <span>พนักงาน ↔ ข้อมูลสัญญาจ้าง</span>
+            <span>น้อย</span>
           </div>
-          <div class="ht-step">
-            <span class="ht-num">3</span>
-            <p>ลากตารางที่ต้องการเชื่อมมาวาง</p>
+          <div class="rst-row">
+            <span><strong style="color:#F59E0B">One-to-Many</strong></span>
+            <span class="rst-badge" style="background:#F59E0B">1 : M</span>
+            <span>ฝั่งหนึ่งมีได้หลาย ฝั่งอื่นมีได้ 1</span>
+            <span>แผนก → นักเรียน</span>
+            <span>⭐ มากที่สุด</span>
           </div>
-          <div class="ht-step">
-            <span class="ht-num">4</span>
-            <p>ลาก Primary Key ไปวางบน Foreign Key ของอีกตาราง</p>
-          </div>
-          <div class="ht-step">
-            <span class="ht-num">5</span>
-            <p>ติ๊ก <strong>Enforce Referential Integrity</strong> แล้วกด Create</p>
+          <div class="rst-row">
+            <span><strong style="color:#8B5CF6">Many-to-Many</strong></span>
+            <span class="rst-badge" style="background:#8B5CF6">M : N</span>
+            <span>ทั้งสองฝั่งมีได้หลายคู่</span>
+            <span>นักเรียน ↔ วิชาเรียน</span>
+            <span>ปานกลาง</span>
           </div>
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 3: Primary Key และ Foreign Key ========== -->
+      <h3 class="unit-section-title">3. Primary Key และ Foreign Key</h3>
+
       <div class="content-block">
-        <div class="info-card" style="background:rgba(239,68,68,0.1); border-color:#EF4444">
+        <h3 class="block-title">🔑 Primary Key vs Foreign Key — กุญแจสำคัญของความสัมพันธ์</h3>
+
+        <div class="key-explain">
+          <div class="key-card pk-card">
+            <div class="key-badge">PK</div>
+            <h4>Primary Key (คีย์หลัก)</h4>
+            <p>Field ที่ระบุ Record ในตารางนั้นๆ ได้โดยไม่ซ้ำกัน มักอยู่ที่ฝั่ง "หนึ่ง" ของความสัมพันธ์ 1:M</p>
+            <div class="key-rules">
+              <span class="kr-item">✅ ค่าไม่ซ้ำ (Unique)</span>
+              <span class="kr-item">✅ ห้ามว่าง (NOT NULL)</span>
+              <span class="kr-item">✅ ค่าไม่เปลี่ยนแปลง (Stable)</span>
+            </div>
+            <div class="key-example">เช่น: <strong>DeptID</strong> ในตาราง tblDepts</div>
+          </div>
+          <div class="key-arrow-center">🔗<br><small style="font-size:0.65rem;color:var(--text-dim)">เชื่อมกัน</small></div>
+          <div class="key-card fk-card">
+            <div class="key-badge fk">FK</div>
+            <h4>Foreign Key (คีย์นอก)</h4>
+            <p>Field ที่อ้างอิงไปยัง Primary Key ของตารางอื่น ใช้สร้างความสัมพันธ์ มักอยู่ที่ฝั่ง "หลาย" ของ 1:M</p>
+            <div class="key-rules">
+              <span class="kr-item kr-fk">🔗 ค่าต้องมีอยู่ใน PK ของตารางอ้างอิง</span>
+              <span class="kr-item kr-fk">🔗 อาจว่างได้ (ถ้าไม่บังคับ)</span>
+              <span class="kr-item kr-fk">🔗 ชนิดข้อมูลต้องตรงกับ PK</span>
+            </div>
+            <div class="key-example">เช่น: <strong>DeptID</strong> ในตาราง tblStudents</div>
+          </div>
+        </div>
+
+        <h4 style="margin:28px 0 14px;font-weight:700">🏗️ ตัวอย่างความสัมพันธ์ระบบโรงเรียน (แบบสมบูรณ์)</h4>
+        <div class="full-rel-example">
+          <div class="fre-table">
+            <div class="fret-head" style="border-top:3px solid #EF4444">📋 tblDepts (แผนก)</div>
+            <div class="fret-row pk-row-full">🔑 DeptID — Short Text(4) — <em>Primary Key</em></div>
+            <div class="fret-row">DeptName — Short Text(100)</div>
+            <div class="fret-row">HeadName — Short Text(100)</div>
+          </div>
+          <div class="fre-arrow">
+            <div class="frea-line"></div>
+            <div class="frea-label">1 : M</div>
+            <div class="frea-tip">►</div>
+          </div>
+          <div class="fre-table">
+            <div class="fret-head" style="border-top:3px solid #F59E0B">📋 tblStudents (นักเรียน)</div>
+            <div class="fret-row pk-row-full">🔑 StudentID — AutoNumber — <em>Primary Key</em></div>
+            <div class="fret-row fk-row-full">🔗 DeptID — Short Text(4) — <em>Foreign Key → tblDepts</em></div>
+            <div class="fret-row">FirstName — Short Text(50)</div>
+            <div class="fret-row">LastName — Short Text(50)</div>
+            <div class="fret-row">BirthDate — Date/Time</div>
+          </div>
+          <div class="fre-arrow">
+            <div class="frea-line"></div>
+            <div class="frea-label">1 : M</div>
+            <div class="frea-tip">►</div>
+          </div>
+          <div class="fre-table">
+            <div class="fret-head" style="border-top:3px solid #8B5CF6">📋 tblGrades (เกรด)</div>
+            <div class="fret-row pk-row-full">🔑 GradeID — AutoNumber — <em>Primary Key</em></div>
+            <div class="fret-row fk-row-full">🔗 StudentID — Number — <em>FK → tblStudents</em></div>
+            <div class="fret-row fk-row-full">🔗 SubjectID — Short Text — <em>FK → tblSubjects</em></div>
+            <div class="fret-row">Score — Number</div>
+            <div class="fret-row">Grade — Short Text(2)</div>
+          </div>
+        </div>
+
+        <div class="info-card accent-yellow" style="margin-top:1.5rem">
+          <div class="info-icon">⚠️</div>
+          <div>
+            <h4>กฎสำคัญของ Foreign Key</h4>
+            <p>ชนิดข้อมูล (Data Type) ของ Foreign Key <strong>ต้องตรงกัน</strong> กับ Primary Key ที่อ้างอิง เช่น ถ้า DeptID ใน tblDepts เป็น Short Text ก็ต้องกำหนด DeptID ใน tblStudents เป็น Short Text ด้วย มิฉะนั้นจะสร้าง Relationship ไม่ได้</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 4: สร้าง Relationship ใน Access ========== -->
+      <h3 class="unit-section-title">4. การสร้าง Relationship ในโปรแกรม Access</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">⚙️ วิธีสร้าง Relationship ใน Microsoft Access</h3>
+
+        <div class="info-card" style="background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.35)">
+          <div class="info-icon">🖱️</div>
+          <div>
+            <h4>เครื่องมือ Relationships ใน Access</h4>
+            <p>Microsoft Access มีหน้าต่าง <strong>Relationships</strong> ที่ให้ลากเส้นเชื่อม PK กับ FK ระหว่างตารางได้โดยตรง พร้อมตั้งค่า Referential Integrity ได้ในขั้นตอนเดียว</p>
+          </div>
+        </div>
+
+        <h4 style="margin:20px 0 14px;font-weight:700">📋 ขั้นตอนการสร้าง Relationship ทีละขั้น</h4>
+        <div class="steps-timeline">
+          <div class="timeline-item">
+            <div class="tl-icon">1️⃣</div>
+            <div class="tl-content">
+              <h4>เปิดหน้าต่าง Relationships</h4>
+              <p>ไปที่แท็บ <strong>Database Tools</strong> → คลิกปุ่ม <strong>Relationships</strong> (ไอคอนรูปตารางเชื่อมกัน)</p>
+              <div class="tl-tip">💡 ถ้ายังไม่เคยสร้าง Relationship จะมีกล่อง "Show Table" ปรากฏขึ้นอัตโนมัติ</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">2️⃣</div>
+            <div class="tl-content">
+              <h4>เพิ่มตารางที่ต้องการเชื่อม</h4>
+              <p>ในกล่อง <strong>Show Table</strong> คลิกเลือกตารางที่ต้องการ แล้วกด <strong>Add</strong> จนครบ จากนั้นกด <strong>Close</strong></p>
+              <div class="tl-tip">💡 ควรเพิ่มทุกตารางที่จะเชื่อมสัมพันธ์กันในครั้งเดียว</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">3️⃣</div>
+            <div class="tl-content">
+              <h4>ลากเส้นเชื่อม PK → FK</h4>
+              <p>คลิกที่ <strong>Primary Key</strong> ในตารางหลัก แล้ว <strong>ลากไปวางบน Foreign Key</strong> ของตารางที่จะเชื่อม กล่อง Edit Relationships จะปรากฏขึ้น</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">4️⃣</div>
+            <div class="tl-content">
+              <h4>ตั้งค่าใน Edit Relationships</h4>
+              <p>ตรวจสอบว่า Field ถูกต้อง จากนั้นติ๊กที่ <strong>Enforce Referential Integrity</strong> เพื่อเปิดการตรวจสอบความถูกต้องของการอ้างอิง</p>
+              <!-- Relationship Dialog Mock -->
+              <div class="rel-dialog-mock">
+                <div class="rdm-title">Edit Relationships</div>
+                <div class="rdm-body">
+                  <div class="rdm-tables">
+                    <div class="rdm-table">
+                      <div class="rdm-tname">tblDepts</div>
+                      <div class="rdm-field pk-field">DeptID</div>
+                    </div>
+                    <div class="rdm-arrow">↔</div>
+                    <div class="rdm-table">
+                      <div class="rdm-tname">tblStudents</div>
+                      <div class="rdm-field fk-field">DeptID</div>
+                    </div>
+                  </div>
+                  <div class="rdm-options">
+                    <label class="rdm-check checked">☑ Enforce Referential Integrity</label>
+                    <label class="rdm-check">☐ Cascade Update Related Fields</label>
+                    <label class="rdm-check">☐ Cascade Delete Related Records</label>
+                  </div>
+                  <div class="rdm-type">Relationship Type: <strong>One-To-Many</strong></div>
+                </div>
+                <div class="rdm-buttons">
+                  <span class="rdm-btn rdm-create">Create</span>
+                  <span class="rdm-btn rdm-cancel">Cancel</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">5️⃣</div>
+            <div class="tl-content">
+              <h4>คลิก Create และบันทึก</h4>
+              <p>กด <strong>Create</strong> จะปรากฏเส้นเชื่อมระหว่างสองตาราง จากนั้นกด <kbd>Ctrl + S</kbd> เพื่อบันทึก Relationship</p>
+              <div class="tl-tip">✅ เส้นเชื่อมที่มีเครื่องหมาย "1" และ "∞" แสดงว่าสร้าง 1:M Relationship สำเร็จ</div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:28px 0 14px;font-weight:700">⚙️ ตัวเลือก Cascade — การลบและอัปเดตข้ามตาราง</h4>
+        <div class="cascade-options">
+          <div class="cas-item">
+            <div class="cas-icon">🔄</div>
+            <div class="cas-name">Cascade Update Related Fields</div>
+            <div class="cas-desc">เมื่อเปลี่ยน PK ในตารางหลัก FK ในตารางลูกจะอัปเดตตามอัตโนมัติ</div>
+            <div class="cas-example">เช่น: เปลี่ยน DeptID จาก IT → TECH ทุก Record นักเรียนจะอัปเดต DeptID เป็น TECH</div>
+          </div>
+          <div class="cas-item">
+            <div class="cas-icon">🗑️</div>
+            <div class="cas-name">Cascade Delete Related Records</div>
+            <div class="cas-desc">เมื่อลบ Record ในตารางหลัก Records ที่เชื่อมในตารางลูกจะถูกลบตามอัตโนมัติ</div>
+            <div class="cas-example">เช่น: ลบแผนก IT ระบบจะลบนักเรียนทุกคนในแผนก IT พร้อมกัน ⚠️ ใช้ระวัง!</div>
+          </div>
+        </div>
+
+        <h4 style="margin:28px 0 14px;font-weight:700">🔧 การแก้ไขและลบ Relationship</h4>
+        <div class="rel-manage-grid">
+          <div class="rmg-item">
+            <div class="rmg-icon">✏️</div>
+            <div class="rmg-action">แก้ไข Relationship</div>
+            <div class="rmg-how">ดับเบิลคลิกที่เส้นเชื่อม → กล่อง Edit Relationships จะเปิด → ปรับตั้งค่า → OK</div>
+          </div>
+          <div class="rmg-item">
+            <div class="rmg-icon">🗑️</div>
+            <div class="rmg-action">ลบ Relationship</div>
+            <div class="rmg-how">คลิกที่เส้นเชื่อมให้หนาขึ้น → กด <kbd>Delete</kbd> → ยืนยัน Yes</div>
+          </div>
+          <div class="rmg-item">
+            <div class="rmg-icon">➕</div>
+            <div class="rmg-action">เพิ่มตารางใหม่</div>
+            <div class="rmg-how">คลิกขวาในพื้นที่ว่าง → Show Table → เลือกตาราง → Add</div>
+          </div>
+          <div class="rmg-item">
+            <div class="rmg-icon">🖼️</div>
+            <div class="rmg-action">จัดเรียง Layout</div>
+            <div class="rmg-how">ลากตารางในหน้าต่าง Relationships ให้เป็นระเบียบ → Ctrl+S บันทึก</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 5: Referential Integrity ========== -->
+      <h3 class="unit-section-title">5. Referential Integrity (ความถูกต้องของการอ้างอิง)</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">🛡️ Referential Integrity คืออะไร?</h3>
+
+        <div class="info-card" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.4)">
           <div class="info-icon">🛡️</div>
           <div>
-            <h4>Referential Integrity คืออะไร?</h4>
-            <p>กฎที่ควบคุมความสัมพันธ์ระหว่างตาราง เพื่อให้ข้อมูลมีความถูกต้องสม่ำเสมอ</p>
-            <ul>
-              <li>ไม่สามารถเพิ่ม Record ใน Child Table ถ้าไม่มี Record ใน Parent Table</li>
-              <li>ไม่สามารถลบ Record ใน Parent Table ถ้ามี Record ที่อ้างอิงอยู่ใน Child Table</li>
-            </ul>
+            <h3>Referential Integrity (RI)</h3>
+            <p>Referential Integrity คือ <strong>กฎที่ Access บังคับใช้เพื่อรักษาความสัมพันธ์ระหว่างตารางให้ถูกต้องสม่ำเสมอ</strong> กำหนดว่า Foreign Key ในตารางลูกต้องมีค่าที่ตรงกับ Primary Key ในตารางหลักเสมอ จะมีค่า FK ที่ "ลอยอยู่" โดยไม่มี PK รองรับไม่ได้</p>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 14px;font-weight:700">📜 กฎของ Referential Integrity</h4>
+        <div class="ri-rules">
+          <div class="ri-rule">
+            <div class="rir-num">กฎ 1</div>
+            <div class="rir-content">
+              <div class="rir-title">❌ ไม่สามารถเพิ่ม Record ใน Child Table ที่ไม่มีข้อมูลใน Parent Table</div>
+              <div class="rir-example">
+                <div class="rie-bad">❌ เพิ่มนักเรียนที่มี DeptID = "XYZ" — แต่ไม่มีแผนก XYZ ในตาราง tblDepts → <strong>Access จะแสดง Error</strong></div>
+                <div class="rie-good">✅ เพิ่มนักเรียนที่มี DeptID = "IT" — ต้องมีแผนก IT ในตาราง tblDepts ก่อน → <strong>บันทึกได้</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="ri-rule">
+            <div class="rir-num">กฎ 2</div>
+            <div class="rir-content">
+              <div class="rir-title">❌ ไม่สามารถลบ Record ใน Parent Table ถ้ายังมี Record ใน Child Table อ้างอิงอยู่</div>
+              <div class="rir-example">
+                <div class="rie-bad">❌ ลบแผนก IT — แต่ยังมีนักเรียนที่มี DeptID = "IT" อยู่ → <strong>Access จะแสดง Error</strong></div>
+                <div class="rie-good">✅ ลบนักเรียนทุกคนในแผนก IT ก่อน แล้วจึงลบแผนก IT → <strong>ลบได้</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="ri-rule">
+            <div class="rir-num">กฎ 3</div>
+            <div class="rir-content">
+              <div class="rir-title">❌ ไม่สามารถเปลี่ยน PK ใน Parent Table ถ้ายังมี FK ใน Child Table อ้างอิงอยู่ (ถ้าไม่เปิด Cascade Update)</div>
+              <div class="rir-example">
+                <div class="rie-bad">❌ เปลี่ยน DeptID จาก "IT" → "TECH" — แต่มีนักเรียนอ้างอิง "IT" อยู่ → <strong>Error (ถ้าไม่เปิด Cascade Update)</strong></div>
+                <div class="rie-good">✅ เปิด Cascade Update → Access อัปเดต DeptID ทุกที่อัตโนมัติ → <strong>ทำได้</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:28px 0 14px;font-weight:700">⚡ RI เปิด vs ปิด — ผลที่แตกต่าง</h4>
+        <div class="ri-compare">
+          <div class="ric-col">
+            <div class="ric-head" style="background:rgba(239,68,68,0.12);color:#991B1B">🔓 ปิด Referential Integrity</div>
+            <div class="ric-items">
+              <div class="ric-item bad-ri">❌ อาจมี FK ที่ไม่มี PK รองรับ ("Orphan Records")</div>
+              <div class="ric-item bad-ri">❌ ลบ Parent ได้แม้มี Child อ้างอิงอยู่</div>
+              <div class="ric-item bad-ri">❌ ข้อมูลไม่สม่ำเสมอ อาจผิดพลาดโดยไม่รู้ตัว</div>
+              <div class="ric-item good-ri">✅ ยืดหยุ่นกว่า เหมาะกับข้อมูลเก่าที่ไม่สมบูรณ์</div>
+            </div>
+          </div>
+          <div class="ric-col">
+            <div class="ric-head" style="background:rgba(16,185,129,0.12);color:#065F46">🔒 เปิด Referential Integrity</div>
+            <div class="ric-items">
+              <div class="ric-item good-ri">✅ FK ทุกค่าต้องมี PK รองรับเสมอ</div>
+              <div class="ric-item good-ri">✅ ป้องกันการลบ Parent ที่ยังมี Child</div>
+              <div class="ric-item good-ri">✅ ข้อมูลสม่ำเสมอ ถูกต้องเสมอ</div>
+              <div class="ric-item bad-ri">⚠️ ต้องเพิ่มข้อมูล Parent ก่อน Child เสมอ</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card accent-blue" style="margin-top:1.5rem">
+          <div class="info-icon">💡</div>
+          <div>
+            <h4>คำแนะนำการใช้ Referential Integrity</h4>
+            <p>ควร <strong>เปิด Enforce Referential Integrity เสมอ</strong> เมื่อสร้าง Relationship ในระบบงานจริง เพราะช่วยป้องกันข้อผิดพลาดของข้อมูลได้อัตโนมัติ และเปิด <strong>Cascade Update</strong> ไว้ด้วยถ้าต้องการให้ PK เปลี่ยนได้ในอนาคต แต่ระวัง Cascade Delete เพราะอาจลบข้อมูลจำนวนมากโดยไม่ตั้งใจ</p>
           </div>
         </div>
       </div>
 
       <div class="outcome-box" style="--accent-out:#EF4444">
         <span class="outcome-icon">🎯</span>
-        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถสร้างความสัมพันธ์ระหว่างตารางในฐานข้อมูลได้อย่างถูกต้อง</p>
+        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถอธิบายความหมายของความสัมพันธ์ระหว่างตาราง จำแนกประเภท 1:1, 1:M, M:N กำหนด PK และ FK สร้าง Relationship ใน Access และเข้าใจการทำงานของ Referential Integrity ได้อย่างถูกต้อง</p>
       </div>
     </section>
 
@@ -1848,8 +2836,8 @@
         <div class="info-card" style="background:rgba(30,41,59,0.6); border-color:#334155">
           <div class="info-icon">🤖</div>
           <div>
-            <h4>แมโครคืออะไร?</h4>
-            <p style=" color: #000000;">Macro คือชุดคำสั่งที่บันทึกไว้ล่วงหน้า เพื่อให้ทำงานซ้ำๆ โดยอัตโนมัติ ช่วยลดขั้นตอนการทำงาน เพิ่มประสิทธิภาพ</p>
+            <h4 style="color: white;">แมโครคืออะไร?</h4>
+            <p style=" color: #ffffff;">Macro คือชุดคำสั่งที่บันทึกไว้ล่วงหน้า เพื่อให้ทำงานซ้ำๆ โดยอัตโนมัติ ช่วยลดขั้นตอนการทำงาน เพิ่มประสิทธิภาพ</p>
           </div>
         </div>
 
@@ -1916,7 +2904,7 @@
         <div class="macro-example">
           <div class="me-title">💡 ตัวอย่าง: ปุ่มเปิด Form นักเรียน</div>
           <div class="me-content">
-            <div class="me-button">📋 ดูข้อมูลนักเรียน</div>
+            <div class="me-button" style="color: rgb(0, 0, 0);">📋 ดูข้อมูลนักเรียน</div>
             <div class="me-arrow">↓ เมื่อกด จะรัน Macro</div>
             <div class="me-macro">
               <div class="mm-title">⚡ mcrOpenStudentForm</div>

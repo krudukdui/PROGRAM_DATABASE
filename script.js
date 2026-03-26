@@ -59,6 +59,9 @@ function showSection(id) {
 // Nav click
 navItems.forEach(item => {
   item.addEventListener('click', (e) => {
+    // ถ้าเป็นลิงก์ภายนอก (มี target="_blank") ให้เปิดปกติ ไม่ต้อง preventDefault
+    if (item.getAttribute('target') === '_blank') return;
+
     e.preventDefault();
     const href = item.getAttribute('href').replace('#', '');
     showSection(href);
@@ -251,7 +254,6 @@ if (meButton) {
 // ============================================
 // HIGHLIGHT ACTIVE NAV ON SCROLL
 // ============================================
-// Track current active
 let activeSection = 'home';
 
 function updateActiveNav(id) {
@@ -259,3 +261,4 @@ function updateActiveNav(id) {
     activeSection = id;
   }
 }
+
