@@ -949,9 +949,6 @@ header{
   <button class="mnav-btn active" id="mnavCanvas" onclick="closeMobilePanels()">
     <span class="micon">🖼</span>Canvas
   </button>
-  <button class="mnav-btn" id="mnavRel" onclick="toggleMobileRel()">
-    <span class="micon">🔗</span>วาดเส้น
-  </button>
   <button class="mnav-btn" id="mnavCheck" onclick="checkAnswer()">
     <span class="micon">✅</span>ตรวจ
   </button>
@@ -1041,10 +1038,6 @@ function toggleMobileRel(){
   }
   // if already in rel mode, toggle off
   toggleRel();
-  const btn=document.getElementById('mnavRel');
-  if(btn) btn.classList.toggle('active', relMode);
-  const fab=document.getElementById('mobileFab');
-  if(fab) fab.classList.toggle('rel-active', relMode);
   if(isMobile()) closeMobilePanels();
 }
 
@@ -1415,7 +1408,6 @@ function toggleRel(){
   const w=document.getElementById("canvasWrap");
   const b=document.getElementById("relBtn");
   const t=document.getElementById("relToast");
-  const mnavRel=document.getElementById("mnavRel");
   const fab=document.getElementById("mobileFab");
   entities.forEach(e=>document.getElementById(e.id)?.classList.remove("selected"));
   if(relMode){
@@ -1424,22 +1416,13 @@ function toggleRel(){
     b.textContent="❌ ออกจากโหมดวาดเส้น";
     b.style.background="#dc2626";
     t.style.display="block"; t.textContent=`🔗 [${relType}] คลิก Entity ต้นทาง...`;
-    if(mnavRel){mnavRel.classList.add("active");mnavRel.querySelector(".micon").textContent="❌"}
-    if(fab){fab.textContent="❌";fab.classList.add("rel-active");fab.onclick=()=>{toggleRel();syncMobileRelBtn()}}
+    if(fab){fab.textContent="❌";fab.classList.add("rel-active");fab.onclick=()=>{toggleRel();}}
   } else {
     w.classList.remove("rel-mode");
     b.textContent="🖱 วาดเส้นความสัมพันธ์";
     b.style.background="";
     t.style.display="none";
-    if(mnavRel){mnavRel.classList.remove("active");mnavRel.querySelector(".micon").textContent="🔗"}
     if(fab){fab.textContent="＋";fab.classList.remove("rel-active");fab.onclick=()=>{addEntity()}}
-  }
-}
-function syncMobileRelBtn(){
-  const mnavRel=document.getElementById("mnavRel");
-  if(mnavRel){
-    mnavRel.classList.toggle("active",relMode);
-    mnavRel.querySelector(".micon").textContent=relMode?"❌":"🔗";
   }
 }
 
