@@ -2740,182 +2740,706 @@
         <div class="section-num">06</div>
         <div class="section-titles">
           <h2>แบบรายงานและการใช้แมโคร</h2>
-          <p>Reports & Macros — Business Application</p>
+          <p>Reports & Macros — Microsoft Access</p>
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 1: ความหมายและประโยชน์ของรายงาน ========== -->
+      <h3 class="unit-section-title">1. ความหมายและประโยชน์ของรายงาน</h3>
+
       <div class="content-block">
-        <h3 class="block-title">📊 แบบรายงาน (Reports)</h3>
         <div class="info-card accent-pink">
           <div class="info-icon">📄</div>
           <div>
-            <h4>รายงานคืออะไร?</h4>
-            <p>แบบรายงาน (Report) คือ การนำเสนอข้อมูลจากฐานข้อมูลในรูปแบบที่พร้อมพิมพ์หรือแสดงผล มักใช้สรุปข้อมูล สร้างใบเสร็จ หรือรายงานสถิติต่างๆ</p>
+            <h3>แบบรายงาน (Report) คืออะไร?</h3>
+            <p>แบบรายงาน (Report) คือ <strong>ออบเจกต์ใน Access ที่ใช้นำเสนอข้อมูลจากฐานข้อมูลในรูปแบบที่พร้อมพิมพ์หรือแสดงผล</strong> ออกแบบมาเพื่อการสรุปข้อมูล จัดกลุ่ม คำนวณ และนำเสนออย่างเป็นระเบียบ สวยงาม ต่างจาก Form ที่ใช้กรอกข้อมูล Report จะแสดงข้อมูลอย่างเดียว แก้ไขไม่ได้</p>
           </div>
         </div>
 
+        <h4 style="margin:20px 0 12px;font-weight:700">✨ ประโยชน์ของแบบรายงาน</h4>
+        <div class="rpt-benefits">
+          <div class="rptb-item" style="--rptb:#EC4899">
+            <div class="rptb-icon">📊</div>
+            <div class="rptb-title">สรุปข้อมูลได้ทันที</div>
+            <div class="rptb-desc">คำนวณผลรวม ค่าเฉลี่ย จำนวนนับ ได้อัตโนมัติ เช่น ยอดขายรายเดือน หรือคะแนนเฉลี่ยนักเรียน</div>
+          </div>
+          <div class="rptb-item" style="--rptb:#8B5CF6">
+            <div class="rptb-icon">🖨️</div>
+            <div class="rptb-title">พร้อมพิมพ์ทันที</div>
+            <div class="rptb-desc">ออกแบบให้พอดีกับกระดาษ A4 มีหัว-ท้ายหน้า หมายเลขหน้า โลโก้ ตามมาตรฐานเอกสาร</div>
+          </div>
+          <div class="rptb-item" style="--rptb:#3B82F6">
+            <div class="rptb-icon">🗂️</div>
+            <div class="rptb-title">จัดกลุ่มข้อมูล</div>
+            <div class="rptb-desc">จัดกลุ่ม (Group) และเรียงลำดับ (Sort) ข้อมูลได้ตามต้องการ เช่น จัดตามแผนก หรือตามวันที่</div>
+          </div>
+          <div class="rptb-item" style="--rptb:#10B981">
+            <div class="rptb-icon">📤</div>
+            <div class="rptb-title">ส่งออกได้หลายรูปแบบ</div>
+            <div class="rptb-desc">ส่งออกเป็น PDF, Excel, Word หรือส่งทาง Email ได้โดยตรงจาก Access</div>
+          </div>
+          <div class="rptb-item" style="--rptb:#F59E0B">
+            <div class="rptb-icon">🔒</div>
+            <div class="rptb-title">ปลอดภัย ไม่แก้ไขข้อมูล</div>
+            <div class="rptb-desc">ผู้ใช้ดูข้อมูลในรายงานได้อย่างเดียว ไม่สามารถแก้ไขข้อมูลต้นฉบับได้ ปลอดภัยกว่า Datasheet</div>
+          </div>
+          <div class="rptb-item" style="--rptb:#EF4444">
+            <div class="rptb-icon">🎨</div>
+            <div class="rptb-title">ออกแบบได้อิสระ</div>
+            <div class="rptb-desc">ปรับ Font, สี, ขนาด เพิ่มโลโก้ กราฟ หรือภาพประกอบได้ใน Layout View หรือ Design View</div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">🏗️ ส่วนประกอบของ Report (Report Sections)</h4>
+        <p class="block-desc">Report ใน Access แบ่งเนื้อหาออกเป็น Section ต่างๆ แต่ละ Section แสดงผลในเวลาและตำแหน่งที่ต่างกัน</p>
         <div class="report-sections">
-          <h4>ส่วนประกอบของ Report</h4>
           <div class="report-mock">
             <div class="rm-section rm-header">
-              <span class="rm-label">Report Header</span>
-              <span>ชื่อรายงาน, โลโก้ — แสดงครั้งเดียวที่หน้าแรก</span>
+              <div class="rms-left">
+                <span class="rm-label">Report Header</span>
+                <span class="rms-freq">แสดง 1 ครั้ง — หน้าแรก</span>
+              </div>
+              <span>ชื่อรายงาน "รายงานผลการเรียน", โลโก้โรงเรียน, วันที่พิมพ์</span>
             </div>
             <div class="rm-section rm-page-header">
-              <span class="rm-label">Page Header</span>
-              <span>หัวตาราง — แสดงทุกหน้า</span>
+              <div class="rms-left">
+                <span class="rm-label">Page Header</span>
+                <span class="rms-freq">แสดงทุกหน้า</span>
+              </div>
+              <span>หัวคอลัมน์ เช่น "รหัส | ชื่อ | แผนก | คะแนน"</span>
+            </div>
+            <div class="rm-section rm-group-header" style="background:rgba(139,92,246,0.08);border-color:rgba(139,92,246,0.3)">
+              <div class="rms-left">
+                <span class="rm-label" style="background:#8B5CF6">Group Header</span>
+                <span class="rms-freq">แสดงทุกกลุ่ม</span>
+              </div>
+              <span>ชื่อกลุ่ม เช่น "แผนก: คอมพิวเตอร์" (ถ้ากำหนด Grouping)</span>
             </div>
             <div class="rm-section rm-detail">
-              <span class="rm-label">Detail</span>
-              <span>แถวข้อมูล — วนซ้ำสำหรับทุก Record</span>
+              <div class="rms-left">
+                <span class="rm-label">Detail</span>
+                <span class="rms-freq">วนซ้ำทุก Record</span>
+              </div>
+              <span>แถวข้อมูลแต่ละ Record เช่น "001 | สมชาย | คอม | 85"</span>
+            </div>
+            <div class="rm-section rm-group-footer" style="background:rgba(139,92,246,0.06);border-color:rgba(139,92,246,0.2)">
+              <div class="rms-left">
+                <span class="rm-label" style="background:#8B5CF6">Group Footer</span>
+                <span class="rms-freq">แสดงท้ายกลุ่ม</span>
+              </div>
+              <span>สรุปกลุ่ม เช่น "รวมนักเรียนแผนกคอม: 35 คน | เฉลี่ย: 78.5"</span>
             </div>
             <div class="rm-section rm-page-footer">
-              <span class="rm-label">Page Footer</span>
-              <span>หมายเลขหน้า — แสดงทุกหน้า</span>
+              <div class="rms-left">
+                <span class="rm-label">Page Footer</span>
+                <span class="rms-freq">แสดงทุกหน้า</span>
+              </div>
+              <span>หมายเลขหน้า เช่น "หน้า 1 จาก 3" วันที่พิมพ์</span>
             </div>
             <div class="rm-section rm-footer">
-              <span class="rm-label">Report Footer</span>
-              <span>สรุปรวม — แสดงครั้งเดียวท้ายรายงาน</span>
+              <div class="rms-left">
+                <span class="rm-label">Report Footer</span>
+                <span class="rms-freq">แสดง 1 ครั้ง — ท้ายสุด</span>
+              </div>
+              <span>สรุปรวมทั้งหมด เช่น "นักเรียนทั้งหมด: 150 คน | คะแนนเฉลี่ยรวม: 75.2"</span>
             </div>
           </div>
         </div>
 
-        <h4 style="margin-top:2rem">🧙 สร้าง Report ด้วย Report Wizard</h4>
-        <div class="wizard-steps">
-          <div class="wz-step">
-            <div class="wz-num">1</div>
-            <div class="wz-text">Create → <strong>Report Wizard</strong></div>
+        <h4 style="margin:24px 0 12px;font-weight:700">🆚 Report vs Form vs Table — เลือกใช้อะไร?</h4>
+        <div class="rpt-vs-table">
+          <div class="rvt-header">
+            <span>ลักษณะ</span><span>Table (Datasheet)</span><span>Form</span><span>Report ⭐</span>
           </div>
-          <div class="wz-arrow">→</div>
-          <div class="wz-step">
-            <div class="wz-num">2</div>
-            <div class="wz-text">เลือก Table/Query และ Fields ที่ต้องการ</div>
+          <div class="rvt-row">
+            <span>วัตถุประสงค์</span>
+            <span>จัดเก็บข้อมูล</span>
+            <span>กรอก/แก้ไขข้อมูล</span>
+            <span>นำเสนอ/พิมพ์ข้อมูล</span>
           </div>
-          <div class="wz-arrow">→</div>
-          <div class="wz-step">
-            <div class="wz-num">3</div>
-            <div class="wz-text">กำหนด Grouping และ Sorting</div>
+          <div class="rvt-row">
+            <span>แก้ไขข้อมูลได้</span>
+            <span>✅ ได้</span>
+            <span>✅ ได้</span>
+            <span>❌ ไม่ได้</span>
           </div>
-          <div class="wz-arrow">→</div>
-          <div class="wz-step">
-            <div class="wz-num">4</div>
-            <div class="wz-text">เลือก Layout และ Theme</div>
+          <div class="rvt-row">
+            <span>พิมพ์เอกสาร</span>
+            <span>⚠️ ไม่สวย</span>
+            <span>⚠️ พอได้</span>
+            <span>✅ ดีที่สุด</span>
           </div>
-          <div class="wz-arrow">→</div>
-          <div class="wz-step">
-            <div class="wz-num">5</div>
-            <div class="wz-text">ตั้งชื่อแล้วกด Finish</div>
+          <div class="rvt-row">
+            <span>สรุปข้อมูล/จัดกลุ่ม</span>
+            <span>❌ ไม่มี</span>
+            <span>⚠️ จำกัด</span>
+            <span>✅ ครบถ้วน</span>
+          </div>
+          <div class="rvt-row">
+            <span>ส่งออก PDF/Excel</span>
+            <span>⚠️ จำกัด</span>
+            <span>⚠️ จำกัด</span>
+            <span>✅ ง่ายมาก</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 2: สร้างรายงานด้วย Report Wizard ========== -->
+      <h3 class="unit-section-title">2. การสร้างรายงานด้วย Report Wizard</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">🧙 Report Wizard — สร้างรายงานง่ายใน 5 ขั้น</h3>
+        <div class="info-card" style="background:rgba(236,72,153,0.07);border-color:rgba(236,72,153,0.3)">
+          <div class="info-icon">💡</div>
+          <div>
+            <h4>ทำไมต้องใช้ Report Wizard?</h4>
+            <p>Report Wizard ช่วยสร้างรายงานพื้นฐานได้รวดเร็ว โดย Access จะถามคำถามทีละขั้นตอนแล้วสร้างโครงสร้างให้อัตโนมัติ จากนั้นค่อยปรับแต่งเพิ่มเติมใน Design View ตามต้องการ</p>
           </div>
         </div>
 
-        <div class="export-options">
-          <h4>📤 การส่งออกรายงาน</h4>
-          <div class="export-grid">
-            <div class="export-item">
-              <div class="ex-icon">📄</div>
-              <div class="ex-name">PDF</div>
-              <div class="ex-desc">External Data → PDF or XPS</div>
+        <h4 style="margin:20px 0 14px;font-weight:700">📋 ขั้นตอนการสร้าง Report ด้วย Report Wizard</h4>
+        <div class="steps-timeline">
+          <div class="timeline-item">
+            <div class="tl-icon">1️⃣</div>
+            <div class="tl-content">
+              <h4>เปิด Report Wizard</h4>
+              <p>ไปที่แท็บ <strong>Create</strong> → คลิก <strong>Report Wizard</strong> ในกลุ่ม Reports</p>
+              <div class="tl-tip">💡 ถ้าต้องการรายงานด่วน ให้คลิก "Report" แทน Wizard — Access จะสร้างรายงานพื้นฐานจาก Table/Query ที่เลือกทันที</div>
             </div>
-            <div class="export-item">
-              <div class="ex-icon">📊</div>
-              <div class="ex-name">Excel</div>
-              <div class="ex-desc">External Data → Excel</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">2️⃣</div>
+            <div class="tl-content">
+              <h4>เลือกแหล่งข้อมูลและ Fields</h4>
+              <p>เลือก <strong>Table หรือ Query</strong> จาก Dropdown แล้วเลือก Fields ที่ต้องการแสดง กด <strong>&gt;</strong> เพิ่มทีละ Field หรือ <strong>&gt;&gt;</strong> เพิ่มทั้งหมด</p>
+              <div class="wizard-field-mock">
+                <div class="wfm-col">
+                  <div class="wfm-title">Available Fields:</div>
+                  <div class="wfm-list">
+                    <div class="wfm-item">StudentID</div>
+                    <div class="wfm-item">Address</div>
+                    <div class="wfm-item">Phone</div>
+                  </div>
+                </div>
+                <div class="wfm-btns">
+                  <span class="wfm-btn">&gt;</span>
+                  <span class="wfm-btn">&gt;&gt;</span>
+                  <span class="wfm-btn">&lt;</span>
+                  <span class="wfm-btn">&lt;&lt;</span>
+                </div>
+                <div class="wfm-col">
+                  <div class="wfm-title">Selected Fields:</div>
+                  <div class="wfm-list wfm-selected">
+                    <div class="wfm-item wfm-sel">FirstName</div>
+                    <div class="wfm-item wfm-sel">LastName</div>
+                    <div class="wfm-item wfm-sel">DeptName</div>
+                    <div class="wfm-item wfm-sel">Score</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tl-tip">💡 สามารถดึง Fields จากหลาย Table ได้ถ้ามี Relationship เชื่อมกันอยู่แล้ว</div>
             </div>
-            <div class="export-item">
-              <div class="ex-icon">🖨️</div>
-              <div class="ex-name">พิมพ์</div>
-              <div class="ex-desc">File → Print หรือ Ctrl+P</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">3️⃣</div>
+            <div class="tl-content">
+              <h4>กำหนด Grouping (การจัดกลุ่ม)</h4>
+              <p>เลือก Field ที่ต้องการจัดกลุ่ม เช่น <strong>DeptName</strong> เพื่อแบ่งรายงานเป็นกลุ่มแผนก Access จะเพิ่ม Group Header และ Group Footer ให้อัตโนมัติ</p>
+              <div class="grouping-mock">
+                <div class="gm-preview">
+                  <div class="gm-group-header">📁 แผนก: คอมพิวเตอร์</div>
+                  <div class="gm-detail">001 | สมชาย | 85</div>
+                  <div class="gm-detail">002 | สมหญิง | 90</div>
+                  <div class="gm-group-footer">รวม: 2 คน | เฉลี่ย: 87.5</div>
+                  <div class="gm-group-header">📁 แผนก: บัญชี</div>
+                  <div class="gm-detail">003 | สมใจ | 78</div>
+                  <div class="gm-group-footer">รวม: 1 คน | เฉลี่ย: 78</div>
+                </div>
+              </div>
             </div>
-            <div class="export-item">
-              <div class="ex-icon">📧</div>
-              <div class="ex-name">Email</div>
-              <div class="ex-desc">ส่งออกแล้วแนบไฟล์</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">4️⃣</div>
+            <div class="tl-content">
+              <h4>กำหนด Sorting และ Summary Options</h4>
+              <p>เรียงลำดับข้อมูลได้สูงสุด 4 Field เลือก <strong>Ascending</strong> หรือ <strong>Descending</strong> และกด <strong>Summary Options</strong> เพื่อเพิ่มการคำนวณ Sum, Avg, Min, Max</p>
+              <div class="sort-options">
+                <div class="so-sort">
+                  <span class="sos-field">LastName</span>
+                  <span class="sos-dir asc">▲ Ascending</span>
+                </div>
+                <div class="so-sort">
+                  <span class="sos-field">Score</span>
+                  <span class="sos-dir desc">▼ Descending</span>
+                </div>
+                <div class="so-summary">
+                  <span class="sum-opt">☑ Sum</span>
+                  <span class="sum-opt">☑ Average</span>
+                  <span class="sum-opt">☐ Min</span>
+                  <span class="sum-opt">☐ Max</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">5️⃣</div>
+            <div class="tl-content">
+              <h4>เลือก Layout และตั้งชื่อรายงาน</h4>
+              <p>เลือกรูปแบบ Layout เช่น <strong>Stepped, Block, Outline</strong> เลือกแนวกระดาษ Portrait/Landscape แล้วตั้งชื่อรายงาน เช่น <code>rptStudentGrades</code> กด <strong>Finish</strong></p>
+              <div class="layout-options">
+                <div class="lo-item lo-active">
+                  <div class="lo-preview stepped-prev">
+                    <div class="lop-group">▌ กลุ่ม</div>
+                    <div class="lop-row">  ▸ แถวข้อมูล</div>
+                    <div class="lop-row">  ▸ แถวข้อมูล</div>
+                  </div>
+                  <div class="lo-name">Stepped ⭐</div>
+                </div>
+                <div class="lo-item">
+                  <div class="lo-preview">
+                    <div class="lop-group">กลุ่ม | ข้อมูล 1</div>
+                    <div class="lop-row">      | ข้อมูล 2</div>
+                  </div>
+                  <div class="lo-name">Block</div>
+                </div>
+                <div class="lo-item">
+                  <div class="lo-preview">
+                    <div class="lop-group">▶ กลุ่ม</div>
+                    <div class="lop-row">    ข้อมูล 1 | ข้อมูล 2</div>
+                  </div>
+                  <div class="lo-name">Outline</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- ========== หัวข้อ 3: การจัดรูปแบบและตกแต่งรายงาน ========== -->
+      <h3 class="unit-section-title">3. การจัดรูปแบบและตกแต่งรายงาน</h3>
+
       <div class="content-block">
-        <h3 class="block-title">⚡ แมโคร (Macro)</h3>
+        <h3 class="block-title">🎨 การปรับแต่งรายงานใน Design View และ Layout View</h3>
+
+        <div class="view-compare-grid">
+          <div class="vcg-card" style="border-top-color:#EC4899">
+            <div class="vcg-icon">⚙️</div>
+            <div class="vcg-name">Design View</div>
+            <div class="vcg-desc">ปรับแต่งโครงสร้างได้เต็มที่ ย้าย Control, เพิ่ม Section, กำหนด Property ทุกอย่าง เหมาะสำหรับการตกแต่งขั้นสูง</div>
+            <div class="vcg-how">View → Design View หรือคลิกขวา → Design View</div>
+          </div>
+          <div class="vcg-card" style="border-top-color:#8B5CF6">
+            <div class="vcg-icon">🖼️</div>
+            <div class="vcg-name">Layout View</div>
+            <div class="vcg-desc">เห็นข้อมูลจริงขณะปรับแต่ง ใช้เมาส์ลาก Control ปรับขนาด เหมาะสำหรับการจัดวางเบื้องต้น</div>
+            <div class="vcg-how">View → Layout View หรือคลิกขวา → Layout View</div>
+          </div>
+          <div class="vcg-card" style="border-top-color:#3B82F6">
+            <div class="vcg-icon">👁️</div>
+            <div class="vcg-name">Print Preview</div>
+            <div class="vcg-desc">ดูตัวอย่างก่อนพิมพ์ ตรวจสอบขนาดหน้า การตัดข้อมูล และเลย์เอาต์ สามารถซูมและดูหลายหน้าได้</div>
+            <div class="vcg-how">View → Print Preview หรือ Ctrl+F2</div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">🛠️ Control ที่ใช้บ่อยใน Report Design</h4>
+        <div class="controls-grid">
+          <div class="ctrl-item">
+            <div class="ctrl-icon" style="background:#3B82F6">Aa</div>
+            <div class="ctrl-name">Label</div>
+            <div class="ctrl-desc">ข้อความคงที่ เช่น หัวข้อ ชื่อคอลัมน์ ป้ายกำกับ — ไม่เชื่อมกับข้อมูล</div>
+          </div>
+          <div class="ctrl-item">
+            <div class="ctrl-icon" style="background:#EC4899">[x]</div>
+            <div class="ctrl-name">Text Box</div>
+            <div class="ctrl-desc">แสดงข้อมูลจาก Field หรือ Expression เช่น =Sum([Score]) หรือ [FirstName]</div>
+          </div>
+          <div class="ctrl-item">
+            <div class="ctrl-icon" style="background:#10B981">━━</div>
+            <div class="ctrl-name">Line</div>
+            <div class="ctrl-desc">เส้นแบ่ง ใช้คั่นหัวตาราง สรุป หรือส่วนต่างๆ ของรายงาน</div>
+          </div>
+          <div class="ctrl-item">
+            <div class="ctrl-icon" style="background:#F59E0B">📷</div>
+            <div class="ctrl-name">Image</div>
+            <div class="ctrl-desc">แทรกรูปภาพ เช่น โลโก้โรงเรียน ตราสัญลักษณ์ ในส่วน Report Header</div>
+          </div>
+          <div class="ctrl-item">
+            <div class="ctrl-icon" style="background:#6366F1">📄</div>
+            <div class="ctrl-name">Subreport</div>
+            <div class="ctrl-desc">แทรกรายงานย่อยภายในรายงานหลัก ใช้แสดงข้อมูลที่สัมพันธ์กัน</div>
+          </div>
+          <div class="ctrl-item">
+            <div class="ctrl-icon" style="background:#EF4444">#</div>
+            <div class="ctrl-name">Page Number</div>
+            <div class="ctrl-desc">แสดงหมายเลขหน้า เช่น "หน้า [Page] จาก [Pages]"</div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">📐 Expression ที่ใช้บ่อยใน Report</h4>
+        <div class="expr-table">
+          <div class="et-header"><span>Expression</span><span>ความหมาย</span><span>ใช้ใน Section</span></div>
+          <div class="et-row">
+            <span><code>=Sum([Score])</code></span>
+            <span>รวมคะแนนทั้งหมด</span>
+            <span>Group Footer, Report Footer</span>
+          </div>
+          <div class="et-row">
+            <span><code>=Avg([Score])</code></span>
+            <span>คะแนนเฉลี่ย</span>
+            <span>Group Footer, Report Footer</span>
+          </div>
+          <div class="et-row">
+            <span><code>=Count([StudentID])</code></span>
+            <span>นับจำนวน Record</span>
+            <span>Group Footer, Report Footer</span>
+          </div>
+          <div class="et-row">
+            <span><code>=Max([Score])</code></span>
+            <span>คะแนนสูงสุด</span>
+            <span>Group Footer</span>
+          </div>
+          <div class="et-row">
+            <span><code>=[Page] & "/" & [Pages]</code></span>
+            <span>หน้า 1/3</span>
+            <span>Page Footer</span>
+          </div>
+          <div class="et-row">
+            <span><code>=Now()</code></span>
+            <span>วันที่-เวลาปัจจุบัน</span>
+            <span>Report Header, Page Footer</span>
+          </div>
+          <div class="et-row">
+            <span><code>=[FirstName] & " " & [LastName]</code></span>
+            <span>รวมชื่อ-นามสกุล</span>
+            <span>Detail</span>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">🎨 การตกแต่งรายงานให้สวยงาม</h4>
+        <div class="format-tips">
+          <div class="ft-item">
+            <div class="ft-icon">🖌️</div>
+            <div class="ft-content">
+              <div class="ft-title">ใช้ Themes</div>
+              <div class="ft-desc">ไปที่ Design → Themes เลือกชุดสีและ Font สำเร็จรูป เปลี่ยนหน้าตารายงานได้ทันทีทั้งชุด</div>
+            </div>
+          </div>
+          <div class="ft-item">
+            <div class="ft-icon">🎨</div>
+            <div class="ft-content">
+              <div class="ft-title">สลับสีแถว (Alternate Row)</div>
+              <div class="ft-desc">เลือก Detail Section → Format → Alternate Back Color กำหนดสีสลับแถวเพื่อให้อ่านง่ายขึ้น</div>
+            </div>
+          </div>
+          <div class="ft-item">
+            <div class="ft-icon">🔤</div>
+            <div class="ft-content">
+              <div class="ft-title">จัดรูปแบบตัวเลข/วันที่</div>
+              <div class="ft-desc">เลือก Text Box → Properties → Format กำหนด เช่น Currency, dd/mm/yyyy, Percent เพื่อแสดงผลถูกต้อง</div>
+            </div>
+          </div>
+          <div class="ft-item">
+            <div class="ft-icon">📏</div>
+            <div class="ft-content">
+              <div class="ft-title">ปรับขนาดคอลัมน์</div>
+              <div class="ft-desc">ใน Layout View ลากขอบ Control เพื่อปรับความกว้าง ให้ข้อมูลไม่ถูกตัด และพอดีกับหน้ากระดาษ</div>
+            </div>
+          </div>
+          <div class="ft-item">
+            <div class="ft-icon">🖼️</div>
+            <div class="ft-content">
+              <div class="ft-title">เพิ่มโลโก้</div>
+              <div class="ft-desc">ใน Report Header → Design → Logo เลือกไฟล์รูปภาพ ปรับขนาดและตำแหน่งตามต้องการ</div>
+            </div>
+          </div>
+          <div class="ft-item">
+            <div class="ft-icon">📌</div>
+            <div class="ft-content">
+              <div class="ft-title">Conditional Formatting</div>
+              <div class="ft-desc">Format → Conditional Formatting ตั้งสีอัตโนมัติตามเงื่อนไข เช่น คะแนน &lt;50 แสดงเป็นสีแดง</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 4: พิมพ์และส่งออกรายงาน ========== -->
+      <h3 class="unit-section-title">4. การพิมพ์และส่งออกรายงาน (PDF, Excel)</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">📤 การพิมพ์และส่งออกรายงาน</h3>
+
+        <div class="export-full-grid">
+          <div class="efg-card" style="--efgc:#EF4444">
+            <div class="efg-top">
+              <div class="efg-icon">📄</div>
+              <div class="efg-name">PDF / XPS</div>
+              <div class="efg-badge">แนะนำ</div>
+            </div>
+            <div class="efg-steps">
+              <div class="efg-step">1. เปิด Report ที่ต้องการ</div>
+              <div class="efg-step">2. แท็บ <strong>External Data</strong></div>
+              <div class="efg-step">3. คลิก <strong>PDF or XPS</strong></div>
+              <div class="efg-step">4. เลือก Folder และตั้งชื่อไฟล์</div>
+              <div class="efg-step">5. กด <strong>Publish</strong></div>
+            </div>
+            <div class="efg-tip">✅ รักษาหน้าตาต้นฉบับ เปิดได้ทุกเครื่อง เหมาะส่งงาน</div>
+          </div>
+
+          <div class="efg-card" style="--efgc:#10B981">
+            <div class="efg-top">
+              <div class="efg-icon">📊</div>
+              <div class="efg-name">Excel (.xlsx)</div>
+              <div class="efg-badge" style="background:rgba(16,185,129,0.15);color:#065F46">ยืดหยุ่น</div>
+            </div>
+            <div class="efg-steps">
+              <div class="efg-step">1. เปิด Report ที่ต้องการ</div>
+              <div class="efg-step">2. แท็บ <strong>External Data</strong></div>
+              <div class="efg-step">3. คลิก <strong>Excel</strong></div>
+              <div class="efg-step">4. เลือก Folder และตั้งชื่อไฟล์</div>
+              <div class="efg-step">5. เลือกตัวเลือก → กด <strong>OK</strong></div>
+            </div>
+            <div class="efg-tip">✅ นำข้อมูลไปวิเคราะห์ต่อใน Excel สร้างกราฟเพิ่มเติมได้</div>
+          </div>
+
+          <div class="efg-card" style="--efgc:#3B82F6">
+            <div class="efg-top">
+              <div class="efg-icon">🖨️</div>
+              <div class="efg-name">พิมพ์โดยตรง</div>
+              <div class="efg-badge" style="background:rgba(59,130,246,0.15);color:#1D4ED8">ด่วน</div>
+            </div>
+            <div class="efg-steps">
+              <div class="efg-step">1. เปิด Report ใน Print Preview</div>
+              <div class="efg-step">2. กด <kbd>Ctrl + P</kbd> หรือ File → Print</div>
+              <div class="efg-step">3. เลือกเครื่องพิมพ์</div>
+              <div class="efg-step">4. กำหนดจำนวนสำเนา</div>
+              <div class="efg-step">5. กด <strong>OK</strong></div>
+            </div>
+            <div class="efg-tip">✅ ง่าย รวดเร็ว เหมาะพิมพ์ทันที ไม่ต้องบันทึกไฟล์</div>
+          </div>
+
+          <div class="efg-card" style="--efgc:#F59E0B">
+            <div class="efg-top">
+              <div class="efg-icon">📝</div>
+              <div class="efg-name">Word (.rtf)</div>
+              <div class="efg-badge" style="background:rgba(245,158,11,0.15);color:#B45309">แก้ไขได้</div>
+            </div>
+            <div class="efg-steps">
+              <div class="efg-step">1. เปิด Report ที่ต้องการ</div>
+              <div class="efg-step">2. แท็บ <strong>External Data</strong></div>
+              <div class="efg-step">3. คลิก <strong>Word</strong> (More → Word)</div>
+              <div class="efg-step">4. เลือก Folder และตั้งชื่อไฟล์</div>
+              <div class="efg-step">5. กด <strong>OK</strong></div>
+            </div>
+            <div class="efg-tip">✅ นำไปแก้ไขเพิ่มเติมใน Word ได้ เช่น เพิ่มความเห็น</div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">⚙️ การตั้งค่าหน้ากระดาษก่อนพิมพ์</h4>
+        <div class="page-setup-grid">
+          <div class="psg-item">
+            <div class="psg-icon">📐</div>
+            <div class="psg-label">ขนาดกระดาษ</div>
+            <div class="psg-desc">Print Preview → Page Setup → ขนาด A4, Letter, Legal ตามต้องการ</div>
+          </div>
+          <div class="psg-item">
+            <div class="psg-icon">↔️</div>
+            <div class="psg-label">แนวกระดาษ</div>
+            <div class="psg-desc">Portrait (แนวตั้ง) สำหรับรายงานทั่วไป — Landscape (แนวนอน) สำหรับตารางกว้าง</div>
+          </div>
+          <div class="psg-item">
+            <div class="psg-icon">📏</div>
+            <div class="psg-label">ขอบกระดาษ (Margins)</div>
+            <div class="psg-desc">ปกติ 2.54 ซม. ทุกด้าน ลดได้ถ้าข้อมูลเยอะ แต่ไม่ควรน้อยกว่า 1 ซม.</div>
+          </div>
+          <div class="psg-item">
+            <div class="psg-icon">🔢</div>
+            <div class="psg-label">จำนวน Columns</div>
+            <div class="psg-desc">สำหรับรายงานที่มีหลายคอลัมน์ เช่น ป้ายชื่อ (Labels) ตั้งค่าจำนวนคอลัมน์ได้</div>
+          </div>
+        </div>
+
+        <div class="info-card accent-yellow" style="margin-top:1.5rem">
+          <div class="info-icon">💡</div>
+          <div>
+            <h4>เคล็ดลับก่อนพิมพ์</h4>
+            <p>ควรดูตัวอย่างใน <strong>Print Preview</strong> ก่อนเสมอ ตรวจสอบว่าข้อมูลไม่ถูกตัดขอบ หมายเลขหน้าถูกต้อง และหัวตารางแสดงในทุกหน้า ถ้าข้อมูลเกินขอบให้ลดขนาด Font หรือปรับ Margin ใน Page Setup</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== หัวข้อ 5: Subreport ========== -->
+      <h3 class="unit-section-title">5. การสร้าง Subreport</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">📋 Subreport คืออะไร?</h3>
+        <div class="info-card" style="background:rgba(99,102,241,0.07);border-color:rgba(99,102,241,0.35)">
+          <div class="info-icon">📄</div>
+          <div>
+            <h3>Subreport (รายงานย่อย)</h3>
+            <p>Subreport คือ <strong>รายงานที่ฝังอยู่ภายในรายงานหลัก (Main Report)</strong> ใช้แสดงข้อมูลที่สัมพันธ์กันในตำแหน่งเดียวกัน เช่น รายงานหลักแสดงข้อมูลนักเรียน ส่วน Subreport แสดงรายวิชาและเกรดของนักเรียนคนนั้น</p>
+          </div>
+        </div>
+
+        <h4 style="margin:20px 0 12px;font-weight:700">🌍 ตัวอย่างการใช้งาน Subreport</h4>
+        <!-- Subreport Visual -->
+        <div class="subreport-demo">
+          <div class="srd-main">
+            <div class="srd-title">📋 Main Report: รายงานนักเรียน</div>
+            <div class="srd-header-row">
+              <span>รหัส: ST001</span>
+              <span>ชื่อ: สมชาย ใจดี</span>
+              <span>แผนก: คอมพิวเตอร์</span>
+            </div>
+            <div class="srd-sub-container">
+              <div class="srd-sub-label">▼ Subreport: รายวิชาที่ลงทะเบียน</div>
+              <div class="srd-sub-content">
+                <div class="srd-sub-header"><span>รหัสวิชา</span><span>ชื่อวิชา</span><span>หน่วยกิต</span><span>เกรด</span></div>
+                <div class="srd-sub-row"><span>CS101</span><span>คอมพิวเตอร์เบื้องต้น</span><span>3</span><span>A</span></div>
+                <div class="srd-sub-row"><span>CS102</span><span>ฐานข้อมูล</span><span>3</span><span>B+</span></div>
+                <div class="srd-sub-row"><span>CS103</span><span>โปรแกรมมิ่ง</span><span>2</span><span>A</span></div>
+                <div class="srd-sub-footer">รวม 3 วิชา | 8 หน่วยกิต | เฉลี่ย: 3.75</div>
+              </div>
+            </div>
+            <div class="srd-header-row" style="margin-top:8px;border-top:1px dashed var(--border);padding-top:8px">
+              <span>รหัส: ST002</span>
+              <span>ชื่อ: สมหญิง ดีงาม</span>
+              <span>แผนก: บัญชี</span>
+            </div>
+            <div class="srd-sub-container">
+              <div class="srd-sub-label">▼ Subreport: รายวิชาที่ลงทะเบียน</div>
+              <div class="srd-sub-content">
+                <div class="srd-sub-header"><span>รหัสวิชา</span><span>ชื่อวิชา</span><span>หน่วยกิต</span><span>เกรด</span></div>
+                <div class="srd-sub-row"><span>AC101</span><span>การบัญชีเบื้องต้น</span><span>3</span><span>A</span></div>
+                <div class="srd-sub-footer">รวม 1 วิชา | 3 หน่วยกิต</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin:24px 0 12px;font-weight:700">🛠️ วิธีสร้าง Subreport ใน Access</h4>
+        <div class="steps-timeline">
+          <div class="timeline-item">
+            <div class="tl-icon">1️⃣</div>
+            <div class="tl-content">
+              <h4>สร้าง Subreport ก่อน</h4>
+              <p>สร้าง Report ย่อยที่ต้องการฝังให้เสร็จสมบูรณ์ก่อน เช่น <code>rptSubGrades</code> ที่แสดงรายวิชาและเกรด</p>
+              <div class="tl-tip">💡 ควรตั้งชื่อ Subreport ให้สื่อความหมาย เช่น นำหน้าด้วย rptSub</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">2️⃣</div>
+            <div class="tl-content">
+              <h4>เปิด Main Report ใน Design View</h4>
+              <p>เปิดรายงานหลักใน <strong>Design View</strong> วางตำแหน่งเคอร์เซอร์ใน Section ที่ต้องการวาง Subreport เช่น Detail Section</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">3️⃣</div>
+            <div class="tl-content">
+              <h4>ลาก Subreport เข้ามา</h4>
+              <p>ลาก Report ย่อยจาก <strong>Navigation Pane</strong> มาวางบน Main Report ใน Design View — Access จะสร้าง Subreport Control ให้อัตโนมัติ</p>
+              <div class="tl-tip">💡 หรือใช้ Design → Subform/Subreport Control แล้วใช้ Wizard</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">4️⃣</div>
+            <div class="tl-content">
+              <h4>กำหนด Link Fields (ตัวเชื่อม)</h4>
+              <p>คลิกขวาที่ Subreport Control → <strong>Properties</strong> ตั้งค่า:</p>
+              <div class="link-fields-mock">
+                <div class="lfm-row">
+                  <span class="lfm-prop">Link Master Fields:</span>
+                  <span class="lfm-val">StudentID <em>(จาก Main Report)</em></span>
+                </div>
+                <div class="lfm-row">
+                  <span class="lfm-prop">Link Child Fields:</span>
+                  <span class="lfm-val">StudentID <em>(จาก Subreport)</em></span>
+                </div>
+              </div>
+              <p style="font-size:0.82rem;margin-top:8px;color:var(--text-dim)">การเชื่อมนี้ทำให้ Subreport แสดงเฉพาะข้อมูลที่ตรงกับ Record ปัจจุบันใน Main Report</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="tl-icon">5️⃣</div>
+            <div class="tl-content">
+              <h4>บันทึกและดูตัวอย่าง</h4>
+              <p>กด <kbd>Ctrl + S</kbd> บันทึก จากนั้นสลับไป <strong>Print Preview</strong> เพื่อตรวจสอบว่า Subreport แสดงข้อมูลถูกต้องตามนักเรียนแต่ละคน</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card" style="background:rgba(99,102,241,0.07);border-color:rgba(99,102,241,0.35);margin-top:1.5rem">
+          <div class="info-icon">⚠️</div>
+          <div>
+            <h4>ข้อควรระวังเมื่อใช้ Subreport</h4>
+            <p>ต้องมี <strong>Relationship ระหว่างตาราง</strong> ที่ถูกต้องก่อน และ Field ที่ใช้เชื่อม (Link Master/Child) ต้องมี Data Type ตรงกัน มิฉะนั้น Subreport จะแสดงข้อมูลผิดหรือแสดงทุก Record โดยไม่กรอง</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Macro Section (คงไว้จากเดิม + ขยาย) -->
+      <h3 class="unit-section-title">6. การใช้แมโคร (Macro)</h3>
+
+      <div class="content-block">
+        <h3 class="block-title">⚡ แมโคร (Macro) — อัตโนมัติ ลดขั้นตอน</h3>
         <div class="info-card" style="background:rgba(30,41,59,0.6); border-color:#334155">
           <div class="info-icon">🤖</div>
           <div>
-            <h4 style="color: white;">แมโครคืออะไร?</h4>
-            <p style=" color: #ffffff;">Macro คือชุดคำสั่งที่บันทึกไว้ล่วงหน้า เพื่อให้ทำงานซ้ำๆ โดยอัตโนมัติ ช่วยลดขั้นตอนการทำงาน เพิ่มประสิทธิภาพ</p>
+            <h4 style="color:white;">แมโครคืออะไร?</h4>
+            <p style="color:#CBD5E1;">Macro คือ <strong>ชุดคำสั่งที่บันทึกไว้ล่วงหน้า</strong> เพื่อให้ทำงานซ้ำๆ โดยอัตโนมัติ ช่วยลดขั้นตอนการทำงาน เพิ่มประสิทธิภาพ และสร้าง Workflow ที่ใช้งานง่าย ไม่ต้องเขียน Code</p>
           </div>
         </div>
 
-        <h4 style="margin-top:1.5rem">📋 Macro Actions ที่ใช้บ่อย</h4>
+        <h4 style="margin:20px 0 12px;font-weight:700">📋 Macro Actions ที่ใช้บ่อยใน Access</h4>
         <div class="macro-actions">
-          <div class="ma-item">
-            <div class="ma-action">OpenForm</div>
-            <div class="ma-desc">เปิด Form ที่กำหนด</div>
-          </div>
-          <div class="ma-item">
-            <div class="ma-action">OpenReport</div>
-            <div class="ma-desc">เปิดหรือพิมพ์รายงาน</div>
-          </div>
-          <div class="ma-item">
-            <div class="ma-action">CloseWindow</div>
-            <div class="ma-desc">ปิดหน้าต่างปัจจุบัน</div>
-          </div>
-          <div class="ma-item">
-            <div class="ma-action">GoToRecord</div>
-            <div class="ma-desc">ไปยัง Record ที่กำหนด</div>
-          </div>
-          <div class="ma-item">
-            <div class="ma-action">RunQuery</div>
-            <div class="ma-desc">รัน Query ที่กำหนด</div>
-          </div>
-          <div class="ma-item">
-            <div class="ma-action">MessageBox</div>
-            <div class="ma-desc">แสดงข้อความแจ้งเตือน</div>
-          </div>
-          <div class="ma-item">
-            <div class="ma-action">FindRecord</div>
-            <div class="ma-desc">ค้นหา Record ตามเงื่อนไข</div>
-          </div>
-          <div class="ma-item">
-            <div class="ma-action">Quit</div>
-            <div class="ma-desc">ออกจากโปรแกรม Access</div>
-          </div>
+          <div class="ma-item"><div class="ma-action">OpenForm</div><div class="ma-desc">เปิด Form ที่กำหนด</div></div>
+          <div class="ma-item"><div class="ma-action">OpenReport</div><div class="ma-desc">เปิดหรือพิมพ์รายงาน</div></div>
+          <div class="ma-item"><div class="ma-action">CloseWindow</div><div class="ma-desc">ปิดหน้าต่างปัจจุบัน</div></div>
+          <div class="ma-item"><div class="ma-action">GoToRecord</div><div class="ma-desc">ไปยัง Record ที่กำหนด</div></div>
+          <div class="ma-item"><div class="ma-action">RunQuery</div><div class="ma-desc">รัน Query ที่กำหนด</div></div>
+          <div class="ma-item"><div class="ma-action">MessageBox</div><div class="ma-desc">แสดงข้อความแจ้งเตือน</div></div>
+          <div class="ma-item"><div class="ma-action">FindRecord</div><div class="ma-desc">ค้นหา Record ตามเงื่อนไข</div></div>
+          <div class="ma-item"><div class="ma-action">Quit</div><div class="ma-desc">ออกจากโปรแกรม Access</div></div>
+          <div class="ma-item"><div class="ma-action">SetValue</div><div class="ma-desc">กำหนดค่าให้ Field หรือ Control</div></div>
+          <div class="ma-item"><div class="ma-action">ApplyFilter</div><div class="ma-desc">กรองข้อมูลตามเงื่อนไข</div></div>
+          <div class="ma-item"><div class="ma-action">PrintObject</div><div class="ma-desc">พิมพ์ออบเจกต์ที่กำหนด</div></div>
+          <div class="ma-item"><div class="ma-action">SaveObject</div><div class="ma-desc">บันทึกออบเจกต์ปัจจุบัน</div></div>
         </div>
 
-        <h4 style="margin-top:1.5rem">🛠️ วิธีสร้าง Macro</h4>
+        <h4 style="margin:24px 0 12px;font-weight:700">🛠️ วิธีสร้าง Macro</h4>
         <div class="how-to-steps">
-          <div class="ht-step">
-            <span class="ht-num">1</span>
-            <p>ไปที่แท็บ <strong>Create → Macro</strong></p>
-          </div>
-          <div class="ht-step">
-            <span class="ht-num">2</span>
-            <p>เลือก Action จาก Dropdown ที่ต้องการ</p>
-          </div>
-          <div class="ht-step">
-            <span class="ht-num">3</span>
-            <p>กำหนด Arguments (พารามิเตอร์) ของ Action นั้นๆ</p>
-          </div>
-          <div class="ht-step">
-            <span class="ht-num">4</span>
-            <p>บันทึก Macro แล้วตั้งชื่อ เช่น mcrOpenStudentForm</p>
-          </div>
-          <div class="ht-step">
-            <span class="ht-num">5</span>
-            <p>นำ Macro ไปผูกกับปุ่มใน Form เพื่อใช้งาน</p>
-          </div>
+          <div class="ht-step"><span class="ht-num">1</span><p>ไปที่แท็บ <strong>Create → Macro</strong> หน้าต่าง Macro Designer จะเปิดขึ้น</p></div>
+          <div class="ht-step"><span class="ht-num">2</span><p>คลิก <strong>Add New Action</strong> แล้วเลือก Action จาก Dropdown เช่น OpenReport</p></div>
+          <div class="ht-step"><span class="ht-num">3</span><p>กำหนด <strong>Arguments</strong> ของ Action เช่น Report Name: rptStudentGrades, View: Print Preview</p></div>
+          <div class="ht-step"><span class="ht-num">4</span><p>เพิ่ม Action อื่นๆ ต่อกัน เช่น MessageBox แจ้งเตือนเมื่อพิมพ์เสร็จ</p></div>
+          <div class="ht-step"><span class="ht-num">5</span><p>กด <kbd>Ctrl + S</kbd> ตั้งชื่อ Macro เช่น <code>mcrPrintReport</code> แล้วนำไปผูกกับปุ่มใน Form</p></div>
         </div>
 
         <div class="macro-example">
-          <div class="me-title">💡 ตัวอย่าง: ปุ่มเปิด Form นักเรียน</div>
+          <div class="me-title">💡 ตัวอย่าง: ปุ่มพิมพ์รายงานนักเรียน</div>
           <div class="me-content">
-            <div class="me-button" style="color: rgb(0, 0, 0);">📋 ดูข้อมูลนักเรียน</div>
-            <div class="me-arrow">↓ เมื่อกด จะรัน Macro</div>
+            <div class="me-button" style="color:rgb(0,0,0);">🖨️ พิมพ์รายงานนักเรียน</div>
+            <div class="me-arrow">↓ เมื่อกด จะรัน Macro: mcrPrintReport</div>
             <div class="me-macro">
-              <div class="mm-title">⚡ mcrOpenStudentForm</div>
+              <div class="mm-title">⚡ mcrPrintReport</div>
               <div class="mm-action">
-                <span class="mm-act-name">Action: OpenForm</span>
-                <span class="mm-arg">Form Name: frmStudents</span>
-                <span class="mm-arg">View: Form</span>
+                <span class="mm-act-name">Action 1: OpenReport</span>
+                <span class="mm-arg">Report Name: rptStudentGrades</span>
+                <span class="mm-arg">View: Print Preview</span>
+              </div>
+              <div class="mm-action" style="margin-top:8px">
+                <span class="mm-act-name">Action 2: MessageBox</span>
+                <span class="mm-arg">Message: เปิดรายงานสำเร็จ กรุณาตรวจสอบก่อนพิมพ์</span>
+                <span class="mm-arg">Type: Information</span>
               </div>
             </div>
           </div>
@@ -2924,7 +3448,7 @@
 
       <div class="outcome-box" style="--accent-out:#EC4899">
         <span class="outcome-icon">🎯</span>
-        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถสร้างแบบรายงานข้อมูลและใช้แมโครเพื่อเพิ่มประสิทธิภาพการทำงานได้</p>
+        <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถอธิบายความหมายและประโยชน์ของรายงาน สร้างรายงานด้วย Report Wizard จัดรูปแบบตกแต่ง พิมพ์และส่งออกเป็น PDF หรือ Excel สร้าง Subreport และใช้งาน Macro เพื่อเพิ่มประสิทธิภาพการทำงานได้</p>
       </div>
     </section>
 
