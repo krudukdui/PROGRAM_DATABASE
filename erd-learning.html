@@ -399,7 +399,34 @@ header{
 }
 .rel-type-badge{font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px;background:var(--indigo-light);color:var(--indigo);border:1px solid var(--indigo-mid)}
 
-/* Scrollbar */
+/* ── ZOOM CONTROLS ── */
+.zoom-controls{
+  position:absolute;bottom:14px;right:14px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  z-index:50;
+}
+.zoom-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface);border:1.5px solid var(--border);
+  color:var(--text);font-size:18px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:all .14s;line-height:1;
+}
+.zoom-btn:hover{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.zoom-btn:active{transform:scale(.9)}
+.zoom-btn.zoom-fit{font-size:14px}
+.zoom-label{
+  font-size:10px;font-weight:700;color:var(--text2);
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:10px;padding:2px 7px;
+  box-shadow:var(--shadow-sm);min-width:36px;text-align:center;
+}
+
+/* ── CANVAS VIEWPORT (dot grid follows zoom via background-size) ── */
+#canvasViewport{will-change:transform;}
+
+
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
@@ -663,19 +690,30 @@ header{
       <div class="empty-text">Canvas ว่างเปล่า</div>
       <div class="empty-sub">กด "เพิ่ม Entity" หรือ "โหลดโครงร่าง" เพื่อเริ่ม</div>
     </div>
-    <div id="canvas"></div>
-    <svg id="svg-layer" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a11" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L8,3.5 z" fill="#059669"/></marker>
-        <marker id="a1n" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L8,3.5 z" fill="#4361ee"/></marker>
-        <marker id="ann" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L8,3.5 z" fill="#7c3aed"/></marker>
-        <marker id="aerr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L8,3.5 z" fill="#dc2626"/></marker>
-      </defs>
-    </svg>
+    <!-- zoom/pan viewport -->
+    <div id="canvasViewport" style="position:absolute;top:0;left:0;width:0;height:0;transform-origin:0 0;">
+      <div id="canvas" style="position:absolute;top:0;left:0;width:2400px;height:2000px;"></div>
+      <svg id="svg-layer" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;width:2400px;height:2000px;pointer-events:none;overflow:visible">
+        <defs>
+          <marker id="a11" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L0,7 L8,3.5 z" fill="#059669"/></marker>
+          <marker id="a1n" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L0,7 L8,3.5 z" fill="#4361ee"/></marker>
+          <marker id="ann" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L0,7 L8,3.5 z" fill="#7c3aed"/></marker>
+          <marker id="aerr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L0,7 L8,3.5 z" fill="#dc2626"/></marker>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- zoom controls -->
+    <div class="zoom-controls" id="zoomControls">
+      <button class="zoom-btn" onclick="adjustZoom(0.15)" title="ซูมเข้า">＋</button>
+      <span class="zoom-label" id="zoomLabel">100%</span>
+      <button class="zoom-btn" onclick="adjustZoom(-0.15)" title="ซูมออก">－</button>
+      <button class="zoom-btn zoom-fit" onclick="resetZoom()" title="รีเซ็ต">⊙</button>
+    </div>
   </div>
 
   <!-- ═══ RIGHT PANEL ═══ -->
@@ -962,7 +1000,11 @@ function addEntity(){
   let name="Entity";
   for(const n of names){if(!entities.find(e=>e.name===n)){name=n;break}}
   const id=`e${eid++}`;
-  const ent={id,name,x:60+Math.random()*280,y:60+Math.random()*180,attrs:[]};
+  // place in center of current viewport view
+  const wr=document.getElementById("canvasWrap").getBoundingClientRect();
+  const cx=(wr.width/2-vpX)/vpScale;
+  const cy=(wr.height/2-vpY)/vpScale;
+  const ent={id,name,x:Math.max(10,cx-94+Math.random()*60-30),y:Math.max(10,cy-40+Math.random()*60-30),attrs:[]};
   entities.push(ent);
   renderEnt(ent);
   updEmpty();
@@ -1008,8 +1050,8 @@ function renderEnt(ent){
   hdr.addEventListener("mousedown",e=>{
     if(relMode)return;
     e.preventDefault();
-    const r=card.getBoundingClientRect();
-    drag=ent; doff={x:e.clientX-r.left,y:e.clientY-r.top};
+    const pt=clientToCanvas(e.clientX,e.clientY);
+    drag=ent; doff={x:pt.x-ent.x,y:pt.y-ent.y};
     card.style.zIndex=20;
   });
 
@@ -1017,9 +1059,10 @@ function renderEnt(ent){
   hdr.addEventListener("touchstart",e=>{
     if(relMode)return;
     e.preventDefault();
+    e.stopPropagation();
     const t=e.touches[0];
-    const r=card.getBoundingClientRect();
-    drag=ent; doff={x:t.clientX-r.left,y:t.clientY-r.top};
+    const pt=clientToCanvas(t.clientX,t.clientY);
+    drag=ent; doff={x:pt.x-ent.x,y:pt.y-ent.y};
     card.style.zIndex=20;
   },{passive:false});
 
@@ -1065,12 +1108,51 @@ function updEmpty(){
   document.getElementById("emptyState").style.display=entities.length?"none":"block";
 }
 
+// ── ZOOM / PAN STATE ──
+let vpScale=1, vpX=0, vpY=0;
+const SCALE_MIN=0.3, SCALE_MAX=2.5;
+
+function applyViewport(){
+  const vp=document.getElementById("canvasViewport");
+  vp.style.transform=`translate(${vpX}px,${vpY}px) scale(${vpScale})`;
+  // update dot-grid background to match scale
+  const wrap=document.getElementById("canvasWrap");
+  const gs=28*vpScale;
+  wrap.style.backgroundSize=`${gs}px ${gs}px`;
+  wrap.style.backgroundPosition=`${vpX}px ${vpY}px`;
+  document.getElementById("zoomLabel").textContent=Math.round(vpScale*100)+"%";
+}
+
+function adjustZoom(delta,cx,cy){
+  const wrap=document.getElementById("canvasWrap");
+  const wr=wrap.getBoundingClientRect();
+  // zoom toward center of wrap if no point given
+  if(cx===undefined){cx=wr.width/2; cy=wr.height/2;}
+  const newScale=Math.min(SCALE_MAX,Math.max(SCALE_MIN,vpScale+delta));
+  const ratio=newScale/vpScale;
+  vpX=cx-(cx-vpX)*ratio;
+  vpY=cy-(cy-vpY)*ratio;
+  vpScale=newScale;
+  applyViewport();
+}
+
+function resetZoom(){vpScale=1;vpX=0;vpY=0;applyViewport();}
+
+// ── CLIENT → CANVAS COORD ──
+function clientToCanvas(cx,cy){
+  const wr=document.getElementById("canvasWrap").getBoundingClientRect();
+  return{
+    x:(cx-wr.left-vpX)/vpScale,
+    y:(cy-wr.top-vpY)/vpScale
+  };
+}
+
 // ── DRAG (mouse) ──
 document.addEventListener("mousemove",e=>{
   if(!drag)return;
-  const wr=document.getElementById("canvasWrap").getBoundingClientRect();
-  drag.x=Math.max(0,e.clientX-wr.left-doff.x);
-  drag.y=Math.max(0,e.clientY-wr.top-doff.y);
+  const pt=clientToCanvas(e.clientX,e.clientY);
+  drag.x=Math.max(0,pt.x-doff.x);
+  drag.y=Math.max(0,pt.y-doff.y);
   const c=document.getElementById(drag.id);
   if(c){c.style.left=drag.x+"px";c.style.top=drag.y+"px"}
   updLines();
@@ -1079,21 +1161,88 @@ document.addEventListener("mouseup",()=>{
   if(drag){document.getElementById(drag.id).style.zIndex=10;drag=null}
 });
 
-// ── DRAG (touch) ──
-document.addEventListener("touchmove",e=>{
-  if(!drag)return;
-  e.preventDefault();
-  const t=e.touches[0];
+// ── CANVAS PANNING & PINCH-ZOOM (touch) ──
+let panActive=false, panStart={x:0,y:0}, panOrigin={x:0,y:0};
+let pinchDist=0;
+
+function getTouchDist(touches){
+  const dx=touches[0].clientX-touches[1].clientX;
+  const dy=touches[0].clientY-touches[1].clientY;
+  return Math.sqrt(dx*dx+dy*dy);
+}
+function getTouchMid(touches){
   const wr=document.getElementById("canvasWrap").getBoundingClientRect();
-  drag.x=Math.max(0,t.clientX-wr.left-doff.x);
-  drag.y=Math.max(0,t.clientY-wr.top-doff.y);
-  const c=document.getElementById(drag.id);
-  if(c){c.style.left=drag.x+"px";c.style.top=drag.y+"px"}
-  updLines();
+  return{
+    x:(touches[0].clientX+touches[1].clientX)/2-wr.left,
+    y:(touches[0].clientY+touches[1].clientY)/2-wr.top
+  };
+}
+
+document.getElementById("canvasWrap").addEventListener("touchstart",e=>{
+  if(relMode) return;
+  if(e.touches.length===2){
+    // start pinch
+    e.preventDefault();
+    drag=null;
+    panActive=false;
+    pinchDist=getTouchDist(e.touches);
+  } else if(e.touches.length===1 && !drag){
+    // check if touch is on an entity header — if not, start pan
+    const tgt=e.target;
+    const onCard=tgt.closest('.entity-card');
+    if(!onCard){
+      e.preventDefault();
+      panActive=true;
+      panStart={x:e.touches[0].clientX,y:e.touches[0].clientY};
+      panOrigin={x:vpX,y:vpY};
+    }
+  }
 },{passive:false});
-document.addEventListener("touchend",()=>{
-  if(drag){document.getElementById(drag.id).style.zIndex=10;drag=null}
+
+document.addEventListener("touchmove",e=>{
+  if(e.touches.length===2 && !drag){
+    e.preventDefault();
+    const newDist=getTouchDist(e.touches);
+    const mid=getTouchMid(e.touches);
+    const delta=(newDist-pinchDist)*0.008;
+    adjustZoom(delta,mid.x,mid.y);
+    pinchDist=newDist;
+    return;
+  }
+  if(panActive && e.touches.length===1 && !drag){
+    e.preventDefault();
+    vpX=panOrigin.x+(e.touches[0].clientX-panStart.x);
+    vpY=panOrigin.y+(e.touches[0].clientY-panStart.y);
+    applyViewport();
+    return;
+  }
+  if(drag && e.touches.length===1){
+    e.preventDefault();
+    const t=e.touches[0];
+    const pt=clientToCanvas(t.clientX,t.clientY);
+    drag.x=Math.max(0,pt.x-doff.x);
+    drag.y=Math.max(0,pt.y-doff.y);
+    const c=document.getElementById(drag.id);
+    if(c){c.style.left=drag.x+"px";c.style.top=drag.y+"px"}
+    updLines();
+  }
+},{passive:false});
+
+document.addEventListener("touchend",e=>{
+  panActive=false;
+  if(drag && e.touches.length===0){
+    document.getElementById(drag.id).style.zIndex=10;
+    drag=null;
+  }
 });
+
+// ── MOUSE WHEEL ZOOM ──
+document.getElementById("canvasWrap").addEventListener("wheel",e=>{
+  e.preventDefault();
+  const wr=document.getElementById("canvasWrap").getBoundingClientRect();
+  const cx=e.clientX-wr.left, cy=e.clientY-wr.top;
+  adjustZoom(e.deltaY<0?0.1:-0.1,cx,cy);
+},{passive:false});
 
 // ── ATTR MODAL ──
 function openAttrModal(id){
@@ -1399,7 +1548,7 @@ document.addEventListener("keydown",e=>{
 });
 
 // ── INIT ──
-window.addEventListener("load",()=>loadSample());
+window.addEventListener("load",()=>{applyViewport();loadSample()});
 </script>
 </body>
 </html>
