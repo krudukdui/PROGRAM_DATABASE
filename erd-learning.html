@@ -406,7 +406,187 @@ header{
 ::-webkit-scrollbar-thumb:hover{background:var(--text3)}
 
 @media(max-width:900px){.sidebar{width:190px}.rpanel{width:238px}}
-@media(max-width:640px){.rpanel{display:none}}
+
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE — < 768px
+   ══════════════════════════════════════════ */
+@media(max-width:768px){
+  body{
+    overflow:hidden;
+    height:100dvh;
+  }
+
+  header{
+    height:48px;
+    padding:0 12px;
+  }
+  .logo-text{font-size:14px}
+  .logo-sub{display:none}
+  .logo-icon{width:30px;height:30px;font-size:15px}
+  .score-pill{padding:4px 12px;font-size:12px}
+
+  .app{
+    flex-direction:column;
+    flex:1;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* Sidebar becomes slide-in panel */
+  .sidebar{
+    position:fixed;
+    left:0; top:48px;
+    bottom:60px;
+    width:80%;
+    max-width:320px;
+    z-index:300;
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:var(--shadow-lg);
+    overflow-y:auto;
+  }
+  .sidebar.mobile-open{transform:translateX(0)}
+
+  /* Right panel becomes slide-in from right */
+  .rpanel{
+    position:fixed;
+    right:0; top:48px;
+    bottom:60px;
+    width:85%;
+    max-width:340px;
+    z-index:300;
+    transform:translateX(100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:var(--shadow-lg);
+    display:flex !important;
+  }
+  .rpanel.mobile-open{transform:translateX(0)}
+
+  /* Overlay backdrop */
+  .mobile-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    top:48px;
+    bottom:60px;
+    background:rgba(27,31,58,.38);
+    z-index:299;
+    backdrop-filter:blur(2px);
+    animation:fadeIn .18s;
+  }
+  .mobile-overlay.show{display:block}
+
+  /* Canvas takes full space */
+  .canvas-wrap{
+    flex:1;
+    width:100%;
+    overflow:hidden;
+  }
+
+  /* Bottom navigation bar */
+  .mobile-nav{
+    display:flex;
+    position:fixed;
+    bottom:0; left:0; right:0;
+    height:60px;
+    background:var(--surface);
+    border-top:1.5px solid var(--border);
+    z-index:400;
+    box-shadow:0 -4px 16px rgba(67,97,238,.1);
+  }
+  .mnav-btn{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    font-family:var(--font);
+    font-size:10px;
+    font-weight:600;
+    color:var(--text2);
+    transition:all .15s;
+    padding:6px 4px;
+    position:relative;
+  }
+  .mnav-btn .micon{font-size:20px;line-height:1}
+  .mnav-btn.active{color:var(--indigo)}
+  .mnav-btn.active::after{
+    content:'';
+    position:absolute;
+    top:0; left:20%; right:20%;
+    height:2.5px;
+    background:var(--indigo);
+    border-radius:0 0 3px 3px;
+  }
+  .mnav-btn.danger{color:var(--red)}
+
+  /* Compact sidebar sections */
+  .sec{padding:10px}
+  .btn{padding:10px 13px;font-size:13px;margin-bottom:6px}
+
+  /* Entity cards — touch-friendlier */
+  .entity-card{min-width:160px}
+  .ent-header{padding:10px 11px}
+  .icon-btn{width:28px;height:28px;font-size:14px}
+  .attr-row{padding:7px 10px}
+  .add-attr-row{padding:8px 10px 11px}
+
+  /* Attr delete — always visible on mobile */
+  .attr-del{opacity:1 !important}
+
+  /* Canvas empty state */
+  .empty-icon{font-size:40px}
+  .empty-text{font-size:13px}
+
+  /* Modal full-width on mobile */
+  .modal{width:96%;padding:18px}
+  .mgrid{grid-template-columns:1fr;gap:10px}
+  .mgrid .fg[style*="grid-column"]{grid-column:auto}
+
+  /* Panel tabs larger touch target */
+  .ptab{padding:13px 8px;font-size:13px}
+
+  /* FAB for adding entity */
+  .mobile-fab{
+    display:flex;
+    position:fixed;
+    right:14px;
+    bottom:74px;
+    width:52px; height:52px;
+    background:var(--indigo);
+    color:#fff;
+    border:none;
+    border-radius:50%;
+    font-size:24px;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 18px rgba(67,97,238,.45);
+    cursor:pointer;
+    z-index:200;
+    transition:all .18s;
+  }
+  .mobile-fab:active{transform:scale(.9)}
+  .mobile-fab.rel-active{background:var(--violet);box-shadow:0 4px 18px rgba(124,58,237,.45)}
+
+  /* Rel toast smaller on mobile */
+  .rel-toast{font-size:12px;padding:6px 16px}
+
+  /* Score pill hidden on very small */
+  @media(max-width:380px){
+    .score-pill{display:none}
+  }
+}
+
+/* Desktop: hide mobile-only elements */
+@media(min-width:769px){
+  .mobile-nav{display:none}
+  .mobile-fab{display:none}
+  .mobile-overlay{display:none !important}
+}
 </style>
 </head>
 <body>
@@ -656,6 +836,31 @@ header{
   </div>
 </div>
 
+<!-- ════════ MOBILE OVERLAY ════════ -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeMobilePanels()"></div>
+
+<!-- ════════ MOBILE FAB ════════ -->
+<button class="mobile-fab" id="mobileFab" onclick="addEntity()" title="เพิ่ม Entity">＋</button>
+
+<!-- ════════ MOBILE BOTTOM NAV ════════ -->
+<nav class="mobile-nav">
+  <button class="mnav-btn" id="mnavTools" onclick="toggleMobilePanel('sidebar')">
+    <span class="micon">🛠</span>เครื่องมือ
+  </button>
+  <button class="mnav-btn active" id="mnavCanvas" onclick="closeMobilePanels()">
+    <span class="micon">🖼</span>Canvas
+  </button>
+  <button class="mnav-btn" id="mnavRel" onclick="toggleMobileRel()">
+    <span class="micon">🔗</span>วาดเส้น
+  </button>
+  <button class="mnav-btn" id="mnavCheck" onclick="checkAnswer()">
+    <span class="micon">✅</span>ตรวจ
+  </button>
+  <button class="mnav-btn" id="mnavPanel" onclick="toggleMobilePanel('rpanel')">
+    <span class="micon">📊</span>ผล/คู่มือ
+  </button>
+</nav>
+
 <!-- ════════════════ JS ════════════════ -->
 <script>
 // ── STATE ──
@@ -664,6 +869,52 @@ let eid=1, aid=1;
 let relMode=false, relSrc=null, relType="1:N";
 let drag=null, doff={x:0,y:0};
 let curEnt=null; // entity ที่กำลัง add attr
+
+// ── MOBILE PANEL TOGGLE ──
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobilePanels(){
+  document.querySelector('.sidebar')?.classList.remove('mobile-open');
+  document.querySelector('.rpanel')?.classList.remove('mobile-open');
+  document.getElementById('mobileOverlay')?.classList.remove('show');
+  // reset nav active
+  document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('mnavCanvas')?.classList.add('active');
+}
+
+function toggleMobilePanel(which){
+  if(!isMobile()) return;
+  const sidebar=document.querySelector('.sidebar');
+  const rpanel=document.querySelector('.rpanel');
+  const overlay=document.getElementById('mobileOverlay');
+
+  if(which==='sidebar'){
+    const isOpen=sidebar.classList.contains('mobile-open');
+    sidebar.classList.toggle('mobile-open',!isOpen);
+    rpanel.classList.remove('mobile-open');
+    overlay.classList.toggle('show',!isOpen);
+    document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.remove('active'));
+    if(!isOpen) document.getElementById('mnavTools')?.classList.add('active');
+    else document.getElementById('mnavCanvas')?.classList.add('active');
+  } else {
+    const isOpen=rpanel.classList.contains('mobile-open');
+    rpanel.classList.toggle('mobile-open',!isOpen);
+    sidebar.classList.remove('mobile-open');
+    overlay.classList.toggle('show',!isOpen);
+    document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.remove('active'));
+    if(!isOpen) document.getElementById('mnavPanel')?.classList.add('active');
+    else document.getElementById('mnavCanvas')?.classList.add('active');
+  }
+}
+
+function toggleMobileRel(){
+  toggleRel();
+  const btn=document.getElementById('mnavRel');
+  if(btn) btn.classList.toggle('active', relMode);
+  const fab=document.getElementById('mobileFab');
+  if(fab) fab.classList.toggle('rel-active', relMode);
+  if(isMobile()) closeMobilePanels();
+}
 
 // ── ANSWER KEY ──
 const ANS={
@@ -753,7 +1004,7 @@ function renderEnt(ent){
 
   card.appendChild(hdr); card.appendChild(al); card.appendChild(ar);
 
-  // Drag
+  // Drag (mouse)
   hdr.addEventListener("mousedown",e=>{
     if(relMode)return;
     e.preventDefault();
@@ -762,10 +1013,25 @@ function renderEnt(ent){
     card.style.zIndex=20;
   });
 
-  // Rel click
+  // Drag (touch)
+  hdr.addEventListener("touchstart",e=>{
+    if(relMode)return;
+    e.preventDefault();
+    const t=e.touches[0];
+    const r=card.getBoundingClientRect();
+    drag=ent; doff={x:t.clientX-r.left,y:t.clientY-r.top};
+    card.style.zIndex=20;
+  },{passive:false});
+
+  // Rel click (mouse)
   card.addEventListener("mousedown",e=>{
     if(relMode){e.preventDefault();handleRelClick(ent.id)}
   });
+
+  // Rel click (touch)
+  card.addEventListener("touchend",e=>{
+    if(relMode){e.preventDefault();handleRelClick(ent.id)}
+  },{passive:false});
 
   cv.appendChild(card);
 }
@@ -799,7 +1065,7 @@ function updEmpty(){
   document.getElementById("emptyState").style.display=entities.length?"none":"block";
 }
 
-// ── DRAG ──
+// ── DRAG (mouse) ──
 document.addEventListener("mousemove",e=>{
   if(!drag)return;
   const wr=document.getElementById("canvasWrap").getBoundingClientRect();
@@ -810,6 +1076,22 @@ document.addEventListener("mousemove",e=>{
   updLines();
 });
 document.addEventListener("mouseup",()=>{
+  if(drag){document.getElementById(drag.id).style.zIndex=10;drag=null}
+});
+
+// ── DRAG (touch) ──
+document.addEventListener("touchmove",e=>{
+  if(!drag)return;
+  e.preventDefault();
+  const t=e.touches[0];
+  const wr=document.getElementById("canvasWrap").getBoundingClientRect();
+  drag.x=Math.max(0,t.clientX-wr.left-doff.x);
+  drag.y=Math.max(0,t.clientY-wr.top-doff.y);
+  const c=document.getElementById(drag.id);
+  if(c){c.style.left=drag.x+"px";c.style.top=drag.y+"px"}
+  updLines();
+},{passive:false});
+document.addEventListener("touchend",()=>{
   if(drag){document.getElementById(drag.id).style.zIndex=10;drag=null}
 });
 
@@ -839,17 +1121,23 @@ function toggleRel(){
   const w=document.getElementById("canvasWrap");
   const b=document.getElementById("relBtn");
   const t=document.getElementById("relToast");
+  const mnavRel=document.getElementById("mnavRel");
+  const fab=document.getElementById("mobileFab");
   entities.forEach(e=>document.getElementById(e.id)?.classList.remove("selected"));
   if(relMode){
     w.classList.add("rel-mode");
     b.textContent="❌ ออกจากโหมดวาดเส้น";
     b.style.background="#dc2626";
     t.style.display="block"; t.textContent="🔗 คลิก Entity ต้นทาง...";
+    if(mnavRel)mnavRel.classList.add("active");
+    if(fab){fab.textContent="❌";fab.classList.add("rel-active");fab.onclick=()=>{toggleMobileRel()}}
   } else {
     w.classList.remove("rel-mode");
     b.textContent="🖱 วาดเส้นความสัมพันธ์";
     b.style.background="";
     t.style.display="none";
+    if(mnavRel)mnavRel.classList.remove("active");
+    if(fab){fab.textContent="＋";fab.classList.remove("rel-active");fab.onclick=()=>{addEntity()}}
   }
 }
 
@@ -1005,6 +1293,8 @@ function checkAnswer(){
   updLines();
   document.getElementById("scoreDisplay").textContent=`${score}/10`;
   switchTab("feedback");
+  // เปิด right panel บนมือถืออัตโนมัติ
+  if(isMobile()) toggleMobilePanel('rpanel');
 }
 
 function showFeedback(fbs,score){
