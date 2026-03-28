@@ -17,6 +17,9 @@ const QuizUI = (() => {
       <!-- AUTH MODAL -->
       <div class="qm-modal" id="qm-auth">
         <div class="qm-box qm-auth-box">
+          <div style="display:flex; justify-content:flex-end; margin-bottom:4px;">
+            <button class="qm-btn-close" onclick="QuizUI.hideAll()">✕</button>
+          </div>
           <div class="qm-logo">🗄️</div>
           <h2 class="qm-title" id="auth-title">เข้าสู่ระบบ</h2>
 
