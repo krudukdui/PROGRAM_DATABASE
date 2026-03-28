@@ -94,9 +94,11 @@ const QuizUI = (() => {
       <!-- RESULT MODAL -->
       <div class="qm-modal" id="qm-result" style="display:none">
         <div class="qm-box qm-result-box">
+          <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
+            <button class="qm-btn-close" onclick="QuizUI.hideAll()">✕</button>
+          </div>
           <div id="result-content"></div>
           <div class="result-actions">
-            <button class="qm-btn qm-btn-sec" onclick="QuizUI.showReview()">ดูเฉลย</button>
             <button class="qm-btn qm-btn-primary" id="result-next-btn" style="display:none" onclick="QuizUI.goNextUnit()">ไปหน่วยถัดไป →</button>
             <button class="qm-btn qm-btn-retry" onclick="QuizUI.retryQuiz()">ทำใหม่</button>
           </div>
