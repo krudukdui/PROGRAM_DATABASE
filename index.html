@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="quiz-system.css" />
 </head>
 <body>
 
@@ -63,6 +64,28 @@
         <span class="nav-icon">📝</span>
         <span class="nav-label">แบบทดสอบก่อนเรียน</span>
       </a>
+
+<div class="quiz-hub" id="quiz-hub-section">
+  <h2 class="quiz-hub-title">🧪 แบบทดสอบรายหน่วย</h2>
+  <p class="quiz-hub-desc">
+    ทำแบบทดสอบหลังเรียนจบแต่ละหน่วย · ต้องได้ ≥ 70% จึงจะผ่านและเปิดหน่วยถัดไปได้
+  </p>
+  <div class="quiz-unit-grid">
+    <button class="quiz-unit-btn" data-quiz-unit="1"
+            onclick="QuizUI.openQuizForUnit(1)">📝 ทำแบบทดสอบหน่วยที่ 1</button>
+    <button class="quiz-unit-btn" data-quiz-unit="2"
+            onclick="QuizUI.openQuizForUnit(2)">📝 ทำแบบทดสอบหน่วยที่ 2</button>
+    <button class="quiz-unit-btn" data-quiz-unit="3"
+            onclick="QuizUI.openQuizForUnit(3)">📝 ทำแบบทดสอบหน่วยที่ 3</button>
+    <button class="quiz-unit-btn" data-quiz-unit="4"
+            onclick="QuizUI.openQuizForUnit(4)">📝 ทำแบบทดสอบหน่วยที่ 4</button>
+    <button class="quiz-unit-btn" data-quiz-unit="5"
+            onclick="QuizUI.openQuizForUnit(5)">📝 ทำแบบทดสอบหน่วยที่ 5</button>
+    <button class="quiz-unit-btn" data-quiz-unit="6"
+            onclick="QuizUI.openQuizForUnit(6)">📝 ทำแบบทดสอบหน่วยที่ 6</button>
+  </div>
+</div>
+
 
     </nav>
     <div class="sidebar-footer">
@@ -776,6 +799,13 @@
         <span class="outcome-icon">🎯</span>
         <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถอธิบายความหมาย องค์ประกอบ ชนิด คุณสมบัติ และข้อดีข้อเสียของระบบฐานข้อมูล รวมถึงหน้าที่ของ DBMS ได้</p>
       </div>
+      <div style="margin-top:32px; text-align:center;">
+  <button class="quiz-unit-btn" data-quiz-unit="1"
+          onclick="QuizUI.openQuizForUnit(1)"
+          style="display:inline-block; min-width:240px; text-align:center;">
+    📝 ทำแบบทดสอบหน่วยที่ 1
+  </button>
+</div>
     </section>
 
     <!-- UNIT 2 -->
@@ -1239,6 +1269,15 @@
         <span class="outcome-icon">🎯</span>
         <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถวิเคราะห์ความต้องการ ออกแบบ ERD ทำ Normalization และกำหนด Primary Key เพื่อวางแผนโครงสร้างฐานข้อมูลได้อย่างถูกต้อง</p>
       </div>
+
+      <div style="margin-top:32px; text-align:center;">
+  <button class="quiz-unit-btn" data-quiz-unit="2"
+          onclick="QuizUI.openQuizForUnit(2)"
+          style="display:inline-block; min-width:240px; text-align:center;">
+    📝 ทำแบบทดสอบหน่วยที่ 2
+  </button>
+</div>
+
     </section>
 
     <!-- UNIT 3 -->
@@ -1778,6 +1817,14 @@
         <span class="outcome-icon">🎯</span>
         <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถเปิดโปรแกรม Microsoft Access กำหนดค่าโปรแกรม สร้างฐานข้อมูลใหม่ ตั้งชื่อและที่เก็บไฟล์ สร้าง Table กำหนด Field และ Data Type รวมถึงบันทึกและเรียกใช้ฐานข้อมูลได้อย่างถูกต้อง</p>
       </div>
+
+      <div style="margin-top:32px; text-align:center;">
+  <button class="quiz-unit-btn" data-quiz-unit="3"
+          onclick="QuizUI.openQuizForUnit(3)"
+          style="display:inline-block; min-width:240px; text-align:center;">
+    📝 ทำแบบทดสอบหน่วยที่ 3
+  </button>
+</div>
     </section>
 
     <!-- UNIT 4 -->
@@ -2324,6 +2371,14 @@
         <span class="outcome-icon">🎯</span>
         <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถอธิบายความหมายของความสัมพันธ์ระหว่างตาราง จำแนกประเภท 1:1, 1:M, M:N กำหนด PK และ FK สร้าง Relationship ใน Access และเข้าใจการทำงานของ Referential Integrity ได้อย่างถูกต้อง</p>
       </div>
+
+      <div style="margin-top:32px; text-align:center;">
+  <button class="quiz-unit-btn" data-quiz-unit="4"
+          onclick="QuizUI.openQuizForUnit(4)"
+          style="display:inline-block; min-width:240px; text-align:center;">
+    📝 ทำแบบทดสอบหน่วยที่ 4
+  </button>
+</div>
     </section>
 
     <!-- UNIT 5 -->
@@ -2731,7 +2786,13 @@
         <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถจัดการข้อมูลผ่าน Form และสร้าง Query เพื่อค้นหาข้อมูลตามเงื่อนไขได้อย่างถูกต้อง</p>
       </div>
 
-
+<div style="margin-top:32px; text-align:center;">
+  <button class="quiz-unit-btn" data-quiz-unit="5"
+          onclick="QuizUI.openQuizForUnit(5)"
+          style="display:inline-block; min-width:240px; text-align:center;">
+    📝 ทำแบบทดสอบหน่วยที่ 5
+  </button>
+</div>
     </section>
 
     <!-- UNIT 6 -->
@@ -3450,10 +3511,20 @@
         <span class="outcome-icon">🎯</span>
         <p><strong>ผลการเรียนรู้:</strong> นักเรียนสามารถอธิบายความหมายและประโยชน์ของรายงาน สร้างรายงานด้วย Report Wizard จัดรูปแบบตกแต่ง พิมพ์และส่งออกเป็น PDF หรือ Excel สร้าง Subreport และใช้งาน Macro เพื่อเพิ่มประสิทธิภาพการทำงานได้</p>
       </div>
+      <div style="margin-top:32px; text-align:center;">
+  <button class="quiz-unit-btn" data-quiz-unit="6"
+          onclick="QuizUI.openQuizForUnit(6)"
+          style="display:inline-block; min-width:240px; text-align:center;">
+    📝 ทำแบบทดสอบหน่วยที่ 6
+  </button>
+</div>
     </section>
 
   </main>
 
   <script src="script.js"></script>
+  <script src="auth.js"></script>
+<script src="quiz.js"></script>
+<script src="quiz-ui.js"></script>
 </body>
 </html>
